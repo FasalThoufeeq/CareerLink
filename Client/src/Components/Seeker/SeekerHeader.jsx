@@ -12,15 +12,15 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import ChatIcon from "@mui/icons-material/Chat";
 import SchoolIcon from "@mui/icons-material/School";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SeekerLoginModal from "../../Modal/SeekerLoginModal";
 import SeekerRegisterModal from "../../Modal/SeekerRegisterModal";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutSeeker } from "../../Redux/seekerSlice/seekerSlice";
-import {toast} from 'react-toastify'
-import {Button} from "@mui/material"
+import { toast } from "react-toastify";
+import { Button } from "@mui/material";
 
-const settings = ["Profile", "Logout", "Login", "Register"];
+const settings = ["Profile", "Applied Jobs", "Logout", "Login", "Register"];
 
 const UserHeader = () => {
   const token = useSelector((state) => state?.seekers?.seekers?.token);
@@ -29,7 +29,7 @@ const UserHeader = () => {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [registerModalOpen, setRegisterModalOpen] = useState(false);
-
+  const navigate = useNavigate();
   const handleOpen = (modalType) => {
     if (modalType === "Login") {
       setLoginModalOpen(true);
@@ -219,6 +219,19 @@ const UserHeader = () => {
                     </MenuItem>
                   );
                 }
+                if (setting == "Applied Jobs" && token) {
+                  return (
+                    <MenuItem
+                      key={setting}
+                      onClick={() => {
+                        handleCloseUserMenu();
+                        navigate('/applied_jobs');
+                      }}
+                    >
+                      <Typography textAlign="center">{setting}</Typography>
+                    </MenuItem>
+                  );
+                }
                 if (setting == "Logout" && token) {
                   return (
                     <MenuItem
@@ -230,18 +243,25 @@ const UserHeader = () => {
                             <p>Are you sure you want to logout?</p>
                             <div>
                               <Button
-                              color="success"
-                              variant="contained"
-                              size="small"
+                                color="success"
+                                variant="contained"
+                                size="small"
                                 onClick={() => {
-                                  dispatch(logoutSeeker())
-                                  toast.success('Logout succefully')
+                                  dispatch(logoutSeeker());
+                                  toast.success("Logout succefully");
                                 }}
                                 style={{ marginRight: "1rem" }}
                               >
                                 Yes
                               </Button>
-                              <Button color="error" variant="contained" size="small" onClick={toast.dismiss()}>No</Button>
+                              <Button
+                                color="error"
+                                variant="contained"
+                                size="small"
+                                onClick={toast.dismiss()}
+                              >
+                                No
+                              </Button>
                             </div>
                           </div>,
                           {

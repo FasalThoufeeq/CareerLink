@@ -1,16 +1,16 @@
-
-import RecruiterHome from '../../Components/Recruiter/recruiterHome'
+import {} from 'react'
+import AppliedCandidate from '../../Components/Recruiter/AppliedCandidates'
 import RecruiterHeader from '../../Components/Recruiter/recruiterHeader'
 import Footer from '../../Components/Seeker/footer'
 
-const RecruiterHomePage = () => {
+const AppliedCandidates = () => {
   return (
     <>
     <RecruiterHeader/>
-    <RecruiterHome/>
+    <AppliedCandidate/>
     <Footer/>
     </>
   )
 }
 
-export default RecruiterHomePage
+export default AppliedCandidates

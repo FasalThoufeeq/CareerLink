@@ -1,9 +1,10 @@
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { GetAlltJobs } from "../../Redux/recuiterSlice/recruiterjobSlice";
+import { GetAllJobs } from "../../Redux/recuiterSlice/recruiterjobSlice";
 import JobCard from "./jobCard";
-import { Typography } from "@mui/material";
+import { Pagination, Typography } from "@mui/material";
+import { useNavigate } from "react-router";
 
 const RecruiterHome = () => {
   const recruiterId = useSelector(
@@ -12,13 +13,14 @@ const RecruiterHome = () => {
   const jobsById = useSelector(
     (state) => state?.jobs?.jobsById?.data?.RecruiterJobs
   );
-  const isArray = Array.isArray(jobsById);
-  console.log(isArray, "????????????????");
-  console.log(jobsById);
   const dispatch = useDispatch();
+  const navigate=useNavigate()
+  const handleApplicantsClick = (jobId) => {
+    navigate(`/recruiter/applied_candidates?jobId=${jobId}`);
+  };
   useEffect(() => {
     const getJobs = () => {
-      dispatch(GetAlltJobs(recruiterId))
+      dispatch(GetAllJobs(recruiterId))
         .then((response) => {
           return response;
         })
@@ -28,6 +30,14 @@ const RecruiterHome = () => {
     };
     getJobs();
   }, []);
+  const [page, setpage] = useState(1);
+  const handleChangePage = (event, newPage) => {
+    setpage(newPage);
+  };
+  const rowsPerPage = 3;
+  const displayJobs = jobsById
+    ? jobsById?.slice((page - 1) * rowsPerPage, page * rowsPerPage)
+    : [];
   return (
     <>
       <Typography
@@ -39,8 +49,8 @@ const RecruiterHome = () => {
       >
         YOUR JOBS
       </Typography>
-      {jobsById?.length > 0
-        ? jobsById.map((job) => {
+      {displayJobs?.length > 0
+        ? displayJobs.map((job) => {
             return (
               <JobCard 
               companyLogo="logo"
@@ -50,10 +60,26 @@ const RecruiterHome = () => {
               jobTitle={job?.jobTitle}
               salaryPackage={job?.salary}
               createdAt={job?.createdAt}
+              onApplicantsClick={()=>handleApplicantsClick(job?._id)}
               />
             );
           })
         : null}
+        <Pagination
+        count={Math.ceil(jobsById?.length / rowsPerPage)}
+        page={page}
+        onChange={handleChangePage}
+        variant="outlined"
+        color="primary"
+        shape="rounded"
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          // marginRight: '35rem',
+          marginBottom: '5rem',
+          marginTop:'5rem'
+        }}
+      />
     </>
   );
 };

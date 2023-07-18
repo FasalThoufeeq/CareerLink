@@ -9,14 +9,21 @@ export const userRepositoryInter = (
     return repository.getUserByEmail(email);
   };
 
-  const addUser = async (user: UserInterface|GoogleUserInteface) => {
-    return repository.addUser(user);
+  const getUserProfileByEmail = async(email: string) => {
+    return await repository.getUserProfileByEmail(email);
+  };
+  const addUser = async (
+    user: UserInterface | GoogleUserInteface,
+    profileId: any
+  ) => {
+    return repository.addUser(user, profileId);
   };
 
   return {
     getUserByEmail,
     addUser,
+    getUserProfileByEmail
   };
 };
 
-export type UserRepositoryInter= typeof userRepositoryInter
+export type UserRepositoryInter = typeof userRepositoryInter;

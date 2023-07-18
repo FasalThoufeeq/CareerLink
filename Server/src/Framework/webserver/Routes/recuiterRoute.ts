@@ -11,6 +11,10 @@ const recruiterRoute = () => {
   
   router.get('/get_jobs/:recruiterId',controller.RecruiterAllJobs)
 
+  router.get('/applied_candidates/:jobId',controller.GetAppliedCandidates)
+
+  router.post('/change_status',controller.StatusChange)
+
   return router;
 };
 

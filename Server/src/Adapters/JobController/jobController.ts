@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
 import { JobRepositoryInter } from "../../Application/repostories/jobRepositoryInter";
 import {
+  changeStatus,
   createJob,
+  getCandidates,
   getRecruiterJobs,
 } from "../../Application/useCases/job/job";
 import { JobRepositoryImp } from "../../Framework/Database/MongoDB/repositories/jobRepositoryImpl";
@@ -27,8 +29,7 @@ const jobController = (
   });
 
   const RecruiterAllJobs = asyncHandler(async (req: Request, res: Response) => {
-    const {recruiterId}= req.params;
-    // console.log(recruiterId);
+    const { recruiterId } = req.params;
     const RecruiterJobs = await getRecruiterJobs(recruiterId, jobRepository);
     res.json({
       RecruiterJobs,
@@ -37,9 +38,39 @@ const jobController = (
     });
   });
 
+  const GetAppliedCandidates = asyncHandler(
+    async (req: Request, res: Response) => {
+      const { jobId } = req.params;
+      const Candidates = await getCandidates(jobId, jobRepository);
+      res.json({
+        Candidates,
+        status: "success",
+        message: "fetched candidates successfully",
+      });
+    }
+  );
+
+  const StatusChange = asyncHandler(async (req: Request, res: Response) => {
+    const { jobId, applicantId, status } = req.query;
+    const updatedProfile = await changeStatus(
+      jobId?.toString() || "",
+      applicantId?.toString() || "",
+      status?.toString() || "",
+      jobRepository
+    );
+
+    res.json({
+      status: "success",
+      message: "status updated successfully",
+      updatedProfile,
+    });
+  });
+
   return {
     postJob,
-    RecruiterAllJobs
+    RecruiterAllJobs,
+    GetAppliedCandidates,
+    StatusChange,
   };
 };
 

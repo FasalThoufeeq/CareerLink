@@ -15,8 +15,9 @@ export const recruiterRepositoryImpl = () => {
     return recruiter;
   };
   
-  const addRecruiter = async (recruiter: RecruiterInterface) => {
+  const addRecruiter = async (recruiter: RecruiterInterface,profileId:any) => {
     const newRecruiter: any = new Recruiter(recruiter);
+    newRecruiter.profileId=profileId
     const savedRecuiter = await newRecruiter.save();
     return savedRecuiter;
   };

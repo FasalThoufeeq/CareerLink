@@ -1,7 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
-import seekerReducer from './seekerSlice/seekerSlice'
+import seekerReducer from "./seekerSlice/seekerSlice";
 import recruiterReducer from "./recuiterSlice/recruiterSlice";
-import jobReducer from './recuiterSlice/recruiterjobSlice'
+import jobReducer from "./recuiterSlice/recruiterjobSlice";
+import seekerJobReducer from "./seekerSlice/seekerJobSlice";
 
 const loadState = () => {
   try {
@@ -29,9 +30,10 @@ const persistedState = loadState();
 
 export const store = configureStore({
   reducer: {
-    seekers:seekerReducer,
-    recruiters:recruiterReducer,
-    jobs:jobReducer
+    seekers: seekerReducer,
+    recruiters: recruiterReducer,
+    jobs: jobReducer,
+    seekerJobs: seekerJobReducer,
   },
 
   preloadedState: persistedState,

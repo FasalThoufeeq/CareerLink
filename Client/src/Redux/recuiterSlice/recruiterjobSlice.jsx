@@ -15,7 +15,7 @@ export const PostJob = createAsyncThunk(
   }
 );
 
-export const GetAlltJobs = createAsyncThunk(
+export const GetAllJobs = createAsyncThunk(
   "recruiter/all_jobs",
   async (recruiterId) => {
     try {
@@ -29,6 +29,32 @@ export const GetAlltJobs = createAsyncThunk(
   }
 );
 
+export const AppliedCandidates = createAsyncThunk(
+  "recruiter/applied_candidates",
+  async (jobId) => {
+    try {
+      const response = await recruiterApi.get(`/applied_candidates/${jobId}`);
+      console.log(response);
+      return response;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
+
+export const ChangeStatus = createAsyncThunk(
+  "recruiter/change_status",
+  async ({ jobId, applicantId, changedStatus }) => {
+    try {
+      const response = await recruiterApi.post(
+        `/change_status?jobId=${jobId}&applicantId=${applicantId}&status=${changedStatus}`
+      );
+      return response;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
 const initialState = {
   jobs: [],
   jobsById:{}
@@ -40,7 +66,7 @@ const jobSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-    .addCase(GetAlltJobs.fulfilled,(state,{payload})=>{
+    .addCase(GetAllJobs.fulfilled,(state,{payload})=>{
         state.jobsById=payload
     })
   },

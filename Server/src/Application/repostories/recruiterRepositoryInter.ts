@@ -11,8 +11,8 @@ export const recruiterRepositoryInter = (
     return repository.getRecruiterByUsername(userName);
   };
 
-  const addRecruiter = (recruiter: RecruiterInterface) => {
-    return repository.addRecruiter(recruiter);
+  const addRecruiter = (recruiter: RecruiterInterface,profileId:any) => {
+    return repository.addRecruiter(recruiter,profileId);
   };
   
 

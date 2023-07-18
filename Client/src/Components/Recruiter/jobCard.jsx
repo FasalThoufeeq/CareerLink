@@ -14,15 +14,16 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import Groups2Icon from "@mui/icons-material/Groups2";
 import EditIcon from "@mui/icons-material/Edit";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import PaidIcon from '@mui/icons-material/Paid';
 const useStyles = makeStyles((theme) => ({
   container: {
-    backgroundColor: "#EBEBEB",
+    backgroundColor: "#fff",
     padding: theme.spacing(2),
     marginBottom: theme.spacing(2),
     display: "flex",
     alignItems: "flex-start", // Align items to flex-start
-    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-    borderRadius: theme.spacing(1),
+    boxShadow: '0 6px 10px rgba(0, 0, 0, 0.3)',
+    borderRadius: theme.spacing(3),
     width: "40rem",
     position: "relative",
   },
@@ -32,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     height: theme.spacing(6),
   },
   jobTitleContainer: {
-    display: "flex",
+    display: "block",
     alignItems: "center",
     marginBottom: theme.spacing(1),
   },
@@ -56,10 +57,15 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.primary.contrastText,
   },
   salary: {
+    marginLeft: theme.spacing(2),
+    display: "flex",
+    alignItems: "center",
     color: theme.palette.success.main,
   },
   LocationOnIcon: {
     color: "gray",
+    fontSize: '5px',
+    marginRight: theme.spacing(1),
   },
   buttons: {
     position: "absolute",
@@ -67,14 +73,15 @@ const useStyles = makeStyles((theme) => ({
     right: theme.spacing(1),
   },
   editButton: {
-    color: theme.palette.primary.main,
+    
+    color: 'black',
     marginRight: theme.spacing(1),
   },
   deleteButton: {
     color: theme.palette.error.main,
   },
   applicationButton: {
-    color: theme.palette.primary.main,
+    color: 'black',
     paddingLeft: "30px",
     paddingRight: "30px",
   },
@@ -89,20 +96,50 @@ const JobCard = ({
   salaryPackage,
   jobLocation,
   createdAt,
+  onApplicantsClick
 }) => {
-  const currentDate = new Date();
-  const createdDate = new Date(createdAt);
-  const timeDifference = currentDate - createdDate;
-  const daysSinceCreation = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+  const postedDays = () => {
+    const currentDate = new Date();
+    const createdDate = new Date(createdAt);
+    const timeDifference = currentDate - createdDate;
+    const daysSinceCreation = Math.floor(
+      timeDifference / (1000 * 60 * 60 * 24)
+    );
+    if (daysSinceCreation >= 30 && daysSinceCreation < 365) {
+      const value = Math.floor(daysSinceCreation / 30);
+      if (value == 1) {
+        return `${value} month ago`;
+      }
+      return `${value} months ago`;
+    } else if (daysSinceCreation >= 365) {
+      const value = Math.floor(daysSinceCreation / 365);
+      if (value == 1) {
+        return `${value} year ago`;
+      }
+      return `${value} years ago`;
+    } else {
+      if (daysSinceCreation == 1) {
+        return `${daysSinceCreation} day ago`;
+      }
+      return `${daysSinceCreation} days ago`;
+    }
+  };
 
   const classes = useStyles();
   return (
     <>
-      <Container maxWidth="md" className={classes.container}>
+      <Container style={{display:'flex'}} maxWidth="md" className={classes.container}>
+        <div>
         <Avatar alt="Company Logo" src={companyLogo} className={classes.logo} />
-        <Grid Container direction="column" spacing={2}>
+        </div>
+        <div>
+        <Grid
+          Container
+          direction="column"
+          spacing={2}
+        >
           <Grid item className={classes.jobTitleContainer}>
-            <Typography variant="h6" className={classes.jobTitle}>
+            <Typography style={{fontWeight:"bolder" , color:'gray'}} variant="h6" className={classes.jobTitle}>
               {jobTitle}
             </Typography>
             <Typography variant="body2" className={classes.location}>
@@ -113,15 +150,17 @@ const JobCard = ({
             </Typography>
           </Grid>
           <Grid item>
-            <Typography variant="body2" className={classes.salary}>
-              <span className={classes.rupeeIcon}>₹</span>
-              {salaryPackage}
+            <Typography style={{marginTop:'8px'}} variant="body2" className={classes.salary}>
+              <span className={classes.rupeeIcon}><PaidIcon style={{ marginRight: '6px' }}/> </span>
+              {' '}
+              ₹{salaryPackage}
             </Typography>
           </Grid>
-          <Grid item className={classes.skills}>
+          <Grid item style={{marginBottom:'10px',marginTop:'10px'}} className={classes.skills}>
             {requiredSkills.length > 0
               ? requiredSkills.map((skill, index) => (
                   <Chip
+                  style={{color:'white',backgroundColor:'#4287f5', borderColor:'#4287f5',boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)"}}
                     key={index}
                     label={skill}
                     variant="outlined"
@@ -132,16 +171,18 @@ const JobCard = ({
               : null}
           </Grid>
           <Grid item>
-            <Typography variant="body2" className={classes.salary}>
-              <span className={classes.rupeeIcon}>
-                <AccessTimeIcon />
+            <Typography variant="body2">
+              <span >
+                <AccessTimeIcon  />
               </span>
-              {daysSinceCreation} days ago
+              {postedDays()}
             </Typography>
           </Grid>
         </Grid>
+        </div>
         <div className={classes.buttons}>
           <Button
+          style={{ color: "black", borderRadius: "20px",boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)" ,marginBottom:'5px',marginRight:'8px'}}
             variant="outlined"
             startIcon={<EditIcon />}
             className={classes.editButton}
@@ -149,15 +190,17 @@ const JobCard = ({
           >
             Edit
           </Button>
-        </div>
-        <Button
+          <Button
           variant="outlined"
+          style={{ color: "black", borderRadius: "20px",boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)" ,marginBottom:'5px',marginRight:'5px'}}
           startIcon={<Groups2Icon className={classes.personIcon} />}
           className={classes.applicationButton}
-          // onClick={onApplicantsClick}
+          onClick={onApplicantsClick}
         >
           Applications
         </Button>
+        </div>
+        
       </Container>
     </>
   );
@@ -169,6 +212,7 @@ JobCard.propTypes = {
   salaryPackage: PropTypes.string.isRequired,
   jobLocation: PropTypes.string.isRequired,
   createdAt: PropTypes.string.isRequired,
+  onApplicantsClick:PropTypes.func.isRequired
 };
 
 export default JobCard;

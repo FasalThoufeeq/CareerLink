@@ -16,26 +16,44 @@ import { GoogleUserInteface } from "../../Types/userGoogleInterface";
 import { RecruiterRepositoryInter } from "../../Application/repostories/recruiterRepositoryInter";
 import { RecruiterRepositoryImpl } from "../../Framework/Database/MongoDB/repositories/recruiterRepositoryImpl";
 import { RecruiterInterface } from "../../Types/recruiterInterface";
+import { UserProfileRepositoryImpl } from "../../Framework/Database/MongoDB/repositories/userProfileRepositoryImpl";
+import { UserProfileRepositoryInter } from "../../Application/repostories/userProfileRepositoryInter";
+import { RecruiterProfileRepositoryInter } from "../../Application/repostories/recruiterProfileRepositoryInter";
+import { RecruiterProfileRepositoryImpl } from "../../Framework/Database/MongoDB/repositories/recruiterProfileRepositoryImpl";
 const authController = (
   authServiceImpl: AuthServiceImpl,
   authServiceInter: AuthServiceInter,
   userRepositoryImpl: UserRepositoryImpl,
   userRepositoryInter: UserRepositoryInter,
+  userProfileRepositoryImpl: UserProfileRepositoryImpl,
+  userProfileRepositoryInter: UserProfileRepositoryInter,
   recruiterRepositoryImpl: RecruiterRepositoryImpl,
-  recruiterRepositoryInter: RecruiterRepositoryInter
+  recruiterRepositoryInter: RecruiterRepositoryInter,
+  recruiterProfileRepositoryImpl: RecruiterProfileRepositoryImpl,
+  recruiterProfileRepositoryInter: RecruiterProfileRepositoryInter
 ) => {
-
   const authService = authServiceInter(authServiceImpl());
   const userDbRepository = userRepositoryInter(userRepositoryImpl());
+  const userProfileRepository = userProfileRepositoryInter(
+    userProfileRepositoryImpl()
+  );
   const recruiterRepository = recruiterRepositoryInter(
     recruiterRepositoryImpl()
+  );
+  const recruiterProfileRepository = recruiterProfileRepositoryInter(
+    recruiterProfileRepositoryImpl()
   );
 
   const registerUser = asyncHandler(async (req: Request, res: Response) => {
     const user: UserInterface = req.body;
     console.log(req.body);
 
-    const createUser = await userRegister(user, userDbRepository, authService);
+    const createUser = await userRegister(
+      user,
+      userDbRepository,
+      userProfileRepository,
+      authService
+    );
     console.log(createUser, "varum");
 
     res.json({
@@ -47,19 +65,20 @@ const authController = (
 
   const loginUser = asyncHandler(async (req: Request, res: Response) => {
     const { email, password }: { email: string; password: string } = req.body;
-    const { token, user } = await userLogin(
+    const { token, user, profile } = await userLogin(
       email,
       password,
       userDbRepository,
       authService
     );
-    console.log(user, "login");
+    console.log(profile, "login");
 
     res.json({
       status: "success",
       message: "logged in successfully",
       token,
       user,
+      profile
     });
   });
 
@@ -73,6 +92,7 @@ const authController = (
     const { token, isExistingEmail } = await userGoogleLogin(
       user,
       userDbRepository,
+      userProfileRepository,
       authService
     );
     res.json({
@@ -89,6 +109,7 @@ const authController = (
       const createRecruiter = await recruiterRegister(
         recruiter,
         recruiterRepository,
+        recruiterProfileRepository,
         authService
       );
       res.json({

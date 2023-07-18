@@ -6,6 +6,10 @@ import { authServiceImpl } from '../../Services/authServiceImpl'
 import { authServiceInter } from '../../../Application/Services/authServiceInter'
 import { recruiterRepositoryInter } from '../../../Application/repostories/recruiterRepositoryInter'
 import { recruiterRepositoryImpl } from '../../Database/MongoDB/repositories/recruiterRepositoryImpl'
+import { userProfileRepositoryInter } from '../../../Application/repostories/userProfileRepositoryInter'
+import { userProfileRepositoryImpl } from '../../Database/MongoDB/repositories/userProfileRepositoryImpl'
+import { recruiterProfileRepositoryInter } from '../../../Application/repostories/recruiterProfileRepositoryInter'
+import { recruiterProfileRepositoryImpl } from '../../Database/MongoDB/repositories/recruiterProfileRepositoryImpl'
 
 
 const authRoute = () => {
@@ -15,8 +19,12 @@ const authRoute = () => {
         authServiceInter,
         userRepositoryImpl,
         userRepositoryInter,
+        userProfileRepositoryImpl,
+        userProfileRepositoryInter,
         recruiterRepositoryImpl,
-        recruiterRepositoryInter
+        recruiterRepositoryInter,
+        recruiterProfileRepositoryImpl,
+        recruiterProfileRepositoryInter
     )
     
     router.post('/signup',controller.registerUser)
