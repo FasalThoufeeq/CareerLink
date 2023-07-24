@@ -1,9 +1,10 @@
-import {} from "react";
+import { useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import {
   Autocomplete,
   Button,
   Chip,
+  CircularProgress,
   Container,
   Grid,
   Typography,
@@ -12,11 +13,32 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { PostJob } from "../../Redux/recuiterSlice/recruiterjobSlice";
+import {
+  EditingJobDetails,
+  GetJobDetails,
+} from "../../Redux/recuiterSlice/recruiterjobSlice";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 
-const PostJobs = () => {
+const EditPostedJobs = () => {
+  const [loading, setloading] = useState(false);
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const jobId = params.get("jobId");
+  const [jobDetails, setJobDetails] = useState();
+  useEffect(() => {
+    const GetJob = async () => {
+      setloading(true);
+      const response = await dispatch(GetJobDetails(jobId));
+      if (response?.payload?.data?.status === "success") {
+        setJobDetails(response?.payload?.data?.jobDetails);
+        setloading(false);
+      }
+    };
+    GetJob();
+  }, []);
+
+  console.log(jobDetails, "qqqq");
   const recruiterId = useSelector(
     (state) => state?.recruiters?.recruiters?.profile._id
   );
@@ -72,28 +94,73 @@ const PostJobs = () => {
       deadline: Yup.string().required("Deadline is required"),
     }),
     onSubmit: async (values) => {
-      const updatedValues = {
-        ...values,
-        recruiterId: recruiterId,
-      };
+      try {
+        setloading(true);
+        const updatedValues = {
+          ...values,
+          recruiterId: recruiterId,
+        };
 
-      const response = await dispatch(PostJob(updatedValues));
-      if (response?.payload?.data?.status == "success") {
-        toast.success("Latest Job Added Successfully");
-        navigate("/recruiter");
+        console.log(updatedValues, "eeeee");
+
+        const response = await dispatch(
+          EditingJobDetails({ jobId, payload: updatedValues })
+        );
+        if (response?.payload?.data?.status == "success") {
+          toast.success(response?.payload?.data?.message);
+          navigate("/recruiter");
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setloading(false);
       }
     },
   });
+  useEffect(() => {
+    if (jobDetails) {
+      formik.setFieldValue("jobTitle", jobDetails?.jobTitle || "");
+      formik.setFieldValue("jobLocation", jobDetails?.jobLocation || "");
+      formik.setFieldValue("jobType", jobDetails?.jobType || "");
+      formik.setFieldValue("qualification", jobDetails?.qualification || "");
+      formik.setFieldValue("jobVacancies", jobDetails?.jobVacancies || "");
+      formik.setFieldValue("salary", jobDetails?.salary || "");
+      formik.setFieldValue("jobTiming", jobDetails?.jobTiming || "");
+      formik.setFieldValue("experience", jobDetails?.experience || "");
+      formik.setFieldValue("about", jobDetails?.about || "");
+      formik.setFieldValue(
+        "essentialKnowledge",
+        jobDetails?.essentialKnowledge || ""
+      );
+      formik.setFieldValue("deadline", jobDetails?.deadline || "");
+      formik.setFieldValue("skills", jobDetails?.skills || []);
+      setSkills(jobDetails?.skills);
+    }
+  }, [jobDetails, formik.setFieldValue]);
   const handleSkillRemove = (index) => {
     const updatedSkills = skills.filter((_, i) => i !== index);
     formik.setFieldValue("skills", updatedSkills);
     setSkills(updatedSkills);
   };
   console.log(formik.values.skills, "]]]]");
+  if (!jobDetails) {
+    return (
+      <Container maxWidth="md" sx={{ py: 6 }}>
+        <Grid
+          container
+          justifyContent="center"
+          alignItems="center"
+          height="100vh"
+        >
+          <CircularProgress />
+        </Grid>
+      </Container>
+    );
+  }
   return (
     <Container maxWidth="md" style={{ textAlign: "center", marginTop: "40px" }}>
       <Typography variant="h5" component="h1" align="center" gutterBottom>
-        POST JOBS
+        EDIT JOBS
       </Typography>
       <form onSubmit={formik.handleSubmit}>
         <Grid container spacing={2}>
@@ -319,7 +386,11 @@ const PostJobs = () => {
               variant="contained"
               //   className={classes.customButton}
             >
-              Submit
+              {loading ? (
+                <CircularProgress size={24} color="success" />
+              ) : (
+                "Submit"
+              )}
             </Button>
           </Grid>
         </Grid>
@@ -328,4 +399,4 @@ const PostJobs = () => {
   );
 };
 
-export default PostJobs;
+export default EditPostedJobs;

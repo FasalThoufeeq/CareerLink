@@ -4,6 +4,8 @@ import { Pagination, Typography } from "@mui/material";
 import { useLocation, useNavigate } from "react-router";
 import CandidateCard from "./CandidatesCard";
 import { AppliedCandidates } from "../../Redux/recuiterSlice/recruiterjobSlice";
+import ClipLoader from "react-spinners/ClipLoader";
+import CandidateSkeleton from "../candidateSkeleton";
 
 const AppliedCandidate = () => {
   const location = useLocation();
@@ -13,14 +15,17 @@ const AppliedCandidate = () => {
   const navigate = useNavigate();
   const [candidates, setCandidates] = useState([]);
   const [saveClicked, setSaveClicked] = useState([]);
+  const [loading, setLoading] = useState(false);
   const handleSaveClick = () => {
     setSaveClicked(!saveClicked);
   };
   useEffect(() => {
     const ViewCandidates = () => {
+      setLoading(true);
       dispatch(AppliedCandidates(jobId))
         .then((response) => {
           setCandidates(response?.payload?.data?.Candidates?.appliedUsers);
+          setLoading(false);
         })
         .catch((error) => {
           console.log(error);
@@ -47,7 +52,29 @@ const AppliedCandidate = () => {
       >
         APPLIED CANDIDATES
       </Typography>
-      {displayJobs && displayJobs.length > 0
+      {loading && (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "100%",
+            marginBottom:'30px'
+          }}
+        >
+          <ClipLoader
+            color="#4287f5"
+            loading={loading}
+            // cssOverride={override}
+            size={50}
+            align="center"
+            aria-label="Loading Spinner"
+            data-testid="loader"
+          />
+        </div>
+      )}
+      {loading && <CandidateSkeleton cards={3}/>}
+      {!loading && displayJobs && displayJobs.length > 0
         ? displayJobs.map((candidate) => {
             return (
               <CandidateCard
@@ -57,7 +84,10 @@ const AppliedCandidate = () => {
                 phoneNumber={candidate?.phoneNumber}
                 languages={candidate?.languages}
                 jobId={jobId}
+                profile={candidate?.profilePicture}
+                education={candidate?.education}
                 applicantId={candidate?._id}
+                resume={candidate?.resume}
                 appliedJobs={candidate?.appliedJobs}
                 key={candidate?._id}
                 handleStatusChange={handleSaveClick}
@@ -65,7 +95,6 @@ const AppliedCandidate = () => {
             );
           })
         : null}
-
       <Pagination
         count={Math.ceil(candidates?.length / rowsPerPage)}
         page={page}

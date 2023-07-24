@@ -20,7 +20,7 @@ import { logoutSeeker } from "../../Redux/seekerSlice/seekerSlice";
 import { toast } from "react-toastify";
 import { Button } from "@mui/material";
 
-const settings = ["Profile", "Applied Jobs", "Logout", "Login", "Register"];
+const settings = ["Profile", "Logout", "Login", "Register"];
 
 const UserHeader = () => {
   const token = useSelector((state) => state?.seekers?.seekers?.token);
@@ -214,18 +214,11 @@ const UserHeader = () => {
               {settings.map((setting) => {
                 if (setting == "Profile" && token) {
                   return (
-                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                      <Typography textAlign="center">{setting}</Typography>
-                    </MenuItem>
-                  );
-                }
-                if (setting == "Applied Jobs" && token) {
-                  return (
                     <MenuItem
                       key={setting}
                       onClick={() => {
-                        handleCloseUserMenu();
-                        navigate('/applied_jobs');
+                        handleCloseUserMenu()
+                        navigate('/profile')
                       }}
                     >
                       <Typography textAlign="center">{setting}</Typography>

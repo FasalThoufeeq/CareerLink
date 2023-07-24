@@ -32,7 +32,7 @@ const recruiterProfileSchema = new mongoose.Schema(
     about: {
       type: String,
     },
-    logo: {
+    companylogo: {
       type: String, // Store the path or URL of the logo image
     },
   },

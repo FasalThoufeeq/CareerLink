@@ -22,7 +22,7 @@ const settings = ["Profile", "Logout"];
 
 function RecruiterHeader() {
   const dispatch = useDispatch();
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -140,9 +140,9 @@ function RecruiterHeader() {
                   <Button
                     variant="text"
                     key={page}
-                    onClick={()=>{
-                        navigate('/recruiter')
-                        handleCloseNavMenu()
+                    onClick={() => {
+                      navigate("/recruiter");
+                      handleCloseNavMenu();
                     }}
                     sx={{
                       my: 2,
@@ -165,9 +165,9 @@ function RecruiterHeader() {
                   <Button
                     variant="text"
                     key={page}
-                    onClick={()=>{
-                        navigate('/recruiter/post_jobs')
-                        handleCloseNavMenu()
+                    onClick={() => {
+                      navigate("/recruiter/post_jobs");
+                      handleCloseNavMenu();
                     }}
                     sx={{
                       my: 2,
@@ -213,7 +213,14 @@ function RecruiterHeader() {
               {settings.map((setting) => {
                 if (setting == "Profile") {
                   return (
-                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                    <MenuItem
+                      key={setting}
+                      onClick={() => {
+                        handleCloseUserMenu();
+                        navigate("/recruiter/update_profile");
+
+                      }}
+                    >
                       <Typography textAlign="center">{setting}</Typography>
                     </MenuItem>
                   );

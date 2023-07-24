@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import { JobRepositoryInter } from "../../Application/repostories/jobRepositoryInter";
 import {
+  EditJobs,
+  FetchJob,
   changeStatus,
   createJob,
   getCandidates,
@@ -31,6 +33,8 @@ const jobController = (
   const RecruiterAllJobs = asyncHandler(async (req: Request, res: Response) => {
     const { recruiterId } = req.params;
     const RecruiterJobs = await getRecruiterJobs(recruiterId, jobRepository);
+    console.log(RecruiterJobs, "cccc");
+
     res.json({
       RecruiterJobs,
       status: "success",
@@ -66,11 +70,36 @@ const jobController = (
     });
   });
 
+  const EdittingJob = asyncHandler(async (req: Request, res: Response) => {
+    const { jobId } = req.params;
+    const EditedDetails = req.body;
+    const jobDetails = await EditJobs(EditedDetails, jobId, jobRepository);
+
+    res.json({
+      status: "success",
+      message: "Job Edited Successfully",
+      jobDetails,
+    });
+  });
+
+  const FetchingJob = asyncHandler(async (req: Request, res: Response) => {
+    const { jobId } = req.params;
+    const jobDetails = await FetchJob(jobId, jobRepository);
+
+    res.json({
+      status: "success",
+      message: "Job Fetched Successfully",
+      jobDetails,
+    });
+  });
+
   return {
     postJob,
     RecruiterAllJobs,
     GetAppliedCandidates,
     StatusChange,
+    EdittingJob,
+    FetchingJob
   };
 };
 

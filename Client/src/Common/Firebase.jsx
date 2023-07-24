@@ -23,6 +23,4 @@ export const signInWithGoogle=async()=>{
     }).catch((err)=>{
         console.log(err);
     })
-
-    
 }

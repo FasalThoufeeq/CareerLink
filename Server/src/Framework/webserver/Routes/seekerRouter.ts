@@ -4,6 +4,7 @@ import { jobRepositoryImp } from "../../Database/MongoDB/repositories/jobReposit
 import { jobRepositoryInter } from "../../../Application/repostories/jobRepositoryInter";
 import { userProfileRepositoryImpl } from "../../Database/MongoDB/repositories/userProfileRepositoryImpl";
 import { userProfileRepositoryInter } from "../../../Application/repostories/userProfileRepositoryInter";
+import upload, { uploadprofile } from "../Middlewares/cloudinary";
 
 const seekerRoute = () => {
   const router = express.Router();
@@ -22,7 +23,11 @@ const seekerRoute = () => {
 
   router.get("/applied_jobs/:profileId", controller.AppliedJob);
 
-  router.put("/cancel_job",controller.JobAppliedCancel);
+  router.put("/cancel_job", controller.JobAppliedCancel);
+
+  router.put("/update_profile/:profileId", upload, controller.UpdatingProfile);
+
+  router.put("/update_profilePic/:profileId", uploadprofile, controller.UpdatingProfilePic);
 
   return router;
 };

@@ -14,7 +14,7 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import Groups2Icon from "@mui/icons-material/Groups2";
 import EditIcon from "@mui/icons-material/Edit";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import PaidIcon from '@mui/icons-material/Paid';
+import PaidIcon from "@mui/icons-material/Paid";
 const useStyles = makeStyles((theme) => ({
   container: {
     backgroundColor: "#fff",
@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(2),
     display: "flex",
     alignItems: "flex-start", // Align items to flex-start
-    boxShadow: '0 6px 10px rgba(0, 0, 0, 0.3)',
+    boxShadow: "0 6px 10px rgba(0, 0, 0, 0.3)",
     borderRadius: theme.spacing(3),
     width: "40rem",
     position: "relative",
@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
   },
   LocationOnIcon: {
     color: "gray",
-    fontSize: '5px',
+    fontSize: "5px",
     marginRight: theme.spacing(1),
   },
   buttons: {
@@ -73,15 +73,14 @@ const useStyles = makeStyles((theme) => ({
     right: theme.spacing(1),
   },
   editButton: {
-    
-    color: 'black',
+    color: "black",
     marginRight: theme.spacing(1),
   },
   deleteButton: {
     color: theme.palette.error.main,
   },
   applicationButton: {
-    color: 'black',
+    color: "black",
     paddingLeft: "30px",
     paddingRight: "30px",
   },
@@ -96,7 +95,8 @@ const JobCard = ({
   salaryPackage,
   jobLocation,
   createdAt,
-  onApplicantsClick
+  onApplicantsClick,
+  onEditClick
 }) => {
   const postedDays = () => {
     const currentDate = new Date();
@@ -128,79 +128,112 @@ const JobCard = ({
   const classes = useStyles();
   return (
     <>
-      <Container style={{display:'flex'}} maxWidth="md" className={classes.container}>
+      <Container
+        style={{ display: "flex" }}
+        maxWidth="md"
+        className={classes.container}
+      >
         <div>
-        <Avatar alt="Company Logo" src={companyLogo} className={classes.logo} />
+          <Avatar
+            alt="Company Logo"
+            src={companyLogo}
+            className={classes.logo}
+          />
         </div>
         <div>
-        <Grid
-          Container
-          direction="column"
-          spacing={2}
-        >
-          <Grid item className={classes.jobTitleContainer}>
-            <Typography style={{fontWeight:"bolder" , color:'gray'}} variant="h6" className={classes.jobTitle}>
-              {jobTitle}
-            </Typography>
-            <Typography variant="body2" className={classes.location}>
-              <span className={classes.LocationOnIcon}>
-                <LocationOnIcon />
-              </span>
-              {jobLocation}
-            </Typography>
+          <Grid Container direction="column" spacing={2}>
+            <Grid item className={classes.jobTitleContainer}>
+              <Typography
+                style={{ fontWeight: "bolder", color: "gray" }}
+                variant="h6"
+                className={classes.jobTitle}
+              >
+                {jobTitle}
+              </Typography>
+              <Typography variant="body2" className={classes.location}>
+                <span className={classes.LocationOnIcon}>
+                  <LocationOnIcon />
+                </span>
+                {jobLocation}
+              </Typography>
+            </Grid>
+            <Grid item>
+              <Typography
+                style={{ marginTop: "8px" }}
+                variant="body2"
+                className={classes.salary}
+              >
+                <span className={classes.rupeeIcon}>
+                  <PaidIcon style={{ marginRight: "6px" }} />{" "}
+                </span>{" "}
+                ₹{salaryPackage}
+              </Typography>
+            </Grid>
+            <Grid
+              item
+              style={{ marginBottom: "10px", marginTop: "10px" }}
+              className={classes.skills}
+            >
+              {requiredSkills.length > 0
+                ? requiredSkills.map((skill, index) => (
+                    <Chip
+                      style={{
+                        color: "white",
+                        backgroundColor: "#4287f5",
+                        borderColor: "#4287f5",
+                        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+                      }}
+                      key={index}
+                      label={skill}
+                      variant="outlined"
+                      className={classes.chip}
+                      clickable={false}
+                    />
+                  ))
+                : null}
+            </Grid>
+            <Grid item>
+              <Typography variant="body2">
+                <span>
+                  <AccessTimeIcon />
+                </span>
+                {postedDays()}
+              </Typography>
+            </Grid>
           </Grid>
-          <Grid item>
-            <Typography style={{marginTop:'8px'}} variant="body2" className={classes.salary}>
-              <span className={classes.rupeeIcon}><PaidIcon style={{ marginRight: '6px' }}/> </span>
-              {' '}
-              ₹{salaryPackage}
-            </Typography>
-          </Grid>
-          <Grid item style={{marginBottom:'10px',marginTop:'10px'}} className={classes.skills}>
-            {requiredSkills.length > 0
-              ? requiredSkills.map((skill, index) => (
-                  <Chip
-                  style={{color:'white',backgroundColor:'#4287f5', borderColor:'#4287f5',boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)"}}
-                    key={index}
-                    label={skill}
-                    variant="outlined"
-                    className={classes.chip}
-                    clickable={false}
-                  />
-                ))
-              : null}
-          </Grid>
-          <Grid item>
-            <Typography variant="body2">
-              <span >
-                <AccessTimeIcon  />
-              </span>
-              {postedDays()}
-            </Typography>
-          </Grid>
-        </Grid>
         </div>
         <div className={classes.buttons}>
           <Button
-          style={{ color: "black", borderRadius: "20px",boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)" ,marginBottom:'5px',marginRight:'8px'}}
+            style={{
+              color: "black",
+              borderRadius: "20px",
+              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+              marginBottom: "5px",
+              marginRight: "8px",
+            }}
             variant="outlined"
             startIcon={<EditIcon />}
             className={classes.editButton}
-            //   onClick={onEditClick}
+            onClick={onEditClick}
           >
             Edit
           </Button>
           <Button
-          variant="outlined"
-          style={{ color: "black", borderRadius: "20px",boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)" ,marginBottom:'5px',marginRight:'5px'}}
-          startIcon={<Groups2Icon className={classes.personIcon} />}
-          className={classes.applicationButton}
-          onClick={onApplicantsClick}
-        >
-          Applications
-        </Button>
+            variant="outlined"
+            style={{
+              color: "black",
+              borderRadius: "20px",
+              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+              marginBottom: "5px",
+              marginRight: "5px",
+            }}
+            startIcon={<Groups2Icon className={classes.personIcon} />}
+            className={classes.applicationButton}
+            onClick={onApplicantsClick}
+          >
+            Applications
+          </Button>
         </div>
-        
       </Container>
     </>
   );
@@ -212,7 +245,8 @@ JobCard.propTypes = {
   salaryPackage: PropTypes.string.isRequired,
   jobLocation: PropTypes.string.isRequired,
   createdAt: PropTypes.string.isRequired,
-  onApplicantsClick:PropTypes.func.isRequired
+  onApplicantsClick: PropTypes.func.isRequired,
+  onEditClick:PropTypes.func.isRequired
 };
 
 export default JobCard;

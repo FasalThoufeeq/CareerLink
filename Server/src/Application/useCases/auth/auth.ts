@@ -1,3 +1,4 @@
+import { recruiterProfileInterface } from "../../../Types/recruiterProfileInterface";
 import { UserInterface } from "../../../Types/userInterface";
 import { AuthServiceInter } from "../../Services/authServiceInter";
 import { RecruiterProfileRepositoryInter } from "../../repostories/recruiterProfileRepositoryInter";
@@ -134,7 +135,8 @@ export const RecruiterLogin = async (
   email: string,
   password: string,
   recruiterRepository: ReturnType<RecruiterRepositoryInter>,
-  authService: ReturnType<AuthServiceInter>
+  authService: ReturnType<AuthServiceInter>,
+  recruiterProfilerepository: ReturnType<RecruiterProfileRepositoryInter>
 ) => {
   const recruiter: UserInterface | any =
     await recruiterRepository.getRecruiterByEmail(email);
@@ -152,8 +154,12 @@ export const RecruiterLogin = async (
     throw new Error(`Password incorrect`);
   }
 
+  const profile = await recruiterProfilerepository.getRecuiterProfileByEmail(
+    email
+  );
+
   const token = authService.generateToken(recruiter._id.toString());
-  return { token, recruiter };
+  return { token, recruiter, profile };
 };
 
 export const getProfile = async (
@@ -161,4 +167,75 @@ export const getProfile = async (
   userProfileRepository: ReturnType<UserProfileRepositoryInter>
 ) => {
   return await userProfileRepository.getProfile(profileId);
+};
+
+export const UpdateProfile = async (
+  profileId: string,
+  profile: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phoneNumber: string;
+    education: string;
+    languages: string[];
+    resume: string;
+    profilePicture: string;
+  },
+  resume: string,
+  userProfileRepository: ReturnType<UserProfileRepositoryInter>
+) => {
+  profile.resume = resume;
+  const EditedProfile = await userProfileRepository.updateProfile(
+    profileId,
+    profile
+  );
+  return EditedProfile;
+};
+
+export const UpdateProfilepic = async (
+  profileId: string,
+  profilePic: string,
+  userProfileRepository: ReturnType<UserProfileRepositoryInter>
+) => {
+  const EditedData = await userProfileRepository.updateProfilePic(
+    profileId,
+    profilePic
+  );
+  return EditedData;
+};
+
+export const getRecruiterProfile = async (
+  profileId: string,
+  RecruiterProfileRepository: ReturnType<RecruiterProfileRepositoryInter>
+) => {
+  const profile = await RecruiterProfileRepository.getRecuiterProfile(
+    profileId
+  );
+  return profile;
+};
+
+export const UpdateRecruiterProfile = async (
+  updatedProfile: recruiterProfileInterface,
+  profileId: string,
+  RecruiterProfileRepository: ReturnType<RecruiterProfileRepositoryInter>
+) => {
+  const EditedProfile = await RecruiterProfileRepository.updateProfile(
+    updatedProfile,
+    profileId
+  );
+
+  return EditedProfile;
+};
+
+export const UpdateCompanylogo = async (
+  profileId: string,
+  companylogo: string,
+  RecruiterProfileRepository: ReturnType<RecruiterProfileRepositoryInter>
+) => {
+  const EditedProfile = await RecruiterProfileRepository.updateLogo(
+    profileId,
+    companylogo
+  );
+
+  return EditedProfile;
 };

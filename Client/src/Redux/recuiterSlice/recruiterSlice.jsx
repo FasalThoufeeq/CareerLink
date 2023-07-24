@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import authApi from "../../Common/api/authApi";
+import recruiterApi from "../../Common/api/recruiterApi";
 
 export const RegisterRecruiter = createAsyncThunk(
   "recruiter/registerRecruiter",
@@ -18,6 +19,54 @@ export const LoginRecruiter = createAsyncThunk(
   async (payload) => {
     try {
       const response = await authApi.post("/recruiter/login", payload);
+      return response;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
+
+export const GetRecruiterprofile = createAsyncThunk(
+  "recruiter/get_recruiter_profile",
+  async (profileId) => {
+    try {
+      const response = await recruiterApi.get(`/get_profile/${profileId}`);
+      return response;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
+
+export const UpdateRecruiterProfileDetails = createAsyncThunk(
+  "recruiter/update_recruiter_profile",
+  async ({ payload, profileId }) => {
+    try {
+      console.log(payload, profileId, "wwwwwwww");
+      const response = await recruiterApi.put(
+        `/update_profile/${profileId}`,
+        payload,
+        {
+          headers: {
+            "Content-Type": "application/json", // Set the Content-Type header to application/json
+          },
+        }
+      );
+      return response;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
+
+export const UpdatingCompanylogo = createAsyncThunk(
+  "recruiter/update_companylogo",
+  async ({ payload, profileId }) => {
+    try {
+      const response = await recruiterApi.put(
+        `/update_companylogo/${profileId}`,
+        payload
+      );
       return response;
     } catch (err) {
       console.log(err);
@@ -61,6 +110,5 @@ const recruiterSlice = createSlice({
 });
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const { LogoutRecruiter } = recruiterSlice.actions
+export const { LogoutRecruiter } = recruiterSlice.actions;
 export default recruiterSlice.reducer;
-

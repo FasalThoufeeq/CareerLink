@@ -8,7 +8,7 @@ import { useNavigate } from "react-router";
 
 const RecruiterHome = () => {
   const recruiterId = useSelector(
-    (state) => state?.recruiters?.recruiters?.recruiter?._id
+    (state) => state?.recruiters?.recruiters?.profile?._id
   );
   const jobsById = useSelector(
     (state) => state?.jobs?.jobsById?.data?.RecruiterJobs
@@ -18,6 +18,10 @@ const RecruiterHome = () => {
   const handleApplicantsClick = (jobId) => {
     navigate(`/recruiter/applied_candidates?jobId=${jobId}`);
   };
+
+  const JobEditHandler=(jobId)=>{
+    navigate(`/recruiter/edit_jobs?jobId=${jobId}`);
+  }
   useEffect(() => {
     const getJobs = () => {
       dispatch(GetAllJobs(recruiterId))
@@ -53,7 +57,7 @@ const RecruiterHome = () => {
         ? displayJobs.map((job) => {
             return (
               <JobCard 
-              companyLogo="logo"
+              companyLogo={job?.recruiterId?.companylogo}
               key={job?._id}
               jobLocation={job?.jobLocation}
               requiredSkills={job?.skills}
@@ -61,6 +65,7 @@ const RecruiterHome = () => {
               salaryPackage={job?.salary}
               createdAt={job?.createdAt}
               onApplicantsClick={()=>handleApplicantsClick(job?._id)}
+              onEditClick={()=>JobEditHandler(job?._id)}
               />
             );
           })

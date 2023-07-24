@@ -78,7 +78,7 @@ const authController = (
       message: "logged in successfully",
       token,
       user,
-      profile
+      profile,
     });
   });
 
@@ -121,11 +121,12 @@ const authController = (
   );
   const loginRecruiter = asyncHandler(async (req: Request, res: Response) => {
     const { email, password }: { email: string; password: string } = req.body;
-    const { token, recruiter } = await RecruiterLogin(
+    const { token, recruiter, profile } = await RecruiterLogin(
       email,
       password,
       recruiterRepository,
-      authService
+      authService,
+      recruiterProfileRepository
     );
     console.log(recruiter, "login");
 
@@ -134,6 +135,7 @@ const authController = (
       message: "logged in successfully",
       token,
       recruiter,
+      profile,
     });
   });
 

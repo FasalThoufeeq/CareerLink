@@ -8,7 +8,11 @@ import {
 import asyncHandler from "express-async-handler";
 import { JobRepositoryImp } from "../../Framework/Database/MongoDB/repositories/jobRepositoryImpl";
 import { JobRepositoryInter } from "../../Application/repostories/jobRepositoryInter";
-import { getProfile } from "../../Application/useCases/auth/auth";
+import {
+  UpdateProfile,
+  UpdateProfilepic,
+  getProfile,
+} from "../../Application/useCases/auth/auth";
 import { UserProfileRepositoryImpl } from "../../Framework/Database/MongoDB/repositories/userProfileRepositoryImpl";
 import { UserProfileRepositoryInter } from "../../Application/repostories/userProfileRepositoryInter";
 
@@ -77,12 +81,55 @@ const seekerController = (
     });
   });
 
+  const UpdatingProfile = asyncHandler(async (req: Request, res: Response) => {
+    const { profileId } = req.params;
+    const resume: string | any = req?.file?.path;
+    console.log(resume, "hhhh");
+
+    const profile = req.body;
+    console.log(profile);
+
+    const EditedProfile = await UpdateProfile(
+      profileId,
+      profile,
+      resume,
+      userProfileRepository
+    );
+    res.json({
+      status: "success",
+      message: "Profile updated successfully",
+      EditedProfile,
+    });
+  });
+
+  const UpdatingProfilePic = asyncHandler(
+    async (req: Request, res: Response) => {
+      const { profileId } = req.params;
+      const profilePic: string | any = req?.file?.path;
+      console.log(profilePic, "hhhh");
+      console.log(profileId, "hhhh");
+
+      const EditedData = await UpdateProfilepic(
+        profileId,
+        profilePic,
+        userProfileRepository
+      );
+      res.json({
+        status: "success",
+        message: "Profile Pic updated successfully",
+        EditedData,
+      });
+    }
+  );
+
   return {
     getAllJobs,
     JobApply,
     GetSeekerProfile,
     AppliedJob,
-    JobAppliedCancel
+    JobAppliedCancel,
+    UpdatingProfile,
+    UpdatingProfilePic,
   };
 };
 

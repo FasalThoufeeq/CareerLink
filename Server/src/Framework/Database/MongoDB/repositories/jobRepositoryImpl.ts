@@ -13,14 +13,18 @@ export const jobRepositoryImp = () => {
   };
 
   const getRecruiterJobs = async (recruiterId: string) => {
-    const recruiterJobs = await Job.find({ recruiterId: recruiterId }).sort({
-      createdAt: -1,
-    });
+    const recruiterJobs = await Job.find({ recruiterId: recruiterId })
+      .sort({
+        createdAt: -1,
+      })
+      .populate("recruiterId");
     return recruiterJobs;
   };
 
   const getAllJobs = async () => {
-    const jobList = await Job.find().sort({ createdAt: -1 });
+    const jobList = await Job.find()
+      .sort({ createdAt: -1 })
+      .populate("recruiterId");
     return jobList;
   };
 
@@ -95,10 +99,7 @@ export const jobRepositoryImp = () => {
     return profile;
   };
 
-  const cancelJob = async (
-    jobId: string,
-    applicantId: string
-  ) => {
+  const cancelJob = async (jobId: string, applicantId: string) => {
     const updateInUserProfile = await UserProfile.updateOne(
       { _id: applicantId },
       { $pull: { appliedJobs: { _id: jobId } } }
@@ -107,10 +108,23 @@ export const jobRepositoryImp = () => {
       { _id: jobId },
       { $pull: { appliedUsers: applicantId } }
     );
-    console.log(updateInJob,'job');
-    console.log(updateInUserProfile,'profile');
-    
-    
+    console.log(updateInJob, "job");
+    console.log(updateInUserProfile, "profile");
+  };
+
+  const EditJobs = async (EditedDetails: JobInterface, jobId: string) => {
+    const jobDetails = await Job.findByIdAndUpdate(
+      { _id: jobId },
+      { $set: EditedDetails },
+      { new: true }
+    );
+
+    return jobDetails;
+  };
+
+  const FetchJob = async (jobId: string) => {
+    const jobDetails = await Job.findOne({ _id: jobId });
+    return jobDetails;
   };
 
   return {
@@ -121,7 +135,9 @@ export const jobRepositoryImp = () => {
     getCandidates,
     changeStatus,
     getAppliedJobs,
-    cancelJob
+    cancelJob,
+    EditJobs,
+    FetchJob,
   };
 };
 

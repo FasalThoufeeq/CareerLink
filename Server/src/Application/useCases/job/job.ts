@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { JobRepositoryInter } from "../../repostories/jobRepositoryInter";
+import { JobInterface } from "../../../Types/jobInterface";
 
 export const createJob = async (
   job: {
@@ -83,4 +84,21 @@ export const cancelJob = async (
   jobRepository: ReturnType<JobRepositoryInter>
 ) => {
   await jobRepository.cancelJob(jobId, applicantId);
+};
+
+export const EditJobs = async (
+  EditedDetails: JobInterface,
+  jobId: string,
+  jobRepository: ReturnType<JobRepositoryInter>
+) => {
+  const jobDetails = await jobRepository.EditJobs(EditedDetails, jobId);
+  return jobDetails;
+};
+
+export const FetchJob = async (
+  jobId: string,
+  jobRepository: ReturnType<JobRepositoryInter>
+) => {
+  const jobDetails = await jobRepository.FetchJob(jobId);
+  return jobDetails;
 };

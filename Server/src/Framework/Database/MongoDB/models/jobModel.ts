@@ -52,7 +52,7 @@ const jobSchema = new Schema(
     },
     recruiterId: {
       type: Schema.Types.ObjectId,
-      ref: 'Recruiter',
+      ref: 'RecruiterProfile',
     },
     appliedUsers: [
       {

@@ -34,17 +34,25 @@ export const jobRepositoryInter = (
     );
     return updatedProfile;
   };
-  const getAppliedJobs=async(profileId:string)=>{
-    const profile=await repository.getAppliedJobs(profileId)
-    return profile
-  }
-
-  const cancelJob = async (
-    jobId: string,
-    applicantId: string
-  ) => {
-     await repository.cancelJob(jobId,applicantId)   
+  const getAppliedJobs = async (profileId: string) => {
+    const profile = await repository.getAppliedJobs(profileId);
+    return profile;
   };
+
+  const cancelJob = async (jobId: string, applicantId: string) => {
+    await repository.cancelJob(jobId, applicantId);
+  };
+
+  const EditJobs = async (EditedDetails: JobInterface, jobId: string) => {
+    const jobDetails = await repository.EditJobs(EditedDetails, jobId);
+    return jobDetails;
+  };
+
+  const FetchJob = async (jobId: string) => {
+    const jobDetails = await repository.FetchJob(jobId)
+    return jobDetails;
+  };
+
   return {
     addJob,
     getRecruiterJobs,
@@ -53,7 +61,9 @@ export const jobRepositoryInter = (
     getCandidates,
     changeStatus,
     getAppliedJobs,
-    cancelJob
+    cancelJob,
+    EditJobs,
+    FetchJob
   };
 };
 

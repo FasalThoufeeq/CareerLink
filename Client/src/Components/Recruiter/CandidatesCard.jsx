@@ -23,6 +23,7 @@ import ForumIcon from "@mui/icons-material/Forum";
 import EmailIcon from "@mui/icons-material/Email";
 import { useDispatch } from "react-redux";
 import { ChangeStatus } from "../../Redux/recuiterSlice/recruiterjobSlice";
+import { toast } from "react-toastify";
 const useStyles = makeStyles((theme) => ({
   container: {
     backgroundColor: "#fff",
@@ -34,7 +35,6 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: theme.spacing(3),
     width: "40rem",
     position: "relative",
-    
   },
   logo: {
     marginRight: theme.spacing(2),
@@ -104,10 +104,13 @@ const CandidateCard = ({
   email,
   phoneNumber,
   languages,
+  education,
+  profile,
   jobId,
   applicantId,
   appliedJobs,
-  handleStatusChange
+  resume,
+  handleStatusChange,
 }) => {
   const dispatch = useDispatch();
   const [changedStatus, setChangedStatus] = useState();
@@ -127,8 +130,8 @@ const CandidateCard = ({
     const response = await dispatch(
       ChangeStatus({ jobId, applicantId, changedStatus })
     );
-    handleStatusChange()
-    console.log(response,'res');
+    handleStatusChange();
+    console.log(response, "res");
   };
   const classes = useStyles();
   return (
@@ -142,8 +145,8 @@ const CandidateCard = ({
           <div style={{ display: "flex" }}>
             <div>
               <Avatar
-                alt="Company Logo"
-                // src={companyLogo}
+                alt="Profile"
+                src={profile ? profile : "profile"}
                 className={classes.logo}
               />
             </div>
@@ -185,7 +188,7 @@ const CandidateCard = ({
                     <span>
                       <SchoolIcon style={{ marginRight: "6px" }} />{" "}
                     </span>
-                    BSC Computer Science
+                    {education ? education : "Not Provided"}
                   </Typography>
                 </Grid>
                 <Grid
@@ -193,18 +196,29 @@ const CandidateCard = ({
                   style={{ marginBottom: "10px", marginTop: "10px" }}
                   className={classes.skills}
                 >
-                  <Chip
-                    style={{
-                      color: "white",
-                      backgroundColor: "#4287f5",
-                      borderColor: "#4287f5",
-                      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-                    }}
-                    label="English"
-                    variant="outlined"
-                    className={classes.chip}
-                    clickable={false}
-                  />
+                  {languages.length > 0 ? (
+                    languages.map((language, index) => {
+                      return (
+                        <Chip
+                          key={index}
+                          style={{
+                            color: "white",
+                            backgroundColor: "#4287f5",
+                            borderColor: "#4287f5",
+                            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+                          }}
+                          label={language}
+                          variant="outlined"
+                          className={classes.chip}
+                          clickable={false}
+                        />
+                      );
+                    })
+                  ) : (
+                    <Typography style={{ color: "red", marginLeft: "15px" }}>
+                      Languages is Not Provided
+                    </Typography>
+                  )}
                 </Grid>
                 <div className={classes.status}>
                   <InputLabel
@@ -262,8 +276,13 @@ const CandidateCard = ({
                 variant="outlined"
                 startIcon={<PlagiarismIcon />}
                 className={classes.editButton}
+                onClick={() => {
+                  resume
+                    ? window.open(resume, "_blank")
+                    : toast.warning("Resume Not Provided yet");
+                }}
               >
-                VIEW CV
+                VIEW RESUME
               </Button>
             </div>
           </div>
@@ -311,6 +330,9 @@ CandidateCard.propTypes = {
   jobId: PropTypes.string.isRequired,
   applicantId: PropTypes.string.isRequired,
   appliedJobs: PropTypes.array.isRequired,
-  handleStatusChange:PropTypes.func.isRequired
+  handleStatusChange: PropTypes.func.isRequired,
+  education: PropTypes.string.isRequired,
+  profile: PropTypes.string.isRequired,
+  resume: PropTypes.string.isRequired,
 };
 export default CandidateCard;

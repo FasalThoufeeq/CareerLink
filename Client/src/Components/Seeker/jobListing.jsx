@@ -4,9 +4,11 @@ import JobContainer from "./JobContainer";
 import { useDispatch, useSelector } from "react-redux";
 import { ApplyJobs, GetAllJobs } from "../../Redux/seekerSlice/seekerJobSlice";
 import { Pagination } from "@mui/material";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const JobListing = () => {
   const [liveApply, setLiveAplly] = useState(false);
+  const [loading, setLoading] = useState(false);
   const jobs = useSelector((state) => state?.seekerJobs?.jobs?.data?.jobs);
   const applicantId = useSelector(
     (state) => state?.seekers?.seekers?.user?.profileId
@@ -23,32 +25,75 @@ const JobListing = () => {
     };
     getjobs();
   }, [liveApply]);
-  console.log(applicantId);
   const handleApply = async (jobId) => {
+    setLoading(true);
     const response = await dispatch(ApplyJobs({ jobId, applicantId }));
     if (response?.payload?.data?.status == "success") {
       setLiveAplly(!liveApply);
+      setLoading(false);
     }
   };
+  const [searchValue, setSearchValue] = useState("");
+  const [searchedJob, setSearchedJob] = useState("");
+  const handleSearch = (searchValue) => {
+    setSearchValue(searchValue);
+  };
+  useEffect(() => {
+    const searched =
+      jobs.length > 0
+        ? jobs?.filter((job) => {
+            const { jobTitle, jobLocation, skills } = job;
+            const skill = skills.join("");
+            return (
+              jobLocation.toLowerCase().includes(searchValue.toLowerCase()) ||
+              jobTitle.toLowerCase().includes(searchValue.toLowerCase()) ||
+              skill.toLowerCase().includes(searchValue.toLowerCase())
+            );
+          })
+        : [];
+    setSearchedJob(searched);
+    setpage(1)
+  }, [jobs, searchValue]);
   const [page, setpage] = useState(1);
   const handleChangePage = (event, newPage) => {
     setpage(newPage);
   };
   const rowsPerPage = 3;
-  const displayJobs = jobs
-    ? jobs?.slice((page - 1) * rowsPerPage, page * rowsPerPage)
+  const displayJobs = searchedJob
+    ? searchedJob?.slice((page - 1) * rowsPerPage, page * rowsPerPage)
     : [];
   return (
     <>
       <div style={{ marginBottom: "2rem" }}>
-        <SearchBar />
+        <SearchBar handleSearch={handleSearch} />
       </div>
+      {loading && (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "100%",
+            marginBottom: "30px",
+          }}
+        >
+          <ClipLoader
+            color="#4287f5"
+            loading={loading}
+            // cssOverride={override}
+            size={50}
+            align="center"
+            aria-label="Loading Spinner"
+            data-testid="loader"
+          />
+        </div>
+      )}
       {displayJobs && displayJobs.length > 0
         ? displayJobs.map((job) => {
             return (
               <JobContainer
                 key={job._id}
-                companyLogo="company Logo"
+                companyLogo={job.recruiterId.companylogo}
                 requiredSkills={job.skills}
                 jobTitle={job.jobTitle}
                 jobType={job.jobType}
@@ -70,18 +115,18 @@ const JobListing = () => {
           })
         : null}
       <Pagination
-        count={Math.ceil(jobs?.length / rowsPerPage)}
+        count={Math.ceil(searchedJob?.length / rowsPerPage)}
         page={page}
         onChange={handleChangePage}
         variant="outlined"
         color="primary"
         shape="rounded"
         sx={{
-          display: 'flex',
-          justifyContent: 'center',
+          display: "flex",
+          justifyContent: "center",
           // marginRight: '35rem',
-          marginBottom: '5rem',
-          marginTop:'5rem'
+          marginBottom: "5rem",
+          marginTop: "5rem",
         }}
       />
     </>
