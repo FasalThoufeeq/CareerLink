@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import PropTypes from "prop-types";
 
 import {
@@ -111,9 +111,16 @@ const CandidateCard = ({
   appliedJobs,
   resume,
   handleStatusChange,
+  onChatButtonClick
 }) => {
+  
   const dispatch = useDispatch();
   const [changedStatus, setChangedStatus] = useState();
+  const handleChatButtonClick = () => {
+    if (onChatButtonClick) {
+      onChatButtonClick();
+    }
+  };
   const appliedJob = appliedJobs.find((job) => job._id === jobId);
   let statusColor = "black";
   if (appliedJob?.status === "pending") {
@@ -299,6 +306,7 @@ const CandidateCard = ({
             variant="outlined"
             startIcon={<ForumIcon />}
             className={classes.editButton}
+            onClick={handleChatButtonClick}
           >
             CHAT
           </Button>
@@ -334,5 +342,6 @@ CandidateCard.propTypes = {
   education: PropTypes.string.isRequired,
   profile: PropTypes.string.isRequired,
   resume: PropTypes.string.isRequired,
+  onChatButtonClick:PropTypes.func.isRequired
 };
 export default CandidateCard;

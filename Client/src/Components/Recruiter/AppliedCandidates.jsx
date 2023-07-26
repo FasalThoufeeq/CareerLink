@@ -6,19 +6,34 @@ import CandidateCard from "./CandidatesCard";
 import { AppliedCandidates } from "../../Redux/recuiterSlice/recruiterjobSlice";
 import ClipLoader from "react-spinners/ClipLoader";
 import CandidateSkeleton from "../candidateSkeleton";
+import { createChat } from "../../Redux/chatSlice/chatSlice";
 
 const AppliedCandidate = () => {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const jobId = params.get("jobId");
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const navigate=useNavigate()
   const [candidates, setCandidates] = useState([]);
   const [saveClicked, setSaveClicked] = useState([]);
   const [loading, setLoading] = useState(false);
   const handleSaveClick = () => {
     setSaveClicked(!saveClicked);
   };
+  const senderId=useSelector((state)=>state?.recruiters?.recruiters?.profile?._id)
+  const handleChatButtonClick = async(receiverId) => {
+    const formData = {
+      senderId: senderId,
+      recieverId: receiverId,
+    };
+
+    const response =await dispatch(createChat(formData));
+    if (response?.payload?.data?.status=='success') {
+      navigate('/recruiter/chat');
+    }
+  };
+
+
   useEffect(() => {
     const ViewCandidates = () => {
       setLoading(true);
@@ -91,6 +106,7 @@ const AppliedCandidate = () => {
                 appliedJobs={candidate?.appliedJobs}
                 key={candidate?._id}
                 handleStatusChange={handleSaveClick}
+                onChatButtonClick={() => handleChatButtonClick(candidate?._id)}
               />
             );
           })

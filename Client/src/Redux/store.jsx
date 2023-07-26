@@ -3,6 +3,7 @@ import seekerReducer from "./seekerSlice/seekerSlice";
 import recruiterReducer from "./recuiterSlice/recruiterSlice";
 import jobReducer from "./recuiterSlice/recruiterjobSlice";
 import seekerJobReducer from "./seekerSlice/seekerJobSlice";
+import chatReducer from "./chatSlice/chatSlice";
 
 const loadState = () => {
   try {
@@ -34,6 +35,7 @@ export const store = configureStore({
     recruiters: recruiterReducer,
     jobs: jobReducer,
     seekerJobs: seekerJobReducer,
+    chats:chatReducer
   },
 
   preloadedState: persistedState,

@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux'
 import AppliedJobs from '../Pages/Seeker/AppliedJobs'
 import Profile from '../Pages/Seeker/Profile'
 import UpdateProfile from '../Components/Seeker/UpdateProfile'
+import Chat from '../Pages/Chat/chat'
 
 const SeekerRoute = () => {
   const token = useSelector((state) => state?.seekers?.seekers?.token);
@@ -18,6 +19,7 @@ const SeekerRoute = () => {
       <Route path="/applied_jobs" element={token?<AppliedJobs />:<Navigate to='/'/>} />
       <Route path="/profile" element={token?<Profile />:<Navigate to='/'/>} />
       <Route path="/update_profile" element={token?<UpdateProfile />:<Navigate to='/'/>} />
+      <Route path="/chat" element={token?<Chat />:<Navigate to='/'/>} />
 
     </Routes>
     <Footer/>

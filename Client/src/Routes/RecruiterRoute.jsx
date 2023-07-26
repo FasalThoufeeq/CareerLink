@@ -8,7 +8,8 @@ import PostJobs from "../Pages/Recruiter/postJobs";
 import AppliedCandidates from "../Pages/Recruiter/AppliedCandidates";
 import RecruiterProfile from "../Pages/Recruiter/recruiterProfile";
 import EditPostedJobs from "../Components/Recruiter/EditPostedJobs";
-
+import Chat from "../Pages/Chat/chat";
+import ChatLayout from "../Pages/Chat/chatLoayout";
 
 const RecruiterRoute = () => {
   const token = useSelector((state) => state?.recruiters?.recruiters?.token);
@@ -38,11 +39,27 @@ const RecruiterRoute = () => {
         />
         <Route
           path="/update_profile"
-          element={token ? <RecruiterProfile /> : <Navigate to="/recruiter/login" />}
+          element={
+            token ? <RecruiterProfile /> : <Navigate to="/recruiter/login" />
+          }
         />
         <Route
           path="/edit_jobs"
-          element={token ? <EditPostedJobs /> : <Navigate to="/recruiter/login" />}
+          element={
+            token ? <EditPostedJobs /> : <Navigate to="/recruiter/login" />
+          }
+        />
+        <Route
+          path="/chat"
+          element={
+            token ? (
+              <ChatLayout>
+                <Chat />
+              </ChatLayout>
+            ) : (
+              <Navigate to="/" />
+            )
+          }
         />
       </Routes>
     </>
