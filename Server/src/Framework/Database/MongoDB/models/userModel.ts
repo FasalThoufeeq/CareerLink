@@ -28,6 +28,12 @@ const userSchema = new Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "UserProfile",
     },
+    passwordResetToken:{
+      type:String
+    },
+    passwordResetTokenExpires:{
+      type:Date
+    }
   },
   { timestamps: true }
 );

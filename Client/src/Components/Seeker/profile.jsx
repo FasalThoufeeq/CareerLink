@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { GettingSeekerProfile } from "../../Redux/seekerSlice/seekerJobSlice";
 import ClipLoader from "react-spinners/ClipLoader";
 import DocumentScannerIcon from "@mui/icons-material/DocumentScanner";
+import ForgotPassEmail from "../../Modal/forgotPassEmail";
 
 const ProfileContainer = () => {
   const dispatch = useDispatch();
@@ -30,6 +31,14 @@ const ProfileContainer = () => {
   );
   const [UserProfile, setUserProfile] = useState();
   const [loading, setloading] = useState(false);
+  const [forgotPassEmailModalOpen, setForgotPassEmailModalOpen] =
+    useState(false);
+  const handleClose = () => {
+    setForgotPassEmailModalOpen(false);
+  };
+  const handleOpenForgotModal = () => {
+    setForgotPassEmailModalOpen(true);
+  };
   useEffect(() => {
     const GetProfile = async () => {
       setloading(true);
@@ -105,6 +114,7 @@ const ProfileContainer = () => {
                   </ListItem>
                   <ListItem sx={{ justifyContent: "center" }}>
                     <Button
+                      onClick={()=>handleOpenForgotModal()}
                       component={Link}
                       to="/profile"
                       startIcon={<LockResetIcon style={{ color: "gray" }} />}
@@ -162,11 +172,14 @@ const ProfileContainer = () => {
               </Paper>
             </Grid>
 
+            {/* password reset modal */}
+            <ForgotPassEmail handleClose={handleClose} open={forgotPassEmailModalOpen}/>
+
             {/* "Paper" section */}
             <Grid item xs={12} md={9} sx={{ marginTop: "5rem" }}>
               <Typography variant="h4">My Profile</Typography>
               <Paper elevation={3} sx={{ padding: "20px", marginTop: "15px" }}>
-                <Grid style={{marginBottom:'2rem'}}>
+                <Grid style={{ marginBottom: "2rem" }}>
                   {UserProfile?.profilePicture && (
                     <img
                       src={UserProfile?.profilePicture}
@@ -206,7 +219,7 @@ const ProfileContainer = () => {
                     <Typography variant="subtitle1">Contact Number:</Typography>
                     <Typography>{UserProfile?.phoneNumber}</Typography>
                   </Grid>
-                  <Grid item xs={12}>
+                  <Grid item xs={12} sm={6}>
                     <Typography variant="subtitle1">Education:</Typography>
                     {UserProfile?.education ? (
                       <Typography>{UserProfile?.education}</Typography>
@@ -216,13 +229,34 @@ const ProfileContainer = () => {
                       </Typography>
                     )}
                   </Grid>
-                  <Grid item xs={12}>
+                  <Grid item xs={12} sm={6}>
+                    <Typography variant="subtitle1">Experience:</Typography>
+                    <Typography>{UserProfile?.experience}</Typography>
+                  </Grid>
+
+                  <Grid item xs={12} sm={6}>
                     <Typography variant="subtitle1">Languages:</Typography>
                     {UserProfile?.languages?.length > 0 ? (
                       <Grid container spacing={1}>
                         {UserProfile?.languages.map((language, index) => (
                           <Grid item key={index}>
                             <Chip label={language} />
+                          </Grid>
+                        ))}
+                      </Grid>
+                    ) : (
+                      <Typography style={{ color: "red" }}>
+                        Not Provided
+                      </Typography>
+                    )}
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Typography variant="subtitle1">Skills:</Typography>
+                    {UserProfile?.skills?.length > 0 ? (
+                      <Grid container spacing={1}>
+                        {UserProfile?.skills.map((skill, index) => (
+                          <Grid item key={index}>
+                            <Chip label={skill} />
                           </Grid>
                         ))}
                       </Grid>

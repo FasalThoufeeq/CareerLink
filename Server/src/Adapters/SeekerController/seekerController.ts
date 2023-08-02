@@ -122,6 +122,8 @@ const seekerController = (
     }
   );
 
+
+
   return {
     getAllJobs,
     JobApply,

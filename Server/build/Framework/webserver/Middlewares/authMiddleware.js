@@ -6,7 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const httpStatus_1 = require("../../../Types/httpStatus");
 const AppError_1 = __importDefault(require("../../../Utils/AppError"));
 const authServiceInter_1 = require("../../../Application/Services/authServiceInter");
-const userAuthMiddleware = (req, res, next) => {
+const authServiceImpl_1 = require("../../Services/authServiceImpl");
+const service = (0, authServiceInter_1.authServiceInter)((0, authServiceImpl_1.authServiceImpl)());
+const AuthMiddleware = (req, res, next) => {
     let token = "";
     if (req.headers.authorization &&
         req.headers.authorization.startsWith("Bearer")) {
@@ -16,11 +18,12 @@ const userAuthMiddleware = (req, res, next) => {
         throw new AppError_1.default("Token not found", httpStatus_1.HttpStatus.UNAUTHORIZED);
     }
     try {
-        const { payload } = (0, authServiceInter_1.authServiceInter)().verifyToken(token);
+        const { payload } = service.verifyToken(token);
+        console.log(payload, 'authmidd');
         next();
     }
     catch (err) {
         throw new AppError_1.default("UnAuthorized User", httpStatus_1.HttpStatus.UNAUTHORIZED);
     }
 };
-exports.default = userAuthMiddleware;
+exports.default = AuthMiddleware;

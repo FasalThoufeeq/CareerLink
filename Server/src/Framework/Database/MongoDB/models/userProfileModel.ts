@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const userProfileSchema = new mongoose.Schema({
   firstName: {
@@ -26,21 +26,28 @@ const userProfileSchema = new mongoose.Schema({
   resume: {
     type: String,
   },
+  experience: {
+    type: String,
+  },
+  skills: {
+    type: [String],
+    default: [],
+  },
   appliedJobs: {
     type: [
       {
         _id: {
           type: String,
-          ref: 'Job',
+          ref: "Job",
         },
         status: {
           type: String,
-          default: 'pending',
+          default: "pending",
         },
       },
     ],
-    ref: 'Job',
+    ref: "Job",
   },
 });
 
-export const UserProfile = mongoose.model('UserProfile', userProfileSchema);
+export const UserProfile = mongoose.model("UserProfile", userProfileSchema);

@@ -65,6 +65,42 @@ export const UpdateProfilePic = createAsyncThunk(
   }
 );
 
+export const ForgotPassEmailSubmit = createAsyncThunk(
+  "seeker/forgotpass_emailSubmit",
+  async (payload) => {
+    try {
+      const response = await authApi.post(
+        "seeker/forgot_pass_email_submit",
+        payload
+      );
+      return response;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
+
+export const ResetingPassword = createAsyncThunk(
+  "seeker/reset_pass",
+  async ({resetToken, payload}) => {
+    try {
+      console.log(payload, "api");
+      const response = await authApi.put(
+        `seeker/reset_password/${resetToken}`,
+        payload,
+        {
+          headers: {
+            "Content-Type": "application/json", // Set the Content-Type header to application/json
+          },
+        }
+      );
+      return response;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
+
 const initialState = {
   seekers: {},
 };

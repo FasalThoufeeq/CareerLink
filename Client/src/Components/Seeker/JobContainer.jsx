@@ -17,6 +17,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import SendIcon from "@mui/icons-material/Send";
 import JobDetailsModal from "../../Modal/JobDetailsModal";
 import VerifiedIcon from "@mui/icons-material/Verified";
+import { toast } from "react-toastify";
 const useStyles = makeStyles((theme) => ({
   container: {
     backgroundColor: "#fff",
@@ -260,7 +261,11 @@ const JobContainer = ({
                 }}
                 startIcon={<SendIcon className={classes.personIcon} />}
                 className={classes.applicationButton}
-                onClick={handleApplyClick}
+                onClick={() => {
+                  ApplicantId
+                    ? handleApplyClick()
+                    : toast.error("Please Login to Aplly");
+                }}
               >
                 Apply
               </Button>

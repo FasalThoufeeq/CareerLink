@@ -42,7 +42,7 @@ const buttonStyle = { marginTop: "20px", marginBottom: "10px" };
 const avatarStyle = { backgroundColor: "#1bbd7e" };
 const space = " ";
 
-const SeekerLoginModal = ({ handleClose, open, handleSignUp }) => {
+const SeekerLoginModal = ({ handleClose, open, handleSignUp, handleForgot }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [error, setError] = useState('')
@@ -50,6 +50,7 @@ const SeekerLoginModal = ({ handleClose, open, handleSignUp }) => {
     handleClose: PropTypes.func.isRequired,
     handleSignUp: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired,
+    handleForgot:PropTypes.func.isRequired
   };
   const handleGoogleSignIn = async () => {
 
@@ -176,6 +177,18 @@ const SeekerLoginModal = ({ handleClose, open, handleSignUp }) => {
                 onClick={handleSignUp}
               >
                 Sign Up
+              </Link>
+            </Typography>
+            <Typography>
+              <Link
+                sx={{
+                  marginLeft: 0.5,
+                  textDecoration: "none",
+                  cursor: "pointer",
+                }}
+                onClick={handleForgot}
+              >
+                Forgot Password ?
               </Link>
             </Typography>
           </Paper>

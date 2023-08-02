@@ -8,8 +8,8 @@ const recruiterRepositoryInter = (repository) => {
     const getRecruiterByUsername = (userName) => {
         return repository.getRecruiterByUsername(userName);
     };
-    const addRecruiter = (recruiter) => {
-        return repository.addRecruiter(recruiter);
+    const addRecruiter = (recruiter, profileId) => {
+        return repository.addRecruiter(recruiter, profileId);
     };
     return {
         getRecruiterByEmail,

@@ -9,13 +9,29 @@ export const authServiceInter = (service: AuthServiceImplReturn) => {
 
   const generateToken = (payload: string) => service.generateToken(payload);
 
-  const verifyToken=(token:string)=> service.verifyToken(token)
+  const verifyToken = (token: string) => service.verifyToken(token);
+
+  const createResetPasswordToken = async () => {
+    const resetToken = await service.createResetPasswordToken();
+    return resetToken;
+  };
+
+  const hashResetPasswordToken = async (ResetPasswordToken: string) => {
+    const hashedResetPasswordToken = await service.hashResetPasswordToken(
+      ResetPasswordToken
+    );
+
+    return hashedResetPasswordToken;
+  };
+  
 
   return {
     encryptPassword,
     comparePassword,
     generateToken,
-    verifyToken
+    verifyToken,
+    createResetPasswordToken,
+    hashResetPasswordToken
   };
 };
 export type AuthServiceInter = typeof authServiceInter;

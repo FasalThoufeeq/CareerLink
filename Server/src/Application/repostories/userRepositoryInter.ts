@@ -9,7 +9,7 @@ export const userRepositoryInter = (
     return repository.getUserByEmail(email);
   };
 
-  const getUserProfileByEmail = async(email: string) => {
+  const getUserProfileByEmail = async (email: string) => {
     return await repository.getUserProfileByEmail(email);
   };
   const addUser = async (
@@ -19,10 +19,37 @@ export const userRepositoryInter = (
     return repository.addUser(user, profileId);
   };
 
+  const savingResetToken = async (
+    email: string,
+    hashedResetPasswordToken: string,
+    resetPasswordTokenExpires: Date
+  ) => {
+    const saving = await repository.savingResetToken(
+      email,
+      hashedResetPasswordToken,
+      resetPasswordTokenExpires
+    );
+    return saving;
+  };
+
+  const getUserByResetToken = async (resetToken: string) => {
+    const user: UserInterface | null = await repository.getUserByResetToken(
+      resetToken
+    );
+    return user;
+  };
+
+  const resetPassword = async (resetToken: string, password: string) => {
+    return await repository.resetPassword(resetToken, password);
+  };
+
   return {
     getUserByEmail,
     addUser,
-    getUserProfileByEmail
+    getUserProfileByEmail,
+    savingResetToken,
+    getUserByResetToken,
+    resetPassword
   };
 };
 

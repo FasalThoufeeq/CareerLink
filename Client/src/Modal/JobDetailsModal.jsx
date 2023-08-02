@@ -3,35 +3,27 @@ import PropTypes from "prop-types";
 import Modal from "@mui/material/Modal";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
-import {
-  Avatar,
-
-  Chip,
-  Grid,
-  Paper,
- 
-  Typography,
-} from "@mui/material";
+import { Avatar, Chip, Grid, Paper, Typography } from "@mui/material";
 
 const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 700,
-    maxWidth: "90vw", // Set maximum width to avoid horizontal overflow
-    maxHeight: "80vh", // Set maximum height to limit the modal height
-    overflowY: "scroll", // Enable vertical scrolling
-    scrollbarWidth: "none", // Hide the scrollbar for Firefox (for other browsers, see the CSS below)
-    "&::-webkit-scrollbar": {
-      // Hide the scrollbar for Chrome, Safari, and Edge
-      display: "none",
-    },
-    bgcolor: "background.paper",
-    boxShadow: 24,
-    borderRadius: 10,
-    p: 3,
-  };
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 700,
+  maxWidth: "90vw", // Set maximum width to avoid horizontal overflow
+  maxHeight: "80vh", // Set maximum height to limit the modal height
+  overflowY: "scroll", // Enable vertical scrolling
+  scrollbarWidth: "none", // Hide the scrollbar for Firefox (for other browsers, see the CSS below)
+  "&::-webkit-scrollbar": {
+    // Hide the scrollbar for Chrome, Safari, and Edge
+    display: "none",
+  },
+  bgcolor: "background.paper",
+  boxShadow: 24,
+  borderRadius: 10,
+  p: 3,
+};
 const paperStyle = { padding: "30px 20px", width: 600, margin: "20px auto" };
 const headerStyle = { margin: 0 };
 const avatarStyle = {
@@ -50,7 +42,6 @@ const JobDetailsModal = ({
   jobTitle,
   salaryPackage,
   jobLocation,
-  jobId,
   jobType,
   jobVacancies,
   jobTiming,
@@ -70,8 +61,8 @@ const JobDetailsModal = ({
         <Grid sx={style}>
           <Paper elevation={10} style={paperStyle}>
             <Grid align="center" style={{ marginBottom: "50px" }}>
-              <Avatar style={avatarStyle}>
-                <AccountCircleIcon />
+              <Avatar style={avatarStyle} alt="Company Logo" src={companyLogo}>
+                <AccountCircleIcon  />
               </Avatar>
               <h2 style={headerStyle}>Brototype</h2>
               <h5 style={headerStyle}>{jobLocation}</h5>
@@ -96,7 +87,7 @@ const JobDetailsModal = ({
                 </span>{" "}
               </Typography>
 
-              <Typography >
+              <Typography>
                 <span
                   style={{ color: "grey", fontWeight: "bold", gridColumn: "2" }}
                 >
@@ -296,8 +287,8 @@ const JobDetailsModal = ({
                               backgroundColor: "#437cb5",
                               borderColor: "#437cb5",
                               boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-                              marginRight:'5px',
-                              marginTop:'8px'
+                              marginRight: "5px",
+                              marginTop: "8px",
                             }}
                             key={index}
                             label={skill}

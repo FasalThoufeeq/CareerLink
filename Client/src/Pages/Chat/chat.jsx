@@ -37,7 +37,7 @@ const Chat = () => {
     socket.current.on("recieve-message", (data) => {
       setRecieveMessages(data);
     });
-  }, [user,recieveMessages]);
+  }, [user, recieveMessages]);
 
   //receive messages from socket server
 
@@ -55,6 +55,12 @@ const Chat = () => {
     };
     getChats();
   }, []);
+
+  const checkOnlineStatus = (chat) => {
+    const chatMember = chat.members.find((id) => id !== user._id);
+    const online = onlineUsers.find((user) => user.userId === chatMember);
+    return online ? true : false;
+  };
   return (
     <>
       <div className="conversation" style={{ backgroundColor: "#e6e6e6" }}>
@@ -72,7 +78,7 @@ const Chat = () => {
                           setCurrentChat(chat);
                         }}
                       >
-                        <Chats data={chat} currentUserId={user._id} />
+                        <Chats data={chat} currentUserId={user._id} online={checkOnlineStatus(chat)}/>
                       </div>
                     );
                   })

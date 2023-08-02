@@ -5,12 +5,16 @@ const userRepositoryInter = (repository) => {
     const getUserByEmail = async (email) => {
         return repository.getUserByEmail(email);
     };
-    const addUser = async (user) => {
-        return repository.addUser(user);
+    const getUserProfileByEmail = async (email) => {
+        return await repository.getUserProfileByEmail(email);
+    };
+    const addUser = async (user, profileId) => {
+        return repository.addUser(user, profileId);
     };
     return {
         getUserByEmail,
         addUser,
+        getUserProfileByEmail
     };
 };
 exports.userRepositoryInter = userRepositoryInter;

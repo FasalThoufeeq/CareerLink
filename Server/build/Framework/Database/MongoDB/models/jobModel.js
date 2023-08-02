@@ -53,7 +53,7 @@ const jobSchema = new mongoose_1.Schema({
     },
     recruiterId: {
         type: mongoose_1.Schema.Types.ObjectId,
-        ref: 'Recruiter',
+        ref: 'RecruiterProfile',
     },
     appliedUsers: [
         {

@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ApplyJobs, GetAllJobs } from "../../Redux/seekerSlice/seekerJobSlice";
 import { Pagination } from "@mui/material";
 import ClipLoader from "react-spinners/ClipLoader";
+import FilterModal from "../../Modal/filterModal";
 
 const JobListing = () => {
   const [liveApply, setLiveAplly] = useState(false);
@@ -33,10 +34,10 @@ const JobListing = () => {
       setLoading(false);
     }
   };
-  const [searchValue, setSearchValue] = useState("");
+  const [searchValue, setSearchValue] = useState('');
   const [searchedJob, setSearchedJob] = useState("");
   const handleSearch = (searchValue) => {
-    setSearchValue(searchValue);
+    setSearchValue(searchValue.toLowerCase().trim());
   };
   useEffect(() => {
     const searched =
@@ -54,6 +55,24 @@ const JobListing = () => {
     setSearchedJob(searched);
     setpage(1)
   }, [jobs, searchValue]);
+  const handleFilter = (filters) => {
+    const { salary, jobTitle, location } = filters;
+
+    const filtered = jobs?.filter((job) => {
+      const jobSalary = job?.salary.toLowerCase();
+      const jobLocation = job?.jobLocation.toLowerCase();
+      const jobTitleLowerCase = job?.jobTitle.toLowerCase();
+
+      return (
+        (salary === '' || jobSalary === salary) &&
+        (jobLocation === '' || jobLocation.includes(location.toLowerCase())) &&
+        (jobTitle === '' || jobTitleLowerCase.includes(jobTitle.toLowerCase()))
+      );
+    });
+
+    setSearchedJob(filtered);
+    setpage(1);
+  };
   const [page, setpage] = useState(1);
   const handleChangePage = (event, newPage) => {
     setpage(newPage);
@@ -62,11 +81,14 @@ const JobListing = () => {
   const displayJobs = searchedJob
     ? searchedJob?.slice((page - 1) * rowsPerPage, page * rowsPerPage)
     : [];
+
+    console.log(searchValue,"searchValue");
   return (
     <>
       <div style={{ marginBottom: "2rem" }}>
         <SearchBar handleSearch={handleSearch} />
       </div>
+      <FilterModal onFilter={handleFilter} />
       {loading && (
         <div
           style={{

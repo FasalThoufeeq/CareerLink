@@ -5,7 +5,7 @@ import { Box, Typography } from "@mui/material";
 import "./chats.css";
 import { useDispatch } from "react-redux";
 import { getRecruiter, getSeeker } from "../../Redux/chatSlice/chatSlice";
-const Chats = ({ data, currentUserId}) => {
+const Chats = ({ data, currentUserId, online }) => {
   const dispatch = useDispatch();
   const [recruiterData, setRecruiterData] = useState(null);
   const [seekerData, setSeekerData] = useState(null);
@@ -36,7 +36,8 @@ const Chats = ({ data, currentUserId}) => {
     <>
       <div className="conversation">
         <div>
-          <div className="online-dot"></div>
+          {online && <div className="online-dot"></div>}
+
           <div style={{ display: "flex", justifyContent: "space-around" }}>
             <UserImage
               image={
@@ -47,12 +48,18 @@ const Chats = ({ data, currentUserId}) => {
               size="55px"
             />
             <Box>
-              <Typography variant="h5" fontWeight="500" style={{marginLeft:'10px'}}>
+              <Typography
+                variant="h5"
+                fontWeight="500"
+                style={{ marginLeft: "10px" }}
+              >
                 {seekerData
                   ? seekerData?.firstName
                   : recruiterData?.companyName}
               </Typography>
-              <Typography fontSize="0.75rem" style={{marginLeft:'10px'}}>Online</Typography>
+              <Typography fontSize="0.75rem" style={{ marginLeft: "10px" }}>
+                {online ? "Online" : "Offline"}
+              </Typography>
             </Box>
           </div>
         </div>
@@ -64,6 +71,6 @@ const Chats = ({ data, currentUserId}) => {
 Chats.propTypes = {
   data: PropTypes.object.isRequired,
   currentUserId: PropTypes.string.isRequired,
-
+  online: PropTypes.bool.isRequired,
 };
 export default Chats;

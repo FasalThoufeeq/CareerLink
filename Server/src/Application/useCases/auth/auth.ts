@@ -1,6 +1,7 @@
 import { recruiterProfileInterface } from "../../../Types/recruiterProfileInterface";
 import { UserInterface } from "../../../Types/userInterface";
 import { AuthServiceInter } from "../../Services/authServiceInter";
+import { SendEmailInterReturn } from "../../Services/nodemailerInter";
 import { RecruiterProfileRepositoryInter } from "../../repostories/recruiterProfileRepositoryInter";
 import { RecruiterRepositoryInter } from "../../repostories/recruiterRepositoryInter";
 import { UserProfileRepositoryInter } from "../../repostories/userProfileRepositoryInter";
@@ -177,7 +178,9 @@ export const UpdateProfile = async (
     email: string;
     phoneNumber: string;
     education: string;
+    experience: string;
     languages: string[];
+    skills: string[];
     resume: string;
     profilePicture: string;
   },
@@ -238,4 +241,57 @@ export const UpdateCompanylogo = async (
   );
 
   return EditedProfile;
+};
+
+export const forgottenpassEmail = async (
+  email: string,
+  authService: ReturnType<AuthServiceInter>,
+  userRepository: ReturnType<UserRepositoryInter>,
+  nodemailerRepository: SendEmailInterReturn
+) => {
+  const user = await userRepository.getUserByEmail(email);
+  console.log(user);
+
+  if (!user) {
+    throw new Error(`User with ${email} not exists`);
+  }
+
+  const resetPasswordToken = await authService.createResetPasswordToken();
+
+  const hashResetPasswordToken = await authService.hashResetPasswordToken(
+    resetPasswordToken
+  );
+  const passwordResetTokenExpires = new Date(Date.now() + 10 * 60 * 1000);
+
+  const saving = await userRepository.savingResetToken(
+    email,
+    hashResetPasswordToken,
+    passwordResetTokenExpires
+  );
+
+  await nodemailerRepository.ResetPasswordEmail(email, resetPasswordToken);
+};
+
+export const resetPassword = async (
+  resetToken: string,
+  password:string,
+  authService: ReturnType<AuthServiceInter>,
+  userRepository: ReturnType<UserRepositoryInter>
+) => {
+  const hashedResetToken=await authService.hashResetPasswordToken(resetToken)
+
+  const user = await userRepository.getUserByResetToken(hashedResetToken)
+
+  if(!user){
+    throw new Error(`Your reset Token has expired. Please try again`);
+  }
+  console.log(user);
+  
+
+  const hashedPassword=await authService.encryptPassword(password)
+
+  await userRepository.resetPassword(hashedResetToken,hashedPassword)
+
+  return
+
 };

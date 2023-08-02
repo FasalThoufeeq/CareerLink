@@ -11,6 +11,8 @@ import {
   userGoogleLogin,
   recruiterRegister,
   RecruiterLogin,
+  forgottenpassEmail,
+  resetPassword,
 } from "../../Application/useCases/auth/auth";
 import { GoogleUserInteface } from "../../Types/userGoogleInterface";
 import { RecruiterRepositoryInter } from "../../Application/repostories/recruiterRepositoryInter";
@@ -20,6 +22,8 @@ import { UserProfileRepositoryImpl } from "../../Framework/Database/MongoDB/repo
 import { UserProfileRepositoryInter } from "../../Application/repostories/userProfileRepositoryInter";
 import { RecruiterProfileRepositoryInter } from "../../Application/repostories/recruiterProfileRepositoryInter";
 import { RecruiterProfileRepositoryImpl } from "../../Framework/Database/MongoDB/repositories/recruiterProfileRepositoryImpl";
+import { SendEmailInter } from "../../Application/Services/nodemailerInter";
+import { SendEmailImpl } from "../../Framework/Services/nodemailerImpl";
 const authController = (
   authServiceImpl: AuthServiceImpl,
   authServiceInter: AuthServiceInter,
@@ -37,6 +41,7 @@ const authController = (
   const userProfileRepository = userProfileRepositoryInter(
     userProfileRepositoryImpl()
   );
+  const nodemailerRepository = SendEmailInter(SendEmailImpl());
   const recruiterRepository = recruiterRepositoryInter(
     recruiterRepositoryImpl()
   );
@@ -139,12 +144,41 @@ const authController = (
     });
   });
 
+  const forgotPassEmail = asyncHandler(async (req: Request, res: Response) => {
+    const { email } = req.body;
+    await forgottenpassEmail(
+      email,
+      authService,
+      userDbRepository,
+      nodemailerRepository
+    );
+
+    res.json({
+      status: "success",
+      message: "reset password link send to the user email",
+    });
+  });
+
+  const resetingPassword = asyncHandler(async (req: Request, res: Response) => {
+    const { resetToken } = req.params;
+    const { password } = req.body;
+    console.log(resetToken,password);
+    
+    await resetPassword(resetToken, password, authService, userDbRepository);
+    res.json({
+      status: "success",
+      message: "Your password Reset Successfully",
+    });
+  });
+
   return {
     registerUser,
     loginUser,
     googleLoginUser,
     registerRecruiter,
     loginRecruiter,
+    forgotPassEmail,
+    resetingPassword,
   };
 };
 

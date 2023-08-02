@@ -5,16 +5,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
 const auth_1 = require("../../Application/useCases/auth/auth");
-const authController = (authServiceImpl, authServiceInter, userRepositoryImpl, userRepositoryInter, recruiterRepositoryImpl, recruiterRepositoryInter) => {
-    console.log("eeeee");
+const authController = (authServiceImpl, authServiceInter, userRepositoryImpl, userRepositoryInter, userProfileRepositoryImpl, userProfileRepositoryInter, recruiterRepositoryImpl, recruiterRepositoryInter, recruiterProfileRepositoryImpl, recruiterProfileRepositoryInter) => {
     const authService = authServiceInter(authServiceImpl());
     const userDbRepository = userRepositoryInter(userRepositoryImpl());
+    const userProfileRepository = userProfileRepositoryInter(userProfileRepositoryImpl());
     const recruiterRepository = recruiterRepositoryInter(recruiterRepositoryImpl());
+    const recruiterProfileRepository = recruiterProfileRepositoryInter(recruiterProfileRepositoryImpl());
     const registerUser = (0, express_async_handler_1.default)(async (req, res) => {
-        console.log("kkkk");
         const user = req.body;
         console.log(req.body);
-        const createUser = await (0, auth_1.userRegister)(user, userDbRepository, authService);
+        const createUser = await (0, auth_1.userRegister)(user, userDbRepository, userProfileRepository, authService);
         console.log(createUser, "varum");
         res.json({
             status: "success",
@@ -24,13 +24,14 @@ const authController = (authServiceImpl, authServiceInter, userRepositoryImpl, u
     });
     const loginUser = (0, express_async_handler_1.default)(async (req, res) => {
         const { email, password } = req.body;
-        const { token, user } = await (0, auth_1.userLogin)(email, password, userDbRepository, authService);
-        console.log(user, "login");
+        const { token, user, profile } = await (0, auth_1.userLogin)(email, password, userDbRepository, authService);
+        console.log(profile, "login");
         res.json({
             status: "success",
             message: "logged in successfully",
             token,
             user,
+            profile,
         });
     });
     const googleLoginUser = (0, express_async_handler_1.default)(async (req, res) => {
@@ -40,7 +41,7 @@ const authController = (authServiceImpl, authServiceInter, userRepositoryImpl, u
             lastName: userDetails?._tokenResponse?.lastName,
             email: userDetails?._tokenResponse?.email,
         };
-        const { token, isExistingEmail } = await (0, auth_1.userGoogleLogin)(user, userDbRepository, authService);
+        const { token, isExistingEmail } = await (0, auth_1.userGoogleLogin)(user, userDbRepository, userProfileRepository, authService);
         res.json({
             status: "success",
             message: "Google login successfull",
@@ -50,7 +51,7 @@ const authController = (authServiceImpl, authServiceInter, userRepositoryImpl, u
     });
     const registerRecruiter = (0, express_async_handler_1.default)(async (req, res) => {
         const recruiter = req.body;
-        const createRecruiter = await (0, auth_1.recruiterRegister)(recruiter, recruiterRepository, authService);
+        const createRecruiter = await (0, auth_1.recruiterRegister)(recruiter, recruiterRepository, recruiterProfileRepository, authService);
         res.json({
             status: "success",
             message: "new recruiter registered",
@@ -59,13 +60,14 @@ const authController = (authServiceImpl, authServiceInter, userRepositoryImpl, u
     });
     const loginRecruiter = (0, express_async_handler_1.default)(async (req, res) => {
         const { email, password } = req.body;
-        const { token, recruiter } = await (0, auth_1.RecruiterLogin)(email, password, recruiterRepository, authService);
+        const { token, recruiter, profile } = await (0, auth_1.RecruiterLogin)(email, password, recruiterRepository, authService, recruiterProfileRepository);
         console.log(recruiter, "login");
         res.json({
             status: "success",
             message: "logged in successfully",
             token,
             recruiter,
+            profile,
         });
     });
     return {

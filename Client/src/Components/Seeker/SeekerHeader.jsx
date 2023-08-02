@@ -19,6 +19,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { logoutSeeker } from "../../Redux/seekerSlice/seekerSlice";
 import { toast } from "react-toastify";
 import { Button } from "@mui/material";
+import ForgotPassEmail from "../../Modal/forgotPassEmail";
 
 const settings = ["Profile", "Logout", "Login", "Register"];
 
@@ -29,6 +30,8 @@ const UserHeader = () => {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [registerModalOpen, setRegisterModalOpen] = useState(false);
+  const [forgotPassEmailModalOpen, setForgotPassEmailModalOpen] =
+    useState(false);
   const navigate = useNavigate();
   const handleOpen = (modalType) => {
     if (modalType === "Login") {
@@ -40,9 +43,14 @@ const UserHeader = () => {
   const handleOpenSignUpModal = () => {
     setRegisterModalOpen(true);
   };
+  const handleOpenForgotModal = () => {
+    setLoginModalOpen(false)
+    setForgotPassEmailModalOpen(true);
+  };
   const handleClose = () => {
     setLoginModalOpen(false);
     setRegisterModalOpen(false);
+    setForgotPassEmailModalOpen(false);
   };
 
   const handleOpenNavMenu = (event) => {
@@ -182,11 +190,16 @@ const UserHeader = () => {
             handleClose={handleClose}
             open={loginModalOpen}
             handleSignUp={handleOpenSignUpModal}
+            handleForgot={handleOpenForgotModal}
           />
           <SeekerRegisterModal
             handleClose={handleClose}
             open={registerModalOpen}
             handleLogin={handleOpen}
+          />
+          <ForgotPassEmail
+            open={forgotPassEmailModalOpen}
+            handleClose={handleClose}
           />
 
           <Box sx={{ flexGrow: 0 }}>
@@ -217,8 +230,8 @@ const UserHeader = () => {
                     <MenuItem
                       key={setting}
                       onClick={() => {
-                        handleCloseUserMenu()
-                        navigate('/profile')
+                        handleCloseUserMenu();
+                        navigate("/profile");
                       }}
                     >
                       <Typography textAlign="center">{setting}</Typography>

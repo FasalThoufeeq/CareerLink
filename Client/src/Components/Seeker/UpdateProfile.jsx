@@ -46,14 +46,18 @@ const UpdateProfile = () => {
     };
     GetProfile();
   }, [imageUpdate]);
-  console.log(UserProfile,'lllllll');
   const fileInputRef = useRef(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [languages, setLanguages] = useState([]);
+  const [skills, setSkills] = useState([]);
   const [languageInput, setLanguageInput] = useState("");
+  const [skillsInput, setSkillsInput] = useState("");
   const handleLanguageInputChange = (event) => {
     setLanguageInput(event.target.value);
+  };
+  const handleSkillsInputChange = (event) => {
+    setSkillsInput(event.target.value);
   };
   const handleAddLanguage = () => {
     if (languageInput.trim() !== "") {
@@ -66,9 +70,17 @@ const UpdateProfile = () => {
       setLanguageInput("");
     }
   };
+  const handleAddSkills = () => {
+    if (skillsInput.trim() !== "") {
+      const updatedSkills = [...formik.values.skills, skillsInput.trim()];
+      formik.setFieldValue("skills", updatedSkills);
+      setSkills(updatedSkills);
+      setSkillsInput("");
+    }
+  };
 
   const imageUpload = async (profilePic) => {
-    setloading(true)
+    setloading(true);
     const formdata = new FormData();
     formdata.append("profilePic", profilePic);
     const response = await dispatch(
@@ -77,8 +89,8 @@ const UpdateProfile = () => {
 
     if (response?.payload?.data?.status === "success") {
       toast.success(response?.payload?.data?.message);
-      setloading(false)
-      setImageUpdate(!imageUpdate)
+      setloading(false);
+      setImageUpdate(!imageUpdate);
       // navigate('/profile')
     }
   };
@@ -91,6 +103,8 @@ const UpdateProfile = () => {
       phoneNumber: "",
       education: "",
       languages: [],
+      skills: [],
+      experience: "",
       resume: null,
       profilePic: null,
     },
@@ -105,6 +119,7 @@ const UpdateProfile = () => {
         .max(10, "Enter valid Phone Number")
         .required("Contact Number is Required"),
       education: Yup.string().required("Education is required"),
+      experience: Yup.string().required("Experience is required"),
     }),
     onSubmit: async (values) => {
       try {
@@ -121,7 +136,9 @@ const UpdateProfile = () => {
         formData.append("email", values.email);
         formData.append("phoneNumber", values.phoneNumber);
         formData.append("education", values.education);
+        formData.append("experience", values.experience);
         formData.append("languages", values.languages);
+        formData.append("skills", values.skills);
         console.log(formData);
         const response = await dispatch(
           UpdateProfileDetails({ payload: formData, profileId })
@@ -144,16 +161,24 @@ const UpdateProfile = () => {
       formik.setFieldValue("email", UserProfile?.email || "");
       formik.setFieldValue("phoneNumber", UserProfile?.phoneNumber || "");
       formik.setFieldValue("education", UserProfile?.education || "");
+      formik.setFieldValue("experience", UserProfile?.experience || "");
       formik.setFieldValue("languages", UserProfile?.languages || []);
+      formik.setFieldValue("skills", UserProfile?.skills || []);
       setLanguages(
         UserProfile?.languages?.length > 0 ? UserProfile?.languages : []
       );
+      setSkills(UserProfile?.skills?.length > 0 ? UserProfile?.skills : []);
     }
   }, [UserProfile, formik.setFieldValue]);
   const handleLanguageRemove = (index) => {
     const updatedLanguages = languages.filter((_, i) => i !== index);
     formik.setFieldValue("languages", updatedLanguages);
     setLanguages(updatedLanguages);
+  };
+  const handleSkillsRemove = (index) => {
+    const updatedSkills = skills.filter((_, i) => i !== index);
+    formik.setFieldValue("skills", updatedSkills);
+    setSkills(updatedSkills);
   };
   if (!UserProfile) {
     return (
@@ -179,9 +204,9 @@ const UpdateProfile = () => {
           <Grid item xs={12}>
             {!UserProfile?.profilePicture && (
               <AccountCircleIcon
-              style={{ width: "150px", height: "150px", borderRadius: "50%" }}
-            />
-            ) }
+                style={{ width: "150px", height: "150px", borderRadius: "50%" }}
+              />
+            )}
             {UserProfile?.profilePicture && (
               <img
                 src={UserProfile?.profilePicture}
@@ -193,9 +218,7 @@ const UpdateProfile = () => {
                   borderRadius: "50%",
                 }}
               />
-            ) } 
-              
-            
+            )}
           </Grid>
           <Grid item xs={12}>
             <Button
@@ -297,6 +320,20 @@ const UpdateProfile = () => {
               helperText={formik.touched.education && formik.errors.education}
             />
           </Grid>
+          <Grid item xs={12} sm={12}>
+            <TextField
+              fullWidth
+              id="experience"
+              name="experience"
+              label="Experience"
+              value={formik.values.experience}
+              onChange={formik.handleChange}
+              error={
+                formik.touched.experience && Boolean(formik.errors.experience)
+              }
+              helperText={formik.touched.experience && formik.errors.experience}
+            />
+          </Grid>
 
           <Grid item xs={12} sm={6}>
             <TextField
@@ -321,15 +358,28 @@ const UpdateProfile = () => {
             </Button>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <div
-              style={{ height: "50px" }}
-              {...getRootProps({ className: "dropzone" })}
+            <TextField
+              style={{ width: "30ch" }}
+              id="skills"
+              name="skills"
+              label="skills"
+              value={skillsInput}
+              onChange={handleSkillsInputChange}
+            />
+            <Button
+              style={{
+                marginTop: "10px",
+                marginLeft: "5px",
+                backgroundColor: "black",
+              }}
+              variant="contained"
+              color="primary"
+              onClick={handleAddSkills}
             >
-              <input {...getInputProps()} />
-              <p>Drag and drop your resume here or click to browse</p>
-            </div>
-            {selectedFile && <Typography>{selectedFile.name}</Typography>}
+              Add
+            </Button>
           </Grid>
+
           <Grid item xs={12} sm={6} sx={{ marginTop: "10px" }}>
             {languages.length > 0
               ? languages.map((language, index) => (
@@ -344,7 +394,30 @@ const UpdateProfile = () => {
                 ))
               : null}
           </Grid>
-
+          <Grid item xs={12} sm={6} sx={{ marginTop: "10px" }}>
+            {skills.length > 0
+              ? skills.map((skill, index) => (
+                  <Grid item key={index}>
+                    <Chip
+                      label={skill}
+                      onDelete={() => handleSkillsRemove(index)}
+                      color="success"
+                      variant="outlined"
+                    />
+                  </Grid>
+                ))
+              : null}
+          </Grid>
+          <Grid item xs={12} sm={12}>
+            <div
+              style={{ height: "50px" }}
+              {...getRootProps({ className: "dropzone" })}
+            >
+              <input {...getInputProps()} />
+              <p>Drag and drop your resume here or click to browse</p>
+            </div>
+            {selectedFile && <Typography>{selectedFile.name}</Typography>}
+          </Grid>
           <Grid item xs={12}>
             <Button
               style={{ backgroundColor: "black", marginBottom: "70px" }}

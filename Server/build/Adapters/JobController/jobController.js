@@ -19,17 +19,58 @@ const jobController = (jobRepositoryImpl, jobRepositoryInter) => {
     });
     const RecruiterAllJobs = (0, express_async_handler_1.default)(async (req, res) => {
         const { recruiterId } = req.params;
-        // console.log(recruiterId);
         const RecruiterJobs = await (0, job_1.getRecruiterJobs)(recruiterId, jobRepository);
+        console.log(RecruiterJobs, "cccc");
         res.json({
             RecruiterJobs,
             status: "success",
             message: "jobs fetched successfully",
         });
     });
+    const GetAppliedCandidates = (0, express_async_handler_1.default)(async (req, res) => {
+        const { jobId } = req.params;
+        const Candidates = await (0, job_1.getCandidates)(jobId, jobRepository);
+        res.json({
+            Candidates,
+            status: "success",
+            message: "fetched candidates successfully",
+        });
+    });
+    const StatusChange = (0, express_async_handler_1.default)(async (req, res) => {
+        const { jobId, applicantId, status } = req.query;
+        const updatedProfile = await (0, job_1.changeStatus)(jobId?.toString() || "", applicantId?.toString() || "", status?.toString() || "", jobRepository);
+        res.json({
+            status: "success",
+            message: "status updated successfully",
+            updatedProfile,
+        });
+    });
+    const EdittingJob = (0, express_async_handler_1.default)(async (req, res) => {
+        const { jobId } = req.params;
+        const EditedDetails = req.body;
+        const jobDetails = await (0, job_1.EditJobs)(EditedDetails, jobId, jobRepository);
+        res.json({
+            status: "success",
+            message: "Job Edited Successfully",
+            jobDetails,
+        });
+    });
+    const FetchingJob = (0, express_async_handler_1.default)(async (req, res) => {
+        const { jobId } = req.params;
+        const jobDetails = await (0, job_1.FetchJob)(jobId, jobRepository);
+        res.json({
+            status: "success",
+            message: "Job Fetched Successfully",
+            jobDetails,
+        });
+    });
     return {
         postJob,
-        RecruiterAllJobs
+        RecruiterAllJobs,
+        GetAppliedCandidates,
+        StatusChange,
+        EdittingJob,
+        FetchingJob
     };
 };
 exports.default = jobController;

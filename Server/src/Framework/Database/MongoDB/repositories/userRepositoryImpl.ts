@@ -22,10 +22,55 @@ export const userRepositoryImpl = () => {
     return savedUser;
   };
 
+  const savingResetToken = async (
+    email: string,
+    hashedResetPasswordToken: string,
+    resetPasswordTokenExpires: Date
+  ) => {
+    const saving = await User.findOneAndUpdate(
+      { email: email },
+      {
+        $set: {
+          passwordResetToken: hashedResetPasswordToken,
+          passwordResetTokenExpires: resetPasswordTokenExpires,
+        },
+      },
+      { new: true }
+    );
+    return saving;
+  };
+
+  const getUserByResetToken = async (resetToken: string) => {
+    const user: UserInterface | null = await User.findOne({
+      passwordResetToken: resetToken,
+      passwordResetTokenExpires: { $gt: Date.now() },
+    });
+    return user;
+  };
+
+  const resetPassword = async (resetToken: string, password: string) => {
+    await User.findOneAndUpdate(
+      { passwordResetToken: resetToken },
+      {
+        $set: {
+          password: password,
+          passwordResetToken: null,
+          passwordResetTokenExpires: null,
+        },
+      },
+      { new: true }
+    );
+
+    return
+  };
+
   return {
     getUserByEmail,
     addUser,
-    getUserProfileByEmail
+    getUserProfileByEmail,
+    savingResetToken,
+    getUserByResetToken,
+    resetPassword,
   };
 };
 

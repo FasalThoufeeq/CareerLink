@@ -15,8 +15,9 @@ const recruiterRepositoryImpl = () => {
         });
         return recruiter;
     };
-    const addRecruiter = async (recruiter) => {
+    const addRecruiter = async (recruiter, profileId) => {
         const newRecruiter = new recruiterModel_1.Recruiter(recruiter);
+        newRecruiter.profileId = profileId;
         const savedRecuiter = await newRecruiter.save();
         return savedRecuiter;
     };
