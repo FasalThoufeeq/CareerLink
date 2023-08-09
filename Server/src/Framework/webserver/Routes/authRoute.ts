@@ -40,6 +40,9 @@ const authRoute = () => {
 
   router.put("/seeker/reset_password/:resetToken", controller.resetingPassword);
 
+  router.post('/invite_email',controller.InvitingEmail)
+
+
   return router;
 };
 

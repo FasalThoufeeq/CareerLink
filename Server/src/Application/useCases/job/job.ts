@@ -102,3 +102,17 @@ export const FetchJob = async (
   const jobDetails = await jobRepository.FetchJob(jobId);
   return jobDetails;
 };
+
+export const PushNotification = async (
+  applicantId: string,
+  notification: string,
+  notificationSummary: string,
+  jobRepository: ReturnType<JobRepositoryInter>
+) => {
+  await jobRepository.pushNotification(
+    applicantId,
+    notification,
+    notificationSummary
+  );
+  return;
+};

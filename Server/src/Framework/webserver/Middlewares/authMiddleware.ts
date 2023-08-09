@@ -16,15 +16,14 @@ const AuthMiddleware = (
     req.headers.authorization.startsWith("Bearer")
   ) {
     token = req.headers.authorization.split(" ")[1];
+    
   }
   if (!token) {
     throw new AppError("Token not found", HttpStatus.UNAUTHORIZED);
   }
+  
   try {
     const { payload }: any = service.verifyToken(token);
-    console.log(payload,'authmidd');
-    
-
     next();
   } catch (err) {
     throw new AppError("UnAuthorized User", HttpStatus.UNAUTHORIZED);

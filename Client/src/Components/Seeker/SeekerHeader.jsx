@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -20,11 +21,24 @@ import { logoutSeeker } from "../../Redux/seekerSlice/seekerSlice";
 import { toast } from "react-toastify";
 import { Button } from "@mui/material";
 import ForgotPassEmail from "../../Modal/forgotPassEmail";
+import { io } from "socket.io-client";
+import hotToast from 'react-hot-toast'
 
 const settings = ["Profile", "Logout", "Login", "Register"];
 
 const UserHeader = () => {
   const token = useSelector((state) => state?.seekers?.seekers?.token);
+  const seeker = useSelector((state) => state?.seekers?.seekers?.profile);
+  const socket = io("http://localhost:3000");
+  useEffect(() => {
+    if (seeker) {
+      socket?.emit("new-user-add", seeker._id);
+    }
+    socket?.on("getNotifications", (data) => {
+      hotToast(data.notification)
+    });
+  }, [socket, seeker]);
+
   const dispatch = useDispatch();
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -40,11 +54,12 @@ const UserHeader = () => {
       setRegisterModalOpen(true);
     }
   };
+
   const handleOpenSignUpModal = () => {
     setRegisterModalOpen(true);
   };
   const handleOpenForgotModal = () => {
-    setLoginModalOpen(false)
+    setLoginModalOpen(false);
     setForgotPassEmailModalOpen(true);
   };
   const handleClose = () => {
@@ -142,6 +157,25 @@ const UserHeader = () => {
                   <ChatIcon sx={{ mr: 1, mt: 1 }} />
                 </Typography>
               </MenuItem>
+              <MenuItem onClick={handleCloseNavMenu}>
+                <Typography
+                  textAlign="center"
+                  onClick={handleCloseNavMenu}
+                  component={Link}
+                  to="/notifications"
+                  sx={{
+                    my: 2,
+                    color: "#19376D",
+                    display: "block",
+                    md: "flex",
+                  }}
+                >
+                  <NotificationsActiveIcon
+                    sx={{ mr: 1, mt: 1 }}
+                    style={{ color: "#19376D" }}
+                  />
+                </Typography>
+              </MenuItem>
             </Menu>
           </Box>
           <SchoolIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
@@ -182,6 +216,43 @@ const UserHeader = () => {
               }}
             >
               <ChatIcon sx={{ mr: 1, mt: 1 }} />
+            </Typography>
+            <Typography
+              textAlign="center"
+              onClick={handleCloseNavMenu}
+              component={Link}
+              to="/notifications"
+              sx={{
+                ml: 3,
+                my: 2,
+                color: "#19376D",
+                display: "block",
+                md: "flex",
+              }}
+            >
+              {/* <Badge badgeContent={0} color="secondary"> */}
+              {/* <div style={{ position: "relative", display: "inline-block" }}> */}
+                <NotificationsActiveIcon
+                  sx={{ mr: 1, mt: 1 }}
+                  style={{ color: "#19376D" }}
+                />
+                {/* <div
+                  style={{
+                    position: "absolute",
+                    top: "-8px",
+                    right: "-8px",
+                    backgroundColor: "red",
+                    color: "white",
+                    borderRadius: "50%",
+                    padding: "2px 6px",
+                    fontSize: "12px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {/* {newNotifications?.length} */}
+                {/* </div> */} 
+              {/* </div> */}
+              {/* </Badge> */}
             </Typography>
           </Box>
 

@@ -34,7 +34,7 @@ const style = {
 };
 const paperStyle = {
   padding: 20,
-  height: "50vh",
+  height: "58vh",
   width: 300,
   margin: "15px auto",
 };

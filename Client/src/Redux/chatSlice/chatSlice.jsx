@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { chatApi } from "../../Common/api/chatApi";
+import chatApi from "../../Common/api/chatApi";
 import recruiterApi from '../../Common/api/recruiterApi'
 import seekerApi from '../../Common/api/seekerApi'
 import { messageApi } from "../../Common/api/messageApi";

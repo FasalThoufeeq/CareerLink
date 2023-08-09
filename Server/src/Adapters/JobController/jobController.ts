@@ -3,6 +3,7 @@ import { JobRepositoryInter } from "../../Application/repostories/jobRepositoryI
 import {
   EditJobs,
   FetchJob,
+  PushNotification,
   changeStatus,
   createJob,
   getCandidates,
@@ -20,7 +21,6 @@ const jobController = (
 
   const postJob = asyncHandler(async (req: Request, res: Response) => {
     const jobDetails: any = req.body;
-    console.log(jobDetails);
 
     const postedJob = await createJob(jobDetails, jobRepository);
     res.json({
@@ -33,7 +33,6 @@ const jobController = (
   const RecruiterAllJobs = asyncHandler(async (req: Request, res: Response) => {
     const { recruiterId } = req.params;
     const RecruiterJobs = await getRecruiterJobs(recruiterId, jobRepository);
-    console.log(RecruiterJobs, "cccc");
 
     res.json({
       RecruiterJobs,
@@ -93,13 +92,32 @@ const jobController = (
     });
   });
 
+  const pushingNotification = asyncHandler(
+    async (req: Request, res: Response) => {
+      const { applicantId, notification, notificationSummary } = req.body;
+
+      await PushNotification(
+        applicantId,
+        notification,
+        notificationSummary,
+        jobRepository
+      );
+
+      res.json({
+        status: "success",
+        message: "notification successfully pushed",
+      });
+    }
+  );
+
   return {
     postJob,
     RecruiterAllJobs,
     GetAppliedCandidates,
     StatusChange,
     EdittingJob,
-    FetchingJob
+    FetchingJob,
+    pushingNotification,
   };
 };
 

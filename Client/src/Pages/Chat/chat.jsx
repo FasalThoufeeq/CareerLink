@@ -39,13 +39,6 @@ const Chat = () => {
     });
   }, [user, recieveMessages]);
 
-  //receive messages from socket server
-
-  // useEffect(() => {
-  //   socket.current.on("recieve-message", (data) => {
-  //     setRecieveMessages(data);
-  //   });
-  // }, [recieveMessages]);
   useEffect(() => {
     const getChats = async () => {
       const response = await dispatch(getUserChats(user._id));

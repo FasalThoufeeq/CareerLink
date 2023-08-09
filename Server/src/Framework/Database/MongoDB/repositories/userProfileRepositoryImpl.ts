@@ -21,7 +21,6 @@ export const userProfileRepositoryImpl = () => {
         { $set: updatedProfile },
         { new: true }
       );
-    console.log("klklkl");
     await User.findOneAndUpdate(
       { profileId: profileId },
       {

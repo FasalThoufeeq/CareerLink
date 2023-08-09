@@ -27,9 +27,6 @@ export const recruiterProfileRepositoryImpl = () => {
     updatedProfile: recruiterProfileInterface,
     profileId: string
   ) => {
-    console.log(updatedProfile,'..............');
-    console.log(updatedProfile);
-    
     const EditedProfile = await RecruiterProfile.findByIdAndUpdate(
       { _id: profileId },
       { $set: updatedProfile },

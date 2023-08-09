@@ -32,7 +32,6 @@ const RecruiterProfileController = (
   const UpdatingProfile = asyncHandler(async (req: Request, res: Response) => {
     const { profileId } = req.params;
     const updatedProfile = req.body;
-    console.log(profileId, updatedProfile, "wwwe");
 
     const EditedProfile = await UpdateRecruiterProfile(
       updatedProfile,

@@ -53,6 +53,15 @@ export const jobRepositoryInter = (
     return jobDetails;
   };
 
+  const pushNotification = async (
+    applicantId: string,
+    notification: string,
+    notificationSummary:string
+  ) => {
+    await repository.pushNotification(applicantId, notification,notificationSummary)
+    return
+  };
+
   return {
     addJob,
     getRecruiterJobs,
@@ -63,7 +72,8 @@ export const jobRepositoryInter = (
     getAppliedJobs,
     cancelJob,
     EditJobs,
-    FetchJob
+    FetchJob,
+    pushNotification
   };
 };
 

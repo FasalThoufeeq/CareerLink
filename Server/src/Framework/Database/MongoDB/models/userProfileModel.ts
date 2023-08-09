@@ -48,6 +48,18 @@ const userProfileSchema = new mongoose.Schema({
     ],
     ref: "Job",
   },
+  notifications: {
+    type: [
+      {
+        notification: {
+          type: String,
+        },
+        notificationSummary: {
+          type: String,
+        },
+      },
+    ],
+  },
 });
 
 export const UserProfile = mongoose.model("UserProfile", userProfileSchema);

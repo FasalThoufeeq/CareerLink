@@ -13,6 +13,7 @@ import {
   RecruiterLogin,
   forgottenpassEmail,
   resetPassword,
+  InviteEmail,
 } from "../../Application/useCases/auth/auth";
 import { GoogleUserInteface } from "../../Types/userGoogleInterface";
 import { RecruiterRepositoryInter } from "../../Application/repostories/recruiterRepositoryInter";
@@ -51,7 +52,6 @@ const authController = (
 
   const registerUser = asyncHandler(async (req: Request, res: Response) => {
     const user: UserInterface = req.body;
-    console.log(req.body);
 
     const createUser = await userRegister(
       user,
@@ -59,7 +59,6 @@ const authController = (
       userProfileRepository,
       authService
     );
-    console.log(createUser, "varum");
 
     res.json({
       status: "success",
@@ -76,7 +75,6 @@ const authController = (
       userDbRepository,
       authService
     );
-    console.log(profile, "login");
 
     res.json({
       status: "success",
@@ -133,7 +131,6 @@ const authController = (
       authService,
       recruiterProfileRepository
     );
-    console.log(recruiter, "login");
 
     res.json({
       status: "success",
@@ -162,7 +159,6 @@ const authController = (
   const resetingPassword = asyncHandler(async (req: Request, res: Response) => {
     const { resetToken } = req.params;
     const { password } = req.body;
-    console.log(resetToken,password);
     
     await resetPassword(resetToken, password, authService, userDbRepository);
     res.json({
@@ -170,6 +166,15 @@ const authController = (
       message: "Your password Reset Successfully",
     });
   });
+
+  const InvitingEmail=asyncHandler(async(req: Request, res: Response)=>{
+    const {name,email,roomId,jobTitle,companyName} = req.body
+    await InviteEmail(name, email, roomId, jobTitle, companyName,nodemailerRepository)
+    res.json({
+      status: "success",
+      message: "Invite Email send Successfully",
+    });
+  })
 
   return {
     registerUser,
@@ -179,6 +184,7 @@ const authController = (
     loginRecruiter,
     forgotPassEmail,
     resetingPassword,
+    InvitingEmail
   };
 };
 

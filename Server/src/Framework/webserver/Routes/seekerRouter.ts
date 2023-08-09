@@ -20,7 +20,7 @@ const seekerRoute = () => {
 
   router.post("/apply_job",AuthMiddleware, controller.JobApply);
 
-  router.get("/seeker_profile/:profileId",AuthMiddleware, controller.GetSeekerProfile);
+  router.get("/seeker_profile/:profileId", controller.GetSeekerProfile);
 
   router.get("/applied_jobs/:profileId",AuthMiddleware, controller.AppliedJob);
 

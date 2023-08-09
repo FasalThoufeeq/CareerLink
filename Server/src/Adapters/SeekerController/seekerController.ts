@@ -84,10 +84,8 @@ const seekerController = (
   const UpdatingProfile = asyncHandler(async (req: Request, res: Response) => {
     const { profileId } = req.params;
     const resume: string | any = req?.file?.path;
-    console.log(resume, "hhhh");
 
     const profile = req.body;
-    console.log(profile);
 
     const EditedProfile = await UpdateProfile(
       profileId,
@@ -106,8 +104,6 @@ const seekerController = (
     async (req: Request, res: Response) => {
       const { profileId } = req.params;
       const profilePic: string | any = req?.file?.path;
-      console.log(profilePic, "hhhh");
-      console.log(profileId, "hhhh");
 
       const EditedData = await UpdateProfilepic(
         profileId,

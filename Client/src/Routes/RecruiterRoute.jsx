@@ -10,6 +10,9 @@ import RecruiterProfile from "../Pages/Recruiter/recruiterProfile";
 import EditPostedJobs from "../Components/Recruiter/EditPostedJobs";
 import Chat from "../Pages/Chat/chat";
 import ChatLayout from "../Pages/Chat/chatLoayout";
+import PageNotFound from "../Components/pageNotFound";
+import Room from "../Pages/VideoCall/room";
+import RoomLayout from "../Pages/VideoCall/roomLayout";
 
 const RecruiterRoute = () => {
   const token = useSelector((state) => state?.recruiters?.recruiters?.token);
@@ -61,6 +64,19 @@ const RecruiterRoute = () => {
             )
           }
         />
+        <Route
+          path="/room/:roomID"
+          element={
+            token ? (
+              <RoomLayout>
+                <Room />
+              </RoomLayout>
+            ) : (
+              <Navigate to="/" />
+            )
+          }
+        />
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
     </>
   );

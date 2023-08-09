@@ -5,9 +5,26 @@ export const SendEmailInter = (service: SendEmailImplReturn) => {
     const sendMail = await service.ResetPasswordEmail(email, resetToken);
     return sendMail;
   };
+  const InviteEmail = async (
+    name: string,
+    email: string,
+    roomId: string,
+    jobTitle: string,
+    companyName: string
+  ) => {
+    const sendMail = await service.InviteEmail(
+      name,
+      email,
+      roomId,
+      jobTitle,
+      companyName
+    );
+    return sendMail;
+  };
 
   return {
     ResetPasswordEmail,
+    InviteEmail
   };
 };
 

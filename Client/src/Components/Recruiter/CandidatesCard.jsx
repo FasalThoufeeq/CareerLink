@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
 import {
@@ -13,8 +13,8 @@ import {
   Typography,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-
 import CallIcon from "@mui/icons-material/Call";
+import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
 
 import PlagiarismIcon from "@mui/icons-material/Plagiarism";
 import VideocamIcon from "@mui/icons-material/Videocam";
@@ -22,8 +22,14 @@ import SchoolIcon from "@mui/icons-material/School";
 import ForumIcon from "@mui/icons-material/Forum";
 import EmailIcon from "@mui/icons-material/Email";
 import { useDispatch } from "react-redux";
-import { ChangeStatus } from "../../Redux/recuiterSlice/recruiterjobSlice";
+import {
+  ChangeStatus,
+  GetJobDetails,
+  InviteEmail,
+  PushNotification,
+} from "../../Redux/recuiterSlice/recruiterjobSlice";
 import { toast } from "react-toastify";
+import { io } from "socket.io-client";
 const useStyles = makeStyles((theme) => ({
   container: {
     backgroundColor: "#fff",
@@ -33,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "flex-start", // Align items to flex-start
     boxShadow: "0 6px 10px rgba(0, 0, 0, 0.3)",
     borderRadius: theme.spacing(3),
-    width: "40rem",
+    width: "45rem",
     position: "relative",
   },
   logo: {
@@ -99,11 +105,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CandidateCard = ({
+  _id,
   firstName,
   lastName,
   email,
   phoneNumber,
   languages,
+  skills,
   education,
   profile,
   jobId,
@@ -111,16 +119,28 @@ const CandidateCard = ({
   appliedJobs,
   resume,
   handleStatusChange,
-  onChatButtonClick
+  onChatButtonClick,
+  handleVideoCall,
 }) => {
-  
   const dispatch = useDispatch();
   const [changedStatus, setChangedStatus] = useState();
+  const [jobDetails, setJobDetails] = useState();
+
   const handleChatButtonClick = () => {
     if (onChatButtonClick) {
       onChatButtonClick();
     }
   };
+  useEffect(() => {
+    const GetJob = async () => {
+      const response = await dispatch(GetJobDetails(jobId));
+      if (response?.payload?.data?.status == "success") {
+        setJobDetails(response?.payload?.data?.jobDetails);
+      }
+    };
+    GetJob();
+  }, []);
+  console.log(jobDetails, "ooooo");
   const appliedJob = appliedJobs.find((job) => job._id === jobId);
   let statusColor = "black";
   if (appliedJob?.status === "pending") {
@@ -132,13 +152,42 @@ const CandidateCard = ({
   } else if (appliedJob?.status === "Shortlisted") {
     statusColor = "#4287f5";
   }
+  const handleInvite = async () => {
+    const response = await dispatch(
+      InviteEmail({
+        name: firstName,
+        email,
+        roomId: _id,
+        jobTitle: jobDetails?.jobTitle,
+        companyName:jobDetails?.recruiterId?.companyName
+      })
+    );
+    console.log(response,'reeeeesponse');
+  };
   const handleSaveClick = async () => {
     console.log(jobId, applicantId, changedStatus, "pls");
     const response = await dispatch(
       ChangeStatus({ jobId, applicantId, changedStatus })
     );
-    handleStatusChange();
+    const socket = io("http://localhost:3000");
+    socket.emit("sendNotification", {
+      receiverId: applicantId,
+      notification:`Your Application status has been ${changedStatus} for ${jobDetails?.jobTitle} in ${jobDetails?.recruiterId?.companyName} at ${jobDetails?.jobLocation}`
+    });
     console.log(response, "res");
+
+    if (response?.payload?.data?.status == "success") {
+      const notification = `Hi${firstName}, Your Application status has been ${changedStatus} for ${jobDetails?.jobTitle} in ${jobDetails?.recruiterId?.companyName} at ${jobDetails?.jobLocation} `;
+      const response = await dispatch(
+        PushNotification({
+          applicantId,
+          notification,
+          notificationSummary: "Job Application Status Changed",
+        })
+      );
+      console.log(response);
+    }
+    handleStatusChange();
   };
   const classes = useStyles();
   return (
@@ -203,6 +252,41 @@ const CandidateCard = ({
                   style={{ marginBottom: "10px", marginTop: "10px" }}
                   className={classes.skills}
                 >
+                  <Typography style={{ color: "#4287f5", marginLeft: "15px" }}>
+                    Skills :
+                  </Typography>
+                  {skills.length > 0 ? (
+                    skills.map((skill, index) => {
+                      return (
+                        <Chip
+                          key={index}
+                          style={{
+                            color: "white",
+                            backgroundColor: "#4287f5",
+                            borderColor: "#4287f5",
+                            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+                          }}
+                          label={skill}
+                          variant="outlined"
+                          className={classes.chip}
+                          clickable={false}
+                        />
+                      );
+                    })
+                  ) : (
+                    <Typography style={{ color: "red", marginLeft: "5px" }}>
+                      Not added yet
+                    </Typography>
+                  )}
+                </Grid>
+                <Grid
+                  item
+                  style={{ marginBottom: "10px", marginTop: "10px" }}
+                  className={classes.skills}
+                >
+                  <Typography style={{ color: "#4287f5", marginLeft: "15px" }}>
+                    Languages :
+                  </Typography>
                   {languages.length > 0 ? (
                     languages.map((language, index) => {
                       return (
@@ -222,8 +306,8 @@ const CandidateCard = ({
                       );
                     })
                   ) : (
-                    <Typography style={{ color: "red", marginLeft: "15px" }}>
-                      Languages is Not Provided
+                    <Typography style={{ color: "red", marginLeft: "5px" }}>
+                      Not Provided
                     </Typography>
                   )}
                 </Grid>
@@ -281,6 +365,23 @@ const CandidateCard = ({
                   marginRight: "8px",
                 }}
                 variant="outlined"
+                startIcon={<InsertInvitationIcon />}
+                className={classes.editButton}
+                onClick={() => {
+                  handleInvite();
+                }}
+              >
+                INVITE
+              </Button>
+              <Button
+                style={{
+                  color: "black",
+                  borderRadius: "20px",
+                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+                  marginBottom: "5px",
+                  marginRight: "8px",
+                }}
+                variant="outlined"
                 startIcon={<PlagiarismIcon />}
                 className={classes.editButton}
                 onClick={() => {
@@ -321,6 +422,7 @@ const CandidateCard = ({
             }}
             startIcon={<VideocamIcon className={classes.personIcon} />}
             className={classes.applicationButton}
+            onClick={handleVideoCall}
           >
             SCHEDULE
           </Button>
@@ -330,6 +432,7 @@ const CandidateCard = ({
   );
 };
 CandidateCard.propTypes = {
+  _id:PropTypes.string.isRequired,
   firstName: PropTypes.string.isRequired,
   lastName: PropTypes.string.isRequired,
   email: PropTypes.string.isRequired,
@@ -342,6 +445,8 @@ CandidateCard.propTypes = {
   education: PropTypes.string.isRequired,
   profile: PropTypes.string.isRequired,
   resume: PropTypes.string.isRequired,
-  onChatButtonClick:PropTypes.func.isRequired
+  onChatButtonClick: PropTypes.func.isRequired,
+  handleVideoCall: PropTypes.func.isRequired,
+  skills: PropTypes.array.isRequired,
 };
 export default CandidateCard;

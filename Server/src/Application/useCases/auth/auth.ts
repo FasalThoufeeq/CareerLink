@@ -55,7 +55,6 @@ export const userLogin = async (
     throw new Error(`Password incorrect`);
   }
   const profile = await userRepository.getUserProfileByEmail(email);
-  console.log(profile, "hiiihihihhii");
 
   const token = authService.generateToken(user._id.toString());
   return { token, user, profile };
@@ -83,7 +82,6 @@ export const userGoogleLogin = async (
     const isExistingEmail: any = await userRepository.getUserByEmail(
       user.email
     );
-    console.log(isExistingEmail, "haaaaavooooo");
     const token = await authService.generateToken(
       isExistingEmail._id.toString()
     );
@@ -113,7 +111,6 @@ export const recruiterRegister = async (
   const isExistingUsername = await recruiterRepository.getRecruiterByUsername(
     recruiter.userName
   );
-  console.log(isExistingUsername, "aaaaaaa");
 
   if (isExistingUsername) {
     throw new Error(
@@ -250,7 +247,6 @@ export const forgottenpassEmail = async (
   nodemailerRepository: SendEmailInterReturn
 ) => {
   const user = await userRepository.getUserByEmail(email);
-  console.log(user);
 
   if (!user) {
     throw new Error(`User with ${email} not exists`);
@@ -274,24 +270,33 @@ export const forgottenpassEmail = async (
 
 export const resetPassword = async (
   resetToken: string,
-  password:string,
+  password: string,
   authService: ReturnType<AuthServiceInter>,
   userRepository: ReturnType<UserRepositoryInter>
 ) => {
-  const hashedResetToken=await authService.hashResetPasswordToken(resetToken)
+  const hashedResetToken = await authService.hashResetPasswordToken(resetToken);
 
-  const user = await userRepository.getUserByResetToken(hashedResetToken)
+  const user = await userRepository.getUserByResetToken(hashedResetToken);
 
-  if(!user){
+  if (!user) {
     throw new Error(`Your reset Token has expired. Please try again`);
   }
-  console.log(user);
-  
 
-  const hashedPassword=await authService.encryptPassword(password)
+  const hashedPassword = await authService.encryptPassword(password);
 
-  await userRepository.resetPassword(hashedResetToken,hashedPassword)
+  await userRepository.resetPassword(hashedResetToken, hashedPassword);
 
+  return;
+};
+
+export const InviteEmail = async(
+  name: string,
+  email: string,
+  roomId: string,
+  jobTitle: string,
+  companyName: string,
+  nodemailerRepository: SendEmailInterReturn
+) => {
+  await nodemailerRepository.InviteEmail(name, email, roomId, jobTitle,companyName)
   return
-
 };

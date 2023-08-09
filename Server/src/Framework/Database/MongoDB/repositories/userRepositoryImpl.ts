@@ -18,7 +18,6 @@ export const userRepositoryImpl = () => {
     const newUser: any = new User(user);
     newUser.profileId = profileId;
     const savedUser = await newUser.save();
-    console.log(savedUser, "saved");
     return savedUser;
   };
 

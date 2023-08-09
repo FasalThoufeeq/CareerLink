@@ -3,36 +3,44 @@ import { useDispatch, useSelector } from "react-redux";
 import { Pagination, Typography } from "@mui/material";
 import { useLocation, useNavigate } from "react-router";
 import CandidateCard from "./CandidatesCard";
-import { AppliedCandidates } from "../../Redux/recuiterSlice/recruiterjobSlice";
+import {
+  AppliedCandidates,
+  PushNotification,
+} from "../../Redux/recuiterSlice/recruiterjobSlice";
 import ClipLoader from "react-spinners/ClipLoader";
 import CandidateSkeleton from "../candidateSkeleton";
 import { createChat } from "../../Redux/chatSlice/chatSlice";
+import { io } from "socket.io-client";
 
 const AppliedCandidate = () => {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const jobId = params.get("jobId");
   const dispatch = useDispatch();
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const [candidates, setCandidates] = useState([]);
   const [saveClicked, setSaveClicked] = useState([]);
   const [loading, setLoading] = useState(false);
   const handleSaveClick = () => {
     setSaveClicked(!saveClicked);
   };
-  const senderId=useSelector((state)=>state?.recruiters?.recruiters?.profile?._id)
-  const handleChatButtonClick = async(receiverId) => {
+  const senderId = useSelector(
+    (state) => state?.recruiters?.recruiters?.profile?._id
+  );
+  const recruiterProfile = useSelector(
+    (state) => state?.recruiters?.recruiters?.profile
+  );
+  const handleChatButtonClick = async (receiverId) => {
     const formData = {
       senderId: senderId,
       recieverId: receiverId,
     };
 
-    const response =await dispatch(createChat(formData));
-    if (response?.payload?.data?.status=='success') {
-      navigate('/recruiter/chat');
+    const response = await dispatch(createChat(formData));
+    if (response?.payload?.data?.status == "success") {
+      navigate("/recruiter/chat");
     }
   };
-
 
   useEffect(() => {
     const ViewCandidates = () => {
@@ -56,6 +64,31 @@ const AppliedCandidate = () => {
   const displayJobs = candidates
     ? candidates?.slice((page - 1) * rowsPerPage, page * rowsPerPage)
     : [];
+
+  const handleVideoCall = async (roomID) => {
+    const socket = io("http://localhost:3000");
+    socket.emit("sendNotification", {
+      receiverId: roomID,
+      notification:`Video Call Scheduled Pls check your Notification`
+    });
+    const roomUrl = `http://localhost:5173/room/${roomID}`;
+    const message = `Join this room to video chat: ${roomUrl}`;
+    const event = {
+      preventDefault: () => {},
+      message: message,
+    };
+    // await handleSend(event);
+    navigate(`/recruiter/room/${roomID}`);
+    const notification = `According to your job application, the ${recruiterProfile?.companyName} company has scheduled an interview for you. You can join through this link: ${roomUrl}`;
+    await dispatch(
+      PushNotification({
+        applicantId: roomID,
+        notification,
+        notificationSummary: "Interview Scheduled",
+      })
+    );
+    console.log("Video call initiated");
+  };
   return (
     <>
       <Typography
@@ -74,7 +107,7 @@ const AppliedCandidate = () => {
             alignItems: "center",
             justifyContent: "center",
             height: "100%",
-            marginBottom:'30px'
+            marginBottom: "30px",
           }}
         >
           <ClipLoader
@@ -88,15 +121,17 @@ const AppliedCandidate = () => {
           />
         </div>
       )}
-      {loading && <CandidateSkeleton cards={3}/>}
+      {loading && <CandidateSkeleton cards={3} />}
       {!loading && displayJobs && displayJobs.length > 0
         ? displayJobs.map((candidate) => {
             return (
               <CandidateCard
+                _id={candidate._id}
                 firstName={candidate?.firstName}
                 lastName={candidate?.lastName}
                 email={candidate?.email}
                 phoneNumber={candidate?.phoneNumber}
+                skills={candidate?.skills}
                 languages={candidate?.languages}
                 jobId={jobId}
                 profile={candidate?.profilePicture}
@@ -107,6 +142,7 @@ const AppliedCandidate = () => {
                 key={candidate?._id}
                 handleStatusChange={handleSaveClick}
                 onChatButtonClick={() => handleChatButtonClick(candidate?._id)}
+                handleVideoCall={() => handleVideoCall(candidate?._id)}
               />
             );
           })

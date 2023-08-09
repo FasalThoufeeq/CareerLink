@@ -5,11 +5,11 @@ const MyAxios = axios.create({
 });
 
 MyAxios.interceptors.request.use(
-  (config) => {
-    const state = localStorage.getItem("reduxState");
-    const reduxState = JSON.parse(state);
+  async(config) => {
+    const state =await localStorage.getItem("reduxState");
+    const reduxState =await JSON.parse(state);
     const token = reduxState?.seekers?.seekers?.token;
-    console.log(token,'tokrn');
+    console.log(token,'tokrnllll');
     config.headers["Authorization"] = `Bearer ${token}`;
     return config;
   },

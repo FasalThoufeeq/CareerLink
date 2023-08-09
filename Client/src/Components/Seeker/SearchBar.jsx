@@ -28,7 +28,7 @@ const SearchBar = ({ handleSearch }) => {
   const handleChange = (event) => {
     const searchValue = event.target.value;
     setSearchTerm(searchValue);
-    handleSearch(searchTerm);
+   
   };
   const classes = useStyles();
   return (
@@ -44,7 +44,11 @@ const SearchBar = ({ handleSearch }) => {
         className={classes.input}
         placeholder="Serach Jobs..."
         value={searchTerm}
-        onChange={handleChange}
+        onChange={(e)=>{
+          setSearchTerm(e.target.value);
+          handleSearch(e.target.value);
+
+        }}
       />
     </Paper>
   );

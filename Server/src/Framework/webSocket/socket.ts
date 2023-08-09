@@ -2,6 +2,7 @@ import { Server } from "socket.io";
 import { DefaultEventsMap } from "socket.io/dist/typed-events";
 
 let activeUsers: any[] = [];
+let activeVideoCalls: any[] = [];
 const socketConfig = (
   io: Server<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>
 ) => {
@@ -28,12 +29,35 @@ const socketConfig = (
       }
     });
 
+    socket.on("sendNotification", async(data) => {
+   console.log('ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo');
+   
+      const { receiverId } = data;
+      const user =await activeUsers.find((user) => user.userId == receiverId);
+      console.log(activeUsers);
+      
+      console.log("Sending from socket to:", receiverId);
+      console.log("Data:", data);
+      console.log(user);
+      
+      if (user) {
+        
+        io.to(user.socketId).emit("getNotifications", data);
+      }
+      
+    });
+
     socket.on("disconnect", () => {
       // remove user from active users
       activeUsers = activeUsers.filter((user) => user?.socketId !== socket.id);
       // send all active users to all users
       console.log("disconnectUsers", activeUsers);
       io.emit("get-users", activeUsers);
+
+      activeVideoCalls = activeVideoCalls.filter(
+        (user) => user.socketId !== socket.id
+      );
+      io.emit("activeforcall", activeVideoCalls);
     });
   });
 };

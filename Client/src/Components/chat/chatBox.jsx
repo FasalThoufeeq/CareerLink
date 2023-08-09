@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import UserImage from "./userImage";
 import "./chatBox.css";
-import { VideoCall } from "@mui/icons-material";
 import { Box, Typography } from "@mui/material";
 import InputImoji from "react-input-emoji";
 import { useDispatch } from "react-redux";
@@ -94,6 +93,7 @@ const ChatBox = ({ chat, currentUserId, setsendMessages, recieveMessages }) => {
   useEffect(()=>{
     scroll.current?.scrollIntoView({behavior:'smooth'});
   },[messages])
+
   return (
     <>
       <div className="ChatBox-container" style={{ height: "67vh" }}>
@@ -120,10 +120,6 @@ const ChatBox = ({ chat, currentUserId, setsendMessages, recieveMessages }) => {
                       ? seekerData?.firstName
                       : recruiterData?.companyName}
                   </Typography>
-                  <VideoCall
-                    //   onClick={handleVideoCall}
-                    sx={{ fontSize: "25px" }}
-                  />
                 </Box>
               </div>
               <hr style={{ width: "85%", border: "0.1px solid #ececec" }} />

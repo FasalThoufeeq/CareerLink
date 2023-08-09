@@ -41,6 +41,7 @@ const JobListing = () => {
   };
   useEffect(() => {
     const searched =
+    jobs&&
       jobs.length > 0
         ? jobs?.filter((job) => {
             const { jobTitle, jobLocation, skills } = job;

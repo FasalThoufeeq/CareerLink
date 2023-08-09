@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import recruiterApi from "../../Common/api/recruiterApi";
+import authApi from '../../Common/api/authApi'
 
 export const PostJob = createAsyncThunk(
   "recruiter/post_jobs",
@@ -56,6 +57,21 @@ export const ChangeStatus = createAsyncThunk(
   }
 );
 
+export const InviteEmail = createAsyncThunk(
+  "recruiter/invite",
+  async (payload) => {
+    try {
+      const response = await authApi.post(
+        `/invite_email`,
+        payload
+      );
+      return response;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
+
 export const EditingJobDetails = createAsyncThunk(
   "recruiter/edit_job",
   async ({ jobId, payload }) => {
@@ -73,6 +89,18 @@ export const GetJobDetails = createAsyncThunk(
   async (jobId) => {
     try {
       const response = await recruiterApi.get(`/get_job/${jobId}`);
+      return response;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
+
+export const PushNotification=createAsyncThunk(
+  "recruiter/get_job",
+  async (payload) => {
+    try {
+      const response = await recruiterApi.put(`/push_notification`,payload);
       return response;
     } catch (err) {
       console.log(err);

@@ -82,7 +82,7 @@ export const ForgotPassEmailSubmit = createAsyncThunk(
 
 export const ResetingPassword = createAsyncThunk(
   "seeker/reset_pass",
-  async ({resetToken, payload}) => {
+  async ({ resetToken, payload }) => {
     try {
       console.log(payload, "api");
       const response = await authApi.put(
@@ -103,6 +103,7 @@ export const ResetingPassword = createAsyncThunk(
 
 const initialState = {
   seekers: {},
+  newNotifications:[]
 };
 
 const seekerSlice = createSlice({
@@ -111,6 +112,12 @@ const seekerSlice = createSlice({
   reducers: {
     logoutSeeker: (state) => {
       state.seekers = null;
+    },
+    notificationCountAdd: (state,{payload}) => {
+      state.newNotifications += payload;
+    },
+    notificationCountReset: (state) => {
+      state.newNotifications = [];
     },
   },
   extraReducers: (builder) => {
@@ -131,6 +138,7 @@ const seekerSlice = createSlice({
       .addCase(loginSeeker.fulfilled, (state, { payload }) => {
         console.log("login successfully");
         state.seekers = payload.data;
+        state.newNotifications=payload?.data?.profile?.notifications
       })
       .addCase(loginSeeker.rejected, () => {
         console.log("rejected");
@@ -147,5 +155,5 @@ const seekerSlice = createSlice({
       });
   },
 });
-export const { logoutSeeker } = seekerSlice.actions;
+export const { logoutSeeker, notificationCountAdd, notificationCountReset } = seekerSlice.actions;
 export default seekerSlice.reducer;

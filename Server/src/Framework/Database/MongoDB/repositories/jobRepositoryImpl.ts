@@ -32,10 +32,7 @@ export const jobRepositoryImp = () => {
     jobId: mongoose.Types.ObjectId,
     applicantId: mongoose.Types.ObjectId
   ) => {
-    console.log(jobId, applicantId, "ooo");
-
     const userProfile = await UserProfile.findOne({ _id: applicantId });
-    console.log(userProfile, "iiiii");
 
     const job = await Job.findById(jobId);
     if (!userProfile || !job) {
@@ -66,8 +63,6 @@ export const jobRepositoryImp = () => {
     const appliedCandidates = await Job.findById(jobId).populate(
       "appliedUsers"
     );
-    console.log(appliedCandidates, "wonder");
-
     return appliedCandidates;
   };
 
@@ -108,8 +103,6 @@ export const jobRepositoryImp = () => {
       { _id: jobId },
       { $pull: { appliedUsers: applicantId } }
     );
-    console.log(updateInJob, "job");
-    console.log(updateInUserProfile, "profile");
   };
 
   const EditJobs = async (EditedDetails: JobInterface, jobId: string) => {
@@ -123,8 +116,30 @@ export const jobRepositoryImp = () => {
   };
 
   const FetchJob = async (jobId: string) => {
-    const jobDetails = await Job.findOne({ _id: jobId });
+    const jobDetails = await Job.findOne({ _id: jobId }).populate(
+      "recruiterId"
+    );
     return jobDetails;
+  };
+
+  const pushNotification = async (
+    applicantId: string,
+    notification: string,
+    notificationSummary: string
+  ) => {
+    await UserProfile.findByIdAndUpdate(
+      { _id: applicantId },
+      {
+        $push: {
+          notifications: {
+            notification: notification,
+            notificationSummary: notificationSummary,
+          },
+        },
+      }
+    );
+
+    return;
   };
 
   return {
@@ -138,6 +153,7 @@ export const jobRepositoryImp = () => {
     cancelJob,
     EditJobs,
     FetchJob,
+    pushNotification,
   };
 };
 
