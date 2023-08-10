@@ -14,7 +14,6 @@ const JobListing = () => {
   const applicantId = useSelector(
     (state) => state?.seekers?.seekers?.user?.profileId
   );
-  console.log(applicantId);
   const dispatch = useDispatch();
   useEffect(() => {
     const getjobs = async () => {
@@ -82,8 +81,6 @@ const JobListing = () => {
   const displayJobs = searchedJob
     ? searchedJob?.slice((page - 1) * rowsPerPage, page * rowsPerPage)
     : [];
-
-    console.log(searchValue,"searchValue");
   return (
     <>
       <div style={{ marginBottom: "2rem" }}>

@@ -28,7 +28,6 @@ export const googleLoginSeeker = createAsyncThunk(
   async (payload) => {
     try {
       const response = await authApi.post("google-login", payload);
-      console.log(response, "apoi res");
       return response;
     } catch (err) {
       console.log(err);
@@ -84,7 +83,6 @@ export const ResetingPassword = createAsyncThunk(
   "seeker/reset_pass",
   async ({ resetToken, payload }) => {
     try {
-      console.log(payload, "api");
       const response = await authApi.put(
         `seeker/reset_password/${resetToken}`,
         payload,
@@ -126,7 +124,6 @@ const seekerSlice = createSlice({
         console.log("pending");
       })
       .addCase(registerSeeker.fulfilled, (state, { payload }) => {
-        console.log("registered successfully");
         state.seekers = payload.data;
       })
       .addCase(registerSeeker.rejected, () => {
@@ -136,7 +133,6 @@ const seekerSlice = createSlice({
         console.log("pending");
       })
       .addCase(loginSeeker.fulfilled, (state, { payload }) => {
-        console.log("login successfully");
         state.seekers = payload.data;
         state.newNotifications=payload?.data?.profile?.notifications
       })
@@ -144,7 +140,6 @@ const seekerSlice = createSlice({
         console.log("rejected");
       })
       .addCase(googleLoginSeeker.fulfilled, (state, { payload }) => {
-        console.log("login successfully");
         state.seekers = payload.data;
       })
       .addCase(googleLoginSeeker.rejected, () => {

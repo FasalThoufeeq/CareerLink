@@ -13,9 +13,7 @@ const AppliedJobListing = () => {
   const profileId = useSelector(
     (state) => state?.seekers?.seekers?.profile?._id
   );
-  const profile = useSelector((state) => state?.seekers?.seekers?.profile);
   const [appliedJobs, setAppliedJobs] = useState([]);
-  console.log(appliedJobs, "lll");
   useEffect(() => {
     const gettingProfile = async () => {
       setLoading(true);

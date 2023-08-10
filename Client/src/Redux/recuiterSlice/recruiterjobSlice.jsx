@@ -6,9 +6,7 @@ export const PostJob = createAsyncThunk(
   "recruiter/post_jobs",
   async (payload) => {
     try {
-      console.log(payload, "uuuu");
       const response = await recruiterApi.post("/post_jobs", payload);
-      console.log("response", response);
       return response;
     } catch (err) {
       console.log(err);
@@ -20,9 +18,7 @@ export const GetAllJobs = createAsyncThunk(
   "recruiter/all_jobs",
   async (recruiterId) => {
     try {
-      console.log(recruiterId);
       const response = await recruiterApi.get(`/get_jobs/${recruiterId}`);
-      console.log(response);
       return response;
     } catch (err) {
       console.log(err);
@@ -35,7 +31,6 @@ export const AppliedCandidates = createAsyncThunk(
   async (jobId) => {
     try {
       const response = await recruiterApi.get(`/applied_candidates/${jobId}`);
-      console.log(response);
       return response;
     } catch (err) {
       console.log(err);

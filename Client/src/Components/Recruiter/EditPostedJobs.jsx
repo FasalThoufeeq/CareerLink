@@ -38,7 +38,6 @@ const EditPostedJobs = () => {
     GetJob();
   }, []);
 
-  console.log(jobDetails, "qqqq");
   const recruiterId = useSelector(
     (state) => state?.recruiters?.recruiters?.profile._id
   );
@@ -49,7 +48,6 @@ const EditPostedJobs = () => {
   const handleSkillsInputChange = (event) => {
     setSkillInput(event.target.value);
   };
-  console.log(skills, "skils");
 
   const handleAddSkill = () => {
     if (skillInput.trim() !== "") {
@@ -101,8 +99,6 @@ const EditPostedJobs = () => {
           recruiterId: recruiterId,
         };
 
-        console.log(updatedValues, "eeeee");
-
         const response = await dispatch(
           EditingJobDetails({ jobId, payload: updatedValues })
         );
@@ -142,7 +138,6 @@ const EditPostedJobs = () => {
     formik.setFieldValue("skills", updatedSkills);
     setSkills(updatedSkills);
   };
-  console.log(formik.values.skills, "]]]]");
   if (!jobDetails) {
     return (
       <Container maxWidth="md" sx={{ py: 6 }}>

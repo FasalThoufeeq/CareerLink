@@ -90,7 +90,6 @@ const UpdateProfile = () => {
       try {
         setloading(true);
         const formData = new FormData();
-        console.log(values, "oooooop");
 
         formData.append("companyName", values.companyName);
         formData.append("userName", values.userName);
@@ -100,10 +99,6 @@ const UpdateProfile = () => {
         formData.append("companySize", values.companySize);
         formData.append("industry", values.industry);
         formData.append("about", values.about);
-        for (const pair of formData.entries()) {
-          console.log(pair[0], pair[1]);
-        }
-        console.log(formData, "oooooop");
 
         const response = dispatch(
           UpdateRecruiterProfileDetails({ payload: formData, profileId })

@@ -12,7 +12,6 @@ const Chats = ({ data, currentUserId, online }) => {
 
   useEffect(() => {
     const userId = data.members.find((id) => id !== currentUserId);
-    console.log(userId,"userId");
     const userIdIndex = data?.members.indexOf(userId);
     const getUserData = async () => {
       try {
@@ -26,7 +25,6 @@ const Chats = ({ data, currentUserId, online }) => {
           if (response?.payload?.data?.status == "success") {
             setSeekerData(response?.payload?.data?.profile);
           }
-          console.log(response,'res');
         }
       } catch (error) {
         console.log(error);
@@ -34,7 +32,6 @@ const Chats = ({ data, currentUserId, online }) => {
     };
     getUserData();
   }, []);
-  console.log(seekerData,recruiterData);
   return (
     <>
       <div className="conversation">

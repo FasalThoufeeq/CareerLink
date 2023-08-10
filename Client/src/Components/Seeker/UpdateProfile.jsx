@@ -125,7 +125,6 @@ const UpdateProfile = () => {
       try {
         setloading(true);
         const formData = new FormData();
-        console.log(values, "oooooop");
         if (values.resume) {
           // If a new resume file has been selected, append it to the form data
           formData.append("resume", values.resume);
@@ -139,7 +138,6 @@ const UpdateProfile = () => {
         formData.append("experience", values.experience);
         formData.append("languages", values.languages);
         formData.append("skills", values.skills);
-        console.log(formData);
         const response = await dispatch(
           UpdateProfileDetails({ payload: formData, profileId })
         );

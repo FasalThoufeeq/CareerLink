@@ -27,7 +27,6 @@ const PostJobs = () => {
   const handleSkillsInputChange = (event) => {
     setSkillInput(event.target.value);
   };
-  console.log(skills, "skils");
 
   const handleAddSkill = () => {
     if (skillInput.trim() !== "") {
@@ -89,7 +88,6 @@ const PostJobs = () => {
     formik.setFieldValue("skills", updatedSkills);
     setSkills(updatedSkills);
   };
-  console.log(formik.values.skills, "]]]]");
   return (
     <Container maxWidth="md" style={{ textAlign: "center", marginTop: "40px" }}>
       <Typography variant="h5" component="h1" align="center" gutterBottom>

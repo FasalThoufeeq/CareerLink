@@ -74,16 +74,13 @@ const SeekerRegisterModal = ({ handleClose, open, handleLogin }) => {
     }),
     onSubmit: async (values) => {
       const response = await dispatch(registerSeeker(values));
-      console.log(response, "error");
       if (response?.payload?.data?.status == "success") {
         handleClose();
-        console.log(response?.payload?.data?.status, "hey");
         toast.success("Registration Successfull Please login to Explore");
         handleLogin("Login");
       } else if (response?.payload?.data?.status == "error") {
         setError(response?.payload?.data?.message);
       }
-      console.log(response);
     },
   });
   return (

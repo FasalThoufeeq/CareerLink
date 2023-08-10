@@ -117,7 +117,6 @@ const AppliedJobCard = ({
   } else if (appliedStatus === "Shortlisted") {
     statusColor = "#4287f5";
   }
-  console.log(jobType);
   const [viewModal, setViewModal] = useState(false);
   const postedDays = () => {
     const currentDate = new Date();

@@ -70,13 +70,11 @@ const RecruiterRegister = () => {
     onSubmit: async (values) => {
       const response = await dispatch(RegisterRecruiter(values));
       if (response?.payload?.data?.status == "success") {
-        console.log(response?.payload?.data?.status, "hey");
         toast.success("Registration Successfull Please login to Explore");
         navigate("/recruiter");
       } else if (response?.payload?.data?.status == "error") {
         setError(response?.payload?.data?.message);
       }
-      console.log(response);
     },
   });
   return (

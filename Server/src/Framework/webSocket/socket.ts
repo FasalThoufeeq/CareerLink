@@ -13,32 +13,21 @@ const socketConfig = (
       if (!activeUsers.some((user) => user?.userId === newUserId)) {
         activeUsers.push({ userId: newUserId, socketId: socket.id });
       }
-      console.log("activeUsers", activeUsers);
 
       io.emit("get-users", activeUsers);
     });
 
     socket.on("send-message", (data) => {
       const { recieverId } = data;
-      console.log(recieverId, "recieverId");
-
       const user = activeUsers.find((user) => user?.userId === recieverId);
-      console.log("sending message", recieverId);
       if (user) {
         io.to(user.socketId).emit("recieve-message", data);
       }
     });
 
     socket.on("sendNotification", async(data) => {
-   console.log('ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo');
-   
       const { receiverId } = data;
       const user =await activeUsers.find((user) => user.userId == receiverId);
-      console.log(activeUsers);
-      
-      console.log("Sending from socket to:", receiverId);
-      console.log("Data:", data);
-      console.log(user);
       
       if (user) {
         

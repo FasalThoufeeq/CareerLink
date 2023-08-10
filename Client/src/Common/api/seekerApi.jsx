@@ -9,7 +9,6 @@ MyAxios.interceptors.request.use(
     const state =await localStorage.getItem("reduxState");
     const reduxState =await JSON.parse(state);
     const token = reduxState?.seekers?.seekers?.token;
-    console.log(token,'tokrnllll');
     config.headers["Authorization"] = `Bearer ${token}`;
     return config;
   },

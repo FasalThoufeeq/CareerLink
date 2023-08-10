@@ -42,7 +42,6 @@ export const UpdateRecruiterProfileDetails = createAsyncThunk(
   "recruiter/update_recruiter_profile",
   async ({ payload, profileId }) => {
     try {
-      console.log(payload, profileId, "wwwwwwww");
       const response = await recruiterApi.put(
         `/update_profile/${profileId}`,
         payload,

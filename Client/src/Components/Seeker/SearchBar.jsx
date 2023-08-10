@@ -25,11 +25,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 const SearchBar = ({ handleSearch }) => {
   const [searchTerm, setSearchTerm] = useState(" ");
-  const handleChange = (event) => {
-    const searchValue = event.target.value;
-    setSearchTerm(searchValue);
-   
-  };
   const classes = useStyles();
   return (
     <Paper

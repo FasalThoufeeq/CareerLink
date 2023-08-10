@@ -41,14 +41,12 @@ const ResetPassword = () => {
         .required("Confirm Password is required"),
     }),
     onSubmit: async (values) => {
-      console.log(values, "react");
       const payload = {
         password: values.password,
       };
       const response = await dispatch(
         ResetingPassword({ resetToken, payload })
       );
-      console.log(response, "error");
       if (response?.payload?.data?.status == "success") {
         navigate("/");
         toast.success("Password Reset Successfully");

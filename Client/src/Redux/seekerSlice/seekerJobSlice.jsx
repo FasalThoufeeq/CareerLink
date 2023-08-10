@@ -27,7 +27,6 @@ export const GettingSeekerProfile = createAsyncThunk(
   "seeker/seeker_profile",
   async (profileId) => {
     try {
-      console.log(profileId);
       const response = await seekerApi.get(`/seeker_profile/${profileId}`);
       return response;
     } catch (err) {
@@ -40,7 +39,6 @@ export const AppliedJobs = createAsyncThunk(
   "seeker/applied_jobs",
   async (profileId) => {
     try {
-      console.log(profileId);
       const response = await seekerApi.get(`/applied_jobs/${profileId}`);
       return response;
     } catch (err) {

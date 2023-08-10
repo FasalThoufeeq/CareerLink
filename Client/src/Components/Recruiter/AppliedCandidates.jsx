@@ -72,11 +72,6 @@ const AppliedCandidate = () => {
       notification:`Video Call Scheduled Pls check your Notification`
     });
     const roomUrl = `http://localhost:5173/room/${roomID}`;
-    const message = `Join this room to video chat: ${roomUrl}`;
-    const event = {
-      preventDefault: () => {},
-      message: message,
-    };
     // await handleSend(event);
     navigate(`/recruiter/room/${roomID}`);
     const notification = `According to your job application, the ${recruiterProfile?.companyName} company has scheduled an interview for you. You can join through this link: ${roomUrl}`;
@@ -87,7 +82,6 @@ const AppliedCandidate = () => {
         notificationSummary: "Interview Scheduled",
       })
     );
-    console.log("Video call initiated");
   };
   return (
     <>

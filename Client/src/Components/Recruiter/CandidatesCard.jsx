@@ -140,7 +140,6 @@ const CandidateCard = ({
     };
     GetJob();
   }, []);
-  console.log(jobDetails, "ooooo");
   const appliedJob = appliedJobs.find((job) => job._id === jobId);
   let statusColor = "black";
   if (appliedJob?.status === "pending") {
@@ -153,7 +152,7 @@ const CandidateCard = ({
     statusColor = "#4287f5";
   }
   const handleInvite = async () => {
-    const response = await dispatch(
+    await dispatch(
       InviteEmail({
         name: firstName,
         email,
@@ -162,10 +161,8 @@ const CandidateCard = ({
         companyName:jobDetails?.recruiterId?.companyName
       })
     );
-    console.log(response,'reeeeesponse');
   };
   const handleSaveClick = async () => {
-    console.log(jobId, applicantId, changedStatus, "pls");
     const response = await dispatch(
       ChangeStatus({ jobId, applicantId, changedStatus })
     );
@@ -174,18 +171,16 @@ const CandidateCard = ({
       receiverId: applicantId,
       notification:`Your Application status has been ${changedStatus} for ${jobDetails?.jobTitle} in ${jobDetails?.recruiterId?.companyName} at ${jobDetails?.jobLocation}`
     });
-    console.log(response, "res");
 
     if (response?.payload?.data?.status == "success") {
       const notification = `Hi${firstName}, Your Application status has been ${changedStatus} for ${jobDetails?.jobTitle} in ${jobDetails?.recruiterId?.companyName} at ${jobDetails?.jobLocation} `;
-      const response = await dispatch(
+      await dispatch(
         PushNotification({
           applicantId,
           notification,
           notificationSummary: "Job Application Status Changed",
         })
       );
-      console.log(response);
     }
     handleStatusChange();
   };
