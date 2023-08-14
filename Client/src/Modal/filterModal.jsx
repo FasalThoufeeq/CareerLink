@@ -2,7 +2,6 @@ import { useState } from "react";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
-import { makeStyles } from "@mui/styles";
 import {
   Button,
   Modal,
@@ -12,32 +11,8 @@ import {
   MenuItem,
 } from "@mui/material";
 
-const useStyles = makeStyles((theme) => ({
-  modal: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  modalContent: {
-    backgroundColor: theme.palette.background.paper,
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
-    width: 400,
-    borderRadius:25
-  },
-  formControl: {
-    marginBottom: theme.spacing(2),
-    minWidth: 120,
-    width: "100%",
-  },
-  buttonContainer: {
-    display: "flex",
-    justifyContent: "flex-end",
-  },
-}));
 
 const FilterModal = ({ onFilter }) => {
-  const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [salaryFilter, setSalaryFilter] = useState("");
   const [jobLocationFilter, setJobLocationFilter] = useState("");
@@ -90,15 +65,23 @@ const FilterModal = ({ onFilter }) => {
         <FilterAltIcon />
       </Button>
       <Modal
-        className={classes.modal}
+       style={{display: 'flex',
+       alignItems: 'center',
+       justifyContent: 'center',}}
         open={open}
         onClose={handleClose}
         aria-labelledby="filter-modal"
         aria-describedby="filter-modal-description"
       >
-        <div className={classes.modalContent}>
+        <div style={{backgroundColor: '#ffffff', 
+    boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)', 
+    padding: '16px 32px 24px',
+    width: '400px',
+    borderRadius: '25px',}}>
           <h2 id="filter-modal">Filter Jobs</h2>
-          <FormControl className={classes.formControl} style={{marginBottom:'10px'}}>
+          <FormControl  style={{marginBottom:'10px',
+    minWidth: '120px',
+    width: '100%',}}>
             <InputLabel id="salary-filter-label">Salary</InputLabel>
             <Select
               labelId="salary-filter-label"
@@ -114,7 +97,9 @@ const FilterModal = ({ onFilter }) => {
               ))}
             </Select>
           </FormControl>
-          <FormControl className={classes.formControl} style={{marginBottom:'10px'}}>
+          <FormControl style={{marginBottom:'10px',
+    minWidth: '120px',
+    width: '100%',}}>
             <InputLabel id="location-filter-label">Location</InputLabel>
             <Select
               labelId="location-filter-label"
@@ -130,7 +115,9 @@ const FilterModal = ({ onFilter }) => {
               ))}
             </Select>
           </FormControl>
-          <FormControl className={classes.formControl}>
+          <FormControl style={{
+    minWidth: '120px',
+    width: '100%',}}>
             <InputLabel id="job-title-filter-label">Job Title</InputLabel>
             <Select
               labelId="job-title-filter-label"
@@ -147,11 +134,12 @@ const FilterModal = ({ onFilter }) => {
             </Select>
           </FormControl>
           <div
-            className={classes.buttonContainer}
+            
             style={{
               marginTop: "2rem",
               display: "flex",
               justifyContent: "center",
+  
             }}
           >
             <Button variant="contained" color="primary" onClick={handleFilter}>

@@ -9,7 +9,6 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import { makeStyles } from "@mui/styles";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import PaidIcon from "@mui/icons-material/Paid";
@@ -18,79 +17,7 @@ import SendIcon from "@mui/icons-material/Send";
 import JobDetailsModal from "../../Modal/JobDetailsModal";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import { toast } from "react-toastify";
-const useStyles = makeStyles((theme) => ({
-  container: {
-    backgroundColor: "#fff",
-    padding: theme.spacing(2),
-    marginBottom: theme.spacing(2),
-    display: "flex",
-    alignItems: "flex-start", // Align items to flex-start
-    boxShadow: "0 6px 10px rgba(0, 0, 0, 0.3)",
-    borderRadius: theme.spacing(3),
-    width: "40rem",
-    position: "relative",
-  },
-  logo: {
-    marginRight: theme.spacing(2),
-    width: theme.spacing(6),
-    height: theme.spacing(6),
-  },
-  jobTitleContainer: {
-    display: "block",
-    alignItems: "center",
-    marginBottom: theme.spacing(1),
-  },
-  jobTitle: {
-    fontWeight: "bold",
-    color: "black",
-    marginRight: theme.spacing(1),
-  },
-  location: {
-    marginLeft: theme.spacing(1),
-    display: "flex",
-    alignItems: "center",
-  },
-  skills: {
-    display: "flex",
-    gap: theme.spacing(1),
-    marginBottom: theme.spacing(1),
-  },
-  chip: {
-    backgroundColor: theme.palette.primary.main, // Set primary blue color
-    color: theme.palette.primary.contrastText,
-  },
-  salary: {
-    marginLeft: theme.spacing(2),
-    display: "flex",
-    alignItems: "center",
-    color: theme.palette.success.main,
-  },
-  LocationOnIcon: {
-    color: "gray",
-    fontSize: "5px",
-    marginRight: theme.spacing(1),
-  },
-  buttons: {
-    position: "absolute",
-    bottom: theme.spacing(1),
-    right: theme.spacing(1),
-  },
-  editButton: {
-    color: "black",
-    marginRight: theme.spacing(1),
-  },
-  deleteButton: {
-    color: theme.palette.error.main,
-  },
-  applicationButton: {
-    color: "black",
-    paddingLeft: "30px",
-    paddingRight: "30px",
-  },
-  personIcon: {
-    marginRight: theme.spacing(1),
-  },
-}));
+import { format } from "timeago.js";
 
 const JobContainer = ({
   companyLogo,
@@ -115,32 +42,6 @@ const JobContainer = ({
   const isApplied = appliedJobsCheck?.appliedUsers?.some(
     (_id) => _id == ApplicantId
   );
-  const postedDays = () => {
-    const currentDate = new Date();
-    const createdDate = new Date(createdAt);
-    const timeDifference = currentDate - createdDate;
-    const daysSinceCreation = Math.floor(
-      timeDifference / (1000 * 60 * 60 * 24)
-    );
-    if (daysSinceCreation >= 30 && daysSinceCreation < 365) {
-      const value = Math.floor(daysSinceCreation / 30);
-      if (value == 1) {
-        return `${value} month ago`;
-      }
-      return `${value} months ago`;
-    } else if (daysSinceCreation >= 365) {
-      const value = Math.floor(daysSinceCreation / 365);
-      if (value == 1) {
-        return `${value} year ago`;
-      }
-      return `${value} years ago`;
-    } else {
-      if (daysSinceCreation == 1) {
-        return `${daysSinceCreation} day ago`;
-      }
-      return `${daysSinceCreation} days ago`;
-    }
-  };
 
   const handleApplyClick = () => {
     onApplicantsClick(jobId); // Invoke the function with the jobId
@@ -153,13 +54,23 @@ const JobContainer = ({
     setViewModal(false);
   };
 
-  const classes = useStyles();
   return (
     <>
       <Container
-        style={{ display: "flex", justifyContent: "space-between" }}
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          backgroundColor: "#fff",
+          padding: "16px",
+          marginBottom: "16px",
+
+          alignItems: "flex-start",
+          boxShadow: "0 6px 10px rgba(0, 0, 0, 0.3)",
+          borderRadius: "24px",
+          width: "40rem",
+          position: "relative",
+        }}
         maxWidth="md"
-        className={classes.container}
       >
         <div>
           <div style={{ display: "flex" }}>
@@ -167,21 +78,44 @@ const JobContainer = ({
               <Avatar
                 alt="Company Logo"
                 src={companyLogo}
-                className={classes.logo}
+                style={{ marginRight: "16px", width: "48px", height: "48px" }}
               />
             </div>
             <div>
               <Grid Container direction="column" spacing={2}>
-                <Grid item className={classes.jobTitleContainer}>
+                <Grid
+                  item
+                  style={{
+                    display: "block",
+                    alignItems: "center",
+                    marginBottom: "8px",
+                  }}
+                >
                   <Typography
-                    style={{ fontWeight: "bolder", color: "gray" }}
+                    style={{
+                      fontWeight: "bolder",
+                      color: "gray",
+                      marginRight: "8px",
+                    }}
                     variant="h6"
-                    className={classes.jobTitle}
                   >
                     {jobTitle}
                   </Typography>
-                  <Typography variant="body2" className={classes.location}>
-                    <span className={classes.LocationOnIcon}>
+                  <Typography
+                    variant="body2"
+                    style={{
+                      display: "block",
+                      alignItems: "center",
+                      marginBottom: "8px",
+                    }}
+                  >
+                    <span
+                      style={{
+                        color: "gray",
+                        fontSize: "5px",
+                        marginRight: "8px",
+                      }}
+                    >
                       <LocationOnIcon />
                     </span>
                     {jobLocation}
@@ -189,11 +123,16 @@ const JobContainer = ({
                 </Grid>
                 <Grid item>
                   <Typography
-                    style={{ marginTop: "8px" }}
+                    style={{
+                      marginTop: "8px",
+                      marginLeft: "16px",
+                      display: "flex",
+                      alignItems: "center",
+                      color: "#4caf50",
+                    }}
                     variant="body2"
-                    className={classes.salary}
                   >
-                    <span className={classes.rupeeIcon}>
+                    <span>
                       <PaidIcon style={{ marginRight: "6px" }} />{" "}
                     </span>{" "}
                     ₹{salaryPackage}
@@ -201,8 +140,12 @@ const JobContainer = ({
                 </Grid>
                 <Grid
                   item
-                  style={{ marginBottom: "10px", marginTop: "10px" }}
-                  className={classes.skills}
+                  style={{
+                    marginBottom: "10px",
+                    marginTop: "10px",
+                    display: "flex",
+                    gap: "8px",
+                  }}
                 >
                   {requiredSkills.length > 0
                     ? requiredSkills.map((skill, index) => (
@@ -216,7 +159,6 @@ const JobContainer = ({
                           key={index}
                           label={skill}
                           variant="outlined"
-                          className={classes.chip}
                           clickable={false}
                         />
                       ))
@@ -227,13 +169,13 @@ const JobContainer = ({
                     <span>
                       <AccessTimeIcon />
                     </span>
-                    {postedDays()}
+                    {format(createdAt)}
                   </Typography>
                 </Grid>
               </Grid>
             </div>
           </div>
-          <div className={classes.buttons}>
+          <div style={{ position: "absolute", bottom: "8px", right: "8px" }}>
             {isApplied ? (
               <Button
                 variant="outlined"
@@ -243,9 +185,11 @@ const JobContainer = ({
                   boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
                   marginBottom: "5px",
                   marginRight: "5px",
+
+                  paddingLeft: "30px",
+                  paddingRight: "30px",
                 }}
-                startIcon={<VerifiedIcon className={classes.personIcon} />}
-                className={classes.applicationButton}
+                startIcon={<VerifiedIcon style={{ marginRight: "8px" }} />}
               >
                 Applied
               </Button>
@@ -258,9 +202,11 @@ const JobContainer = ({
                   boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
                   marginBottom: "5px",
                   marginRight: "5px",
+
+                  paddingLeft: "30px",
+                  paddingRight: "30px",
                 }}
-                startIcon={<SendIcon className={classes.personIcon} />}
-                className={classes.applicationButton}
+                startIcon={<SendIcon style={{ marginRight: "8px" }} />}
                 onClick={() => {
                   ApplicantId
                     ? handleApplyClick()

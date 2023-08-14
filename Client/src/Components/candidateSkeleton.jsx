@@ -1,87 +1,7 @@
 import { Container, Grid, Skeleton } from "@mui/material";
-import { makeStyles } from "@mui/styles";
 import {} from "react";
 
-const useStyles = makeStyles((theme) => ({
-  container: {
-    backgroundColor: "#fff",
-    padding: theme.spacing(2),
-    marginBottom: theme.spacing(2),
-    display: "flex",
-    alignItems: "flex-start", // Align items to flex-start
-    boxShadow: "0 6px 10px rgba(0, 0, 0, 0.3)",
-    borderRadius: theme.spacing(3),
-    width: "40rem",
-    position: "relative",
-  },
-  logo: {
-    marginRight: theme.spacing(2),
-    width: theme.spacing(6),
-    height: theme.spacing(6),
-    borderRadius: "50%",
-  },
-  jobTitleContainer: {
-    display: "block",
-    alignItems: "center",
-    marginBottom: theme.spacing(1),
-  },
-  jobTitle: {
-    fontWeight: "bold",
-    color: "black",
-    marginRight: theme.spacing(1),
-  },
-  location: {
-    marginLeft: theme.spacing(1),
-    display: "flex",
-    alignItems: "center",
-  },
-  skills: {
-    display: "flex",
-    gap: theme.spacing(1),
-    marginBottom: theme.spacing(1),
-  },
-  chip: {
-    display: "inline-block",
-    borderRadius: theme.spacing(2), // Adjust the border radius to make it look like a chip
-    // backgroundColor: theme.palette.primary.main, // Set primary blue color (change it according to your design)
-    color: theme.palette.primary.contrastText, // Set the text color to contrast with the background color
-    padding: `${theme.spacing(1)} ${theme.spacing(2)}`, // Adjust the padding according to your design
-    margin: theme.spacing(1), // Adjust the margin according to your design
-  },
-  salary: {
-    marginLeft: theme.spacing(2),
-    display: "flex",
-    alignItems: "center",
-    color: theme.palette.success.main,
-  },
-  LocationOnIcon: {
-    color: "gray",
-    fontSize: "5px",
-    marginRight: theme.spacing(1),
-  },
-  buttons: {
-    position: "absolute",
-    bottom: theme.spacing(1),
-    right: theme.spacing(1),
-  },
-  editButton: {
-    color: "black",
-    marginRight: theme.spacing(1),
-  },
-  deleteButton: {
-    color: theme.palette.error.main,
-  },
-  applicationButton: {
-    color: "black",
-    paddingLeft: "30px",
-    paddingRight: "30px",
-  },
-  personIcon: {
-    marginRight: theme.spacing(1),
-  },
-}));
 const CandidateSkeleton = ({ cards }) => {
-  const classes = useStyles();
   return Array(cards)
     .fill(0)
     .map((item, index) => {
@@ -91,10 +11,17 @@ const CandidateSkeleton = ({ cards }) => {
           style={{
             display: "flex",
             justifyContent: "space-between",
-            height: "270px",
+            height: "290px",
+            backgroundColor: "#fff",
+            padding: "16px",
+            marginBottom: "16px",
+            alignItems: "flex-start",
+            boxShadow: "0 6px 10px rgba(0, 0, 0, 0.3)",
+            borderRadius: "24px",
+            width: "40rem",
+            position: "relative",
           }}
           maxWidth="md"
-          className={classes.container}
         >
           <div>
             <div style={{ display: "flex" }}>
@@ -103,35 +30,52 @@ const CandidateSkeleton = ({ cards }) => {
                   height={80}
                   width={50}
                   style={{ borderRadius: "50%" }}
-                  // className={classes.logo} // Apply your logo styles here
                 />
               </div>
               <div>
                 <Grid Container direction="column" spacing={2}>
                   <Grid
                     item
-                    className={classes.jobTitleContainer}
-                    style={{ marginLeft: "30px" }}
+                    style={{
+                      marginLeft: "30px",
+                      display: "block",
+                      alignItems: "center",
+                      marginBottom: "8px",
+                    }}
                   >
                     <Skeleton
                       height={45}
                       width="100%" // Adjust width according to your design
-                      className={classes.jobTitle}
-                      style={{ width: "200px" }}
+                      style={{
+                        width: "200px",
+                        fontWeight: "bold",
+                        color: "black",
+                        marginRight: "8px",
+                      }}
                     />
                     <Skeleton
                       height={30}
                       width="50%" // Adjust width according to your design
-                      className={classes.location}
-                      style={{ width: "120px" }}
+                      style={{
+                        width: "120px",
+                        marginLeft: "8px",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
                     />
                   </Grid>
                   <Grid item>
                     <Skeleton
                       height={30}
                       width="100%" // Adjust width according to your design
-                      className={classes.salary}
-                      style={{ width: "120px", marginLeft: "38px" }}
+                      style={{
+                        width: "120px",
+                        marginLeft: "38px",
+
+                        display: "flex",
+                        alignItems: "center",
+                        color: "#4caf50",
+                      }}
                     />
                   </Grid>
                   <Grid
@@ -140,39 +84,47 @@ const CandidateSkeleton = ({ cards }) => {
                       marginBottom: "10px",
                       marginTop: "10px",
                       marginLeft: "25px",
+                      display: "flex",
+                      gap: "8px",
                     }}
-                    className={classes.skills}
                   >
                     <Skeleton
                       width="100%" // Adjust width according to your design
                       height={50} // Adjust height according to your design
-                      className={classes.chip}
                       style={{
                         width: "50px",
                         borderRadius: "20px",
                         marginTop: "-20px",
+                        display: "inline-block",
+                        color: "#ffffff",
+                        padding: "4px 8px", // Adjust the padding according to your design
+                        margin: "4px", //
                       }}
                     />
                     <Skeleton
                       width="100%" // Adjust width according to your design
                       height={50} // Adjust height according to your design
-                      className={classes.chip}
                       style={{
                         width: "50px",
                         borderRadius: "20px",
                         marginTop: "-20px",
                         marginLeft: "-10px",
+                        display: "inline-block",
+                        color: "#ffffff",
+                        padding: "4px 8px", // Adjust the padding according to your design
+                        margin: "4px", // Adjust the margin according to your design
                       }}
                     />
                     <Skeleton
                       width="100%" // Adjust width according to your design
                       height={50} // Adjust height according to your design
-                      className={classes.chip}
                       style={{
+                        display: "inline-block",
+                        color: "#ffffff",
+                        padding: "4px 8px", // Adjust the padding according to your design
+                        margin: "4px", // Adjust the margin according to your design
                         width: "50px",
                         borderRadius: "20px",
-                        marginTop: "-20px",
-                        marginLeft: "-10px",
                       }}
                     />
                   </Grid>
@@ -180,62 +132,96 @@ const CandidateSkeleton = ({ cards }) => {
                     <Skeleton
                       height={30}
                       width="100%" // Adjust width according to your design
-                      className={classes.salary}
                       style={{
                         width: "200px",
                         marginLeft: "38px",
                         marginTop: "-10px",
+
+                        display: "flex",
+                        alignItems: "center",
+                        color: "#4caf50", // Set your desired color
                       }}
                     />
                   </Grid>
-                  <Grid item style={{display:'flex'}}>
-                  <Skeleton
+                  <Grid
+                    item
+                    style={{
+                      display: "flex",
+                      marginLeft: "3rem",
+                      marginBottom: "1rem",
+                    }}
+                  >
+                    <Skeleton
                       width="100%" // Adjust width according to your design
                       height={50} // Adjust height according to your design
-                      className={classes.chip}
                       style={{
                         width: "100px",
                         borderRadius: "20px",
-                        marginLeft:'35px',
+                        marginLeft: "35px",
                         marginTop: "-10px",
+                        display: "inline-block",
+
+                        color: "#ffffff",
+
+                        padding: "4px 8px", // Adjust the padding according to your design
+                        margin: "4px", // Adjust the margin according to your design
                       }}
                     />
                     <Skeleton
                       width="100%" // Adjust width according to your design
                       height={50} // Adjust height according to your design
-                      className={classes.chip}
                       style={{
                         width: "30px",
                         borderRadius: "20px",
                         marginTop: "-10px",
+                        display: "inline-block",
+
+                        color: "#ffffff",
+
+                        padding: "4px 8px", // Adjust the padding according to your design
+                        margin: "4px", // Adjust the margin according to your design
                       }}
                     />
                   </Grid>
                 </Grid>
               </div>
             </div>
-            <div className={classes.buttons}>
+            <div style={{ position: "absolute", bottom: "8px", right: "8px" }}>
               <Skeleton
                 width={50} // Adjust width according to your design
                 height={50} // Adjust height according to your design
-                style={{ marginRight: "10px" }}
-                className={classes.applicationButton}
+                style={{
+                  marginRight: "10px",
+                  color: "black",
+                  paddingLeft: "30px",
+                  paddingRight: "30px",
+                }}
               />
             </div>
           </div>
-          <div style={{display:'flex'}}>
-          <Skeleton
-                width={50} // Adjust width according to your design
-                height={55} // Adjust height according to your design
-                style={{ marginRight: "10px" ,borderRadius:'20px'}}
-                className={classes.applicationButton}
-              />
-              <Skeleton
-                width={50} // Adjust width according to your design
-                height={55} // Adjust height according to your design
-                style={{ marginRight: "10px",borderRadius:'20px' }}
-                className={classes.applicationButton}
-              />
+          <div style={{ display: "flex" }}>
+            <Skeleton
+              width={50} // Adjust width according to your design
+              height={55} // Adjust height according to your design
+              style={{
+                marginRight: "10px",
+                borderRadius: "20px",
+                color: "black",
+                paddingLeft: "30px",
+                paddingRight: "30px",
+              }}
+            />
+            <Skeleton
+              width={50} // Adjust width according to your design
+              height={55} // Adjust height according to your design
+              style={{
+                marginRight: "10px",
+                borderRadius: "20px",
+                color: "black",
+                paddingLeft: "30px",
+                paddingRight: "30px",
+              }}
+            />
           </div>
         </Container>
       );

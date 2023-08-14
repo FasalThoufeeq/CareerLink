@@ -5,7 +5,7 @@ import { authServiceInter } from "../../../Application/Services/authServiceInter
 import { authServiceImpl } from "../../Services/authServiceImpl";
 
 const service = authServiceInter(authServiceImpl());
-const AuthMiddleware = (
+const seekerAuthMiddleware = (
   req: Request,
   res: Response,
   next: NextFunction
@@ -34,4 +34,4 @@ const AuthMiddleware = (
   }
 };
 
-export default AuthMiddleware;
+export default seekerAuthMiddleware;

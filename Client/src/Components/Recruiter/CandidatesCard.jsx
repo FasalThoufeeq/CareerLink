@@ -12,7 +12,6 @@ import {
   Select,
   Typography,
 } from "@mui/material";
-import { makeStyles } from "@mui/styles";
 import CallIcon from "@mui/icons-material/Call";
 import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
 
@@ -30,79 +29,6 @@ import {
 } from "../../Redux/recuiterSlice/recruiterjobSlice";
 import { toast } from "react-toastify";
 import { io } from "socket.io-client";
-const useStyles = makeStyles((theme) => ({
-  container: {
-    backgroundColor: "#fff",
-    padding: theme.spacing(2),
-    marginBottom: theme.spacing(2),
-    display: "flex",
-    alignItems: "flex-start", // Align items to flex-start
-    boxShadow: "0 6px 10px rgba(0, 0, 0, 0.3)",
-    borderRadius: theme.spacing(3),
-    width: "45rem",
-    position: "relative",
-  },
-  logo: {
-    marginRight: theme.spacing(2),
-    width: theme.spacing(6),
-    height: theme.spacing(6),
-  },
-  jobTitleContainer: {
-    display: "block",
-    alignItems: "center",
-    marginBottom: theme.spacing(1),
-  },
-  jobTitle: {
-    fontWeight: "bold",
-    color: "black",
-    marginRight: theme.spacing(1),
-  },
-  location: {
-    marginLeft: theme.spacing(1),
-    display: "flex",
-    alignItems: "center",
-  },
-  skills: {
-    display: "flex",
-    gap: theme.spacing(1),
-    marginBottom: theme.spacing(1),
-  },
-  chip: {
-    backgroundColor: theme.palette.primary.main, // Set primary blue color
-    color: theme.palette.primary.contrastText,
-  },
-  salary: {
-    marginLeft: theme.spacing(2),
-    display: "flex",
-    alignItems: "center",
-    color: "#4287f5",
-  },
-  LocationOnIcon: {
-    color: "gray",
-    fontSize: "5px",
-    marginRight: theme.spacing(1),
-  },
-  buttons: {
-    position: "absolute",
-    bottom: theme.spacing(1),
-    right: theme.spacing(1),
-  },
-  editButton: {
-    color: "black",
-    marginRight: theme.spacing(1),
-  },
-  deleteButton: {
-    color: theme.palette.error.main,
-  },
-  applicationButton: {
-    color: "black",
-    paddingLeft: "30px",
-    paddingRight: "30px",
-  },
-  personIcon: {
-    marginRight: theme.spacing(1),
-  },
-}));
 
 const CandidateCard = ({
   _id,
@@ -158,7 +84,7 @@ const CandidateCard = ({
         email,
         roomId: _id,
         jobTitle: jobDetails?.jobTitle,
-        companyName:jobDetails?.recruiterId?.companyName
+        companyName: jobDetails?.recruiterId?.companyName,
       })
     );
   };
@@ -169,7 +95,7 @@ const CandidateCard = ({
     const socket = io("http://localhost:3000");
     socket.emit("sendNotification", {
       receiverId: applicantId,
-      notification:`Your Application status has been ${changedStatus} for ${jobDetails?.jobTitle} in ${jobDetails?.recruiterId?.companyName} at ${jobDetails?.jobLocation}`
+      notification: `Your Application status has been ${changedStatus} for ${jobDetails?.jobTitle} in ${jobDetails?.recruiterId?.companyName} at ${jobDetails?.jobLocation}`,
     });
 
     if (response?.payload?.data?.status == "success") {
@@ -184,13 +110,21 @@ const CandidateCard = ({
     }
     handleStatusChange();
   };
-  const classes = useStyles();
+
   return (
     <>
       <Container
-        style={{ display: "flex" }}
+        style={{
+          display: "flex",
+          backgroundColor: "#fff",
+          padding: "16px",
+          marginBottom: "16px",
+          boxShadow: "0 6px 10px rgba(0, 0, 0, 0.3)",
+          borderRadius: "24px",
+          width: "45rem",
+          position: "relative",
+        }}
         maxWidth="md"
-        className={classes.container}
       >
         <div>
           <div style={{ display: "flex" }}>
@@ -198,21 +132,40 @@ const CandidateCard = ({
               <Avatar
                 alt="Profile"
                 src={profile ? profile : "profile"}
-                className={classes.logo}
+                style={{ marginRight: "16px", width: "48px", height: "48px" }}
               />
             </div>
             <div>
               <Grid Container direction="column" spacing={2}>
-                <Grid item className={classes.jobTitleContainer}>
+                <Grid
+                  item
+                  style={{
+                    display: "block",
+                    alignItems: "center",
+                    marginBottom: "8px",
+                  }}
+                >
                   <Typography
-                    style={{ fontWeight: "bolder", color: "gray" }}
+                    style={{
+                      fontWeight: "bolder",
+                      color: "gray",
+                      marginRight: "8px",
+                    }}
                     variant="h6"
-                    className={classes.jobTitle}
                   >
                     {firstName} {lastName}
                   </Typography>
-                  <Typography variant="body2" className={classes.location}>
-                    <span className={classes.LocationOnIcon}>
+                  <Typography
+                    variant="body2"
+                    style={{
+                      marginLeft: "8px",
+                      display: "flex",
+                      alignItems: "center",
+                      color: "gray",
+                      marginRight: "8px",
+                    }}
+                  >
+                    <span>
                       <EmailIcon />
                     </span>
                     {email}
@@ -220,11 +173,16 @@ const CandidateCard = ({
                 </Grid>
                 <Grid item>
                   <Typography
-                    style={{ marginTop: "8px" }}
+                    style={{
+                      marginTop: "8px",
+                      marginLeft: "16px",
+                      display: "flex",
+                      alignItems: "center",
+                      color: "#4287f5",
+                    }}
                     variant="body2"
-                    className={classes.salary}
                   >
-                    <span className={classes.rupeeIcon}>
+                    <span>
                       <CallIcon style={{ marginRight: "6px" }} />{" "}
                     </span>
                     {phoneNumber}
@@ -232,9 +190,14 @@ const CandidateCard = ({
                 </Grid>
                 <Grid item>
                   <Typography
-                    style={{ marginTop: "8px" }}
+                    style={{
+                      marginTop: "8px",
+                      marginLeft: "16px",
+                      display: "flex",
+                      alignItems: "center",
+                      color: "#4287f5",
+                    }}
                     variant="body2"
-                    className={classes.salary}
                   >
                     <span>
                       <SchoolIcon style={{ marginRight: "6px" }} />{" "}
@@ -244,8 +207,14 @@ const CandidateCard = ({
                 </Grid>
                 <Grid
                   item
-                  style={{ marginBottom: "10px", marginTop: "10px" }}
-                  className={classes.skills}
+                  style={{
+                    marginBottom: "10px",
+                    marginTop: "10px",
+                    marginLeft: "8px", // Use your desired value here
+                    display: "flex",
+                    alignItems: "center",
+                    color: "#4287f5",
+                  }}
                 >
                   <Typography style={{ color: "#4287f5", marginLeft: "15px" }}>
                     Skills :
@@ -263,7 +232,6 @@ const CandidateCard = ({
                           }}
                           label={skill}
                           variant="outlined"
-                          className={classes.chip}
                           clickable={false}
                         />
                       );
@@ -276,8 +244,13 @@ const CandidateCard = ({
                 </Grid>
                 <Grid
                   item
-                  style={{ marginBottom: "10px", marginTop: "10px" }}
-                  className={classes.skills}
+                  style={{
+                    marginBottom: "10px",
+                    marginTop: "10px",
+                    marginLeft: "8px", // Use your desired value here
+                    display: "flex",
+                    alignItems: "center",
+                  }}
                 >
                   <Typography style={{ color: "#4287f5", marginLeft: "15px" }}>
                     Languages :
@@ -295,7 +268,6 @@ const CandidateCard = ({
                           }}
                           label={language}
                           variant="outlined"
-                          className={classes.chip}
                           clickable={false}
                         />
                       );
@@ -306,7 +278,7 @@ const CandidateCard = ({
                     </Typography>
                   )}
                 </Grid>
-                <div className={classes.status}>
+                <div>
                   <InputLabel
                     id="application-status-label"
                     style={{ marginLeft: "10px" }}
@@ -350,7 +322,13 @@ const CandidateCard = ({
               </Grid>
             </div>
 
-            <div className={classes.buttons}>
+            <div
+              style={{
+                position: "absolute",
+                bottom: "8px", // Use your desired value here
+                right: "8px",
+              }}
+            >
               <Button
                 style={{
                   color: "black",
@@ -361,7 +339,6 @@ const CandidateCard = ({
                 }}
                 variant="outlined"
                 startIcon={<InsertInvitationIcon />}
-                className={classes.editButton}
                 onClick={() => {
                   handleInvite();
                 }}
@@ -378,7 +355,6 @@ const CandidateCard = ({
                 }}
                 variant="outlined"
                 startIcon={<PlagiarismIcon />}
-                className={classes.editButton}
                 onClick={() => {
                   resume
                     ? window.open(resume, "_blank")
@@ -401,7 +377,6 @@ const CandidateCard = ({
             }}
             variant="outlined"
             startIcon={<ForumIcon />}
-            className={classes.editButton}
             onClick={handleChatButtonClick}
           >
             CHAT
@@ -414,9 +389,10 @@ const CandidateCard = ({
               boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
               marginBottom: "5px",
               marginRight: "5px",
+              paddingLeft: "30px",
+              paddingRight: "30px",
             }}
-            startIcon={<VideocamIcon className={classes.personIcon} />}
-            className={classes.applicationButton}
+            startIcon={<VideocamIcon style={{ marginRight: "8px" }} />}
             onClick={handleVideoCall}
           >
             SCHEDULE
@@ -427,7 +403,7 @@ const CandidateCard = ({
   );
 };
 CandidateCard.propTypes = {
-  _id:PropTypes.string.isRequired,
+  _id: PropTypes.string.isRequired,
   firstName: PropTypes.string.isRequired,
   lastName: PropTypes.string.isRequired,
   email: PropTypes.string.isRequired,

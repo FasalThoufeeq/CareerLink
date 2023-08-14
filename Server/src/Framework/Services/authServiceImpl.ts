@@ -15,9 +15,13 @@ export const authServiceImpl = () => {
   };
 
   const generateToken = (payload: string) => {
-    const token = jwt.sign({ payload }, configKeys.JWT_SECRET_KEY as string, {
-      expiresIn: "5d",
-    });
+    const token = jwt.sign(
+      { userId: payload },
+      configKeys.JWT_SECRET_KEY as string,
+      {
+        expiresIn: "5d",
+      }
+    );
     return token;
   };
   const verifyToken = (token: string) => {
