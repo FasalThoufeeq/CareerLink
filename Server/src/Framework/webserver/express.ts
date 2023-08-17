@@ -10,7 +10,7 @@ import morgan from 'morgan'
 const expressConfig=(app:Application)=>{
 
     const corsOptions = {
-        origin: '*',
+        origin:['https://careerlink.cloud', 'https://careerlink.cloud'],
         exposedHeaders: [
           'Cross-Origin-Opener-Policy',
           'Cross-Origin-Resource-Policy',

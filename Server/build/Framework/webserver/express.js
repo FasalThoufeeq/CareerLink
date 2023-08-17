@@ -9,7 +9,7 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const morgan_1 = __importDefault(require("morgan"));
 const expressConfig = (app) => {
     const corsOptions = {
-        origin: '*',
+        origin: ['https://careerlink.cloud', 'https://careerlink.cloud'],
         exposedHeaders: [
             'Cross-Origin-Opener-Policy',
             'Cross-Origin-Resource-Policy',

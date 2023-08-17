@@ -14,7 +14,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "*",
+    origin:['https://careerlink.cloud', 'https://careerlink.cloud'],
     methods: ["GET", "POST"],
   },
 });
