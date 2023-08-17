@@ -33,16 +33,17 @@ const jobRepositoryInter_1 = require("../../../Application/repostories/jobReposi
 const userProfileRepositoryImpl_1 = require("../../Database/MongoDB/repositories/userProfileRepositoryImpl");
 const userProfileRepositoryInter_1 = require("../../../Application/repostories/userProfileRepositoryInter");
 const cloudinary_1 = __importStar(require("../Middlewares/cloudinary"));
+const seekerAuthMiddleware_1 = __importDefault(require("../Middlewares/seekerAuthMiddleware"));
 const seekerRoute = () => {
     const router = express_1.default.Router();
     const controller = (0, seekerController_1.default)(jobRepositoryImpl_1.jobRepositoryImp, jobRepositoryInter_1.jobRepositoryInter, userProfileRepositoryImpl_1.userProfileRepositoryImpl, userProfileRepositoryInter_1.userProfileRepositoryInter);
     router.get("/all_jobs", controller.getAllJobs);
-    router.post("/apply_job", controller.JobApply);
+    router.post("/apply_job", seekerAuthMiddleware_1.default, controller.JobApply);
     router.get("/seeker_profile/:profileId", controller.GetSeekerProfile);
-    router.get("/applied_jobs/:profileId", controller.AppliedJob);
-    router.put("/cancel_job", controller.JobAppliedCancel);
-    router.put("/update_profile/:profileId", cloudinary_1.default, controller.UpdatingProfile);
-    router.put("/update_profilePic/:profileId", cloudinary_1.uploadprofile, controller.UpdatingProfilePic);
+    router.get("/applied_jobs/:profileId", seekerAuthMiddleware_1.default, controller.AppliedJob);
+    router.put("/cancel_job", seekerAuthMiddleware_1.default, controller.JobAppliedCancel);
+    router.put("/update_profile/:profileId", seekerAuthMiddleware_1.default, cloudinary_1.default, controller.UpdatingProfile);
+    router.put("/update_profilePic/:profileId", seekerAuthMiddleware_1.default, cloudinary_1.uploadprofile, controller.UpdatingProfilePic);
     return router;
 };
 exports.default = seekerRoute;

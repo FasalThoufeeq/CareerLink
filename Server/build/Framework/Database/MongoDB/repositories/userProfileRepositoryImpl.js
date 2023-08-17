@@ -15,7 +15,6 @@ const userProfileRepositoryImpl = () => {
     };
     const updateProfile = async (profileId, updatedProfile) => {
         const EditedProfile = await userProfileModel_1.UserProfile.findByIdAndUpdate({ _id: profileId }, { $set: updatedProfile }, { new: true });
-        console.log("klklkl");
         await userModel_1.default.findOneAndUpdate({ profileId: profileId }, {
             $set: {
                 email: updatedProfile.email,

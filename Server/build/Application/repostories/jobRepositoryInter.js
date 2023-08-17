@@ -32,6 +32,10 @@ const jobRepositoryInter = (repository) => {
         const jobDetails = await repository.FetchJob(jobId);
         return jobDetails;
     };
+    const pushNotification = async (applicantId, notification, notificationSummary) => {
+        await repository.pushNotification(applicantId, notification, notificationSummary);
+        return;
+    };
     return {
         addJob,
         getRecruiterJobs,
@@ -42,7 +46,8 @@ const jobRepositoryInter = (repository) => {
         getAppliedJobs,
         cancelJob,
         EditJobs,
-        FetchJob
+        FetchJob,
+        pushNotification
     };
 };
 exports.jobRepositoryInter = jobRepositoryInter;

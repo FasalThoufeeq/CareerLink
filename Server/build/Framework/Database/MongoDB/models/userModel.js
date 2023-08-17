@@ -51,6 +51,12 @@ const userSchema = new mongoose_1.Schema({
         type: mongoose_1.default.Schema.Types.ObjectId,
         ref: "UserProfile",
     },
+    passwordResetToken: {
+        type: String
+    },
+    passwordResetTokenExpires: {
+        type: Date
+    }
 }, { timestamps: true });
 const User = (0, mongoose_1.model)("User", userSchema);
 exports.default = User;

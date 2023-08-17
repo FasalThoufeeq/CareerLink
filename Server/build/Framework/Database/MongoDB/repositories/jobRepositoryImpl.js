@@ -29,9 +29,7 @@ const jobRepositoryImp = () => {
         return jobList;
     };
     const ApplyJob = async (jobId, applicantId) => {
-        console.log(jobId, applicantId, "ooo");
         const userProfile = await userProfileModel_1.UserProfile.findOne({ _id: applicantId });
-        console.log(userProfile, "iiiii");
         const job = await jobModel_1.Job.findById(jobId);
         if (!userProfile || !job) {
             throw new AppError_1.default("Invalid job or user profile", httpStatus_1.HttpStatus.BAD_REQUEST);
@@ -52,7 +50,6 @@ const jobRepositoryImp = () => {
     };
     const getCandidates = async (jobId) => {
         const appliedCandidates = await jobModel_1.Job.findById(jobId).populate("appliedUsers");
-        console.log(appliedCandidates, "wonder");
         return appliedCandidates;
     };
     const changeStatus = async (jobId, applicantId, status) => {
@@ -75,16 +72,25 @@ const jobRepositoryImp = () => {
     const cancelJob = async (jobId, applicantId) => {
         const updateInUserProfile = await userProfileModel_1.UserProfile.updateOne({ _id: applicantId }, { $pull: { appliedJobs: { _id: jobId } } });
         const updateInJob = await jobModel_1.Job.updateOne({ _id: jobId }, { $pull: { appliedUsers: applicantId } });
-        console.log(updateInJob, "job");
-        console.log(updateInUserProfile, "profile");
     };
     const EditJobs = async (EditedDetails, jobId) => {
         const jobDetails = await jobModel_1.Job.findByIdAndUpdate({ _id: jobId }, { $set: EditedDetails }, { new: true });
         return jobDetails;
     };
     const FetchJob = async (jobId) => {
-        const jobDetails = await jobModel_1.Job.findOne({ _id: jobId });
+        const jobDetails = await jobModel_1.Job.findOne({ _id: jobId }).populate("recruiterId");
         return jobDetails;
+    };
+    const pushNotification = async (applicantId, notification, notificationSummary) => {
+        await userProfileModel_1.UserProfile.findByIdAndUpdate({ _id: applicantId }, {
+            $push: {
+                notifications: {
+                    notification: notification,
+                    notificationSummary: notificationSummary,
+                },
+            },
+        });
+        return;
     };
     return {
         addJob,
@@ -97,6 +103,7 @@ const jobRepositoryImp = () => {
         cancelJob,
         EditJobs,
         FetchJob,
+        pushNotification,
     };
 };
 exports.jobRepositoryImp = jobRepositoryImp;

@@ -18,11 +18,14 @@ const recruiterProfileRepositoryImpl_1 = require("../../Database/MongoDB/reposit
 const authRoute = () => {
     const router = express_1.default.Router();
     const controller = (0, authContoller_1.default)(authServiceImpl_1.authServiceImpl, authServiceInter_1.authServiceInter, userRepositoryImpl_1.userRepositoryImpl, userRepositoryInter_1.userRepositoryInter, userProfileRepositoryImpl_1.userProfileRepositoryImpl, userProfileRepositoryInter_1.userProfileRepositoryInter, recruiterRepositoryImpl_1.recruiterRepositoryImpl, recruiterRepositoryInter_1.recruiterRepositoryInter, recruiterProfileRepositoryImpl_1.recruiterProfileRepositoryImpl, recruiterProfileRepositoryInter_1.recruiterProfileRepositoryInter);
-    router.post('/signup', controller.registerUser);
-    router.post('/login', controller.loginUser);
-    router.post('/google-login', controller.googleLoginUser);
-    router.post('/recruiter/signup', controller.registerRecruiter);
-    router.post('/recruiter/login', controller.loginRecruiter);
+    router.post("/signup", controller.registerUser);
+    router.post("/login", controller.loginUser);
+    router.post("/google-login", controller.googleLoginUser);
+    router.post("/recruiter/signup", controller.registerRecruiter);
+    router.post("/recruiter/login", controller.loginRecruiter);
+    router.post("/seeker/forgot_pass_email_submit", controller.forgotPassEmail);
+    router.put("/seeker/reset_password/:resetToken", controller.resetingPassword);
+    router.post('/invite_email', controller.InvitingEmail);
     return router;
 };
 exports.default = authRoute;

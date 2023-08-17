@@ -31,20 +31,39 @@ const userProfileSchema = new mongoose_1.default.Schema({
     resume: {
         type: String,
     },
+    experience: {
+        type: String,
+    },
+    skills: {
+        type: [String],
+        default: [],
+    },
     appliedJobs: {
         type: [
             {
                 _id: {
                     type: String,
-                    ref: 'Job',
+                    ref: "Job",
                 },
                 status: {
                     type: String,
-                    default: 'pending',
+                    default: "pending",
                 },
             },
         ],
-        ref: 'Job',
+        ref: "Job",
+    },
+    notifications: {
+        type: [
+            {
+                notification: {
+                    type: String,
+                },
+                notificationSummary: {
+                    type: String,
+                },
+            },
+        ],
     },
 });
-exports.UserProfile = mongoose_1.default.model('UserProfile', userProfileSchema);
+exports.UserProfile = mongoose_1.default.model("UserProfile", userProfileSchema);

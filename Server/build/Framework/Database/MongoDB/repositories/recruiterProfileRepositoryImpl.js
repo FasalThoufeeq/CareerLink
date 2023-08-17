@@ -19,8 +19,6 @@ const recruiterProfileRepositoryImpl = () => {
         return Profile;
     };
     const updateProfile = async (updatedProfile, profileId) => {
-        console.log(updatedProfile, '..............');
-        console.log(updatedProfile);
         const EditedProfile = await recruiterProfileModel_1.RecruiterProfile.findByIdAndUpdate({ _id: profileId }, { $set: updatedProfile }, { new: true });
         return EditedProfile;
     };

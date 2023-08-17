@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 let activeUsers = [];
+let activeVideoCalls = [];
 const socketConfig = (io) => {
     io.on("connection", (socket) => {
         console.log(`users connected ${socket.id}`);
@@ -9,16 +10,20 @@ const socketConfig = (io) => {
             if (!activeUsers.some((user) => user?.userId === newUserId)) {
                 activeUsers.push({ userId: newUserId, socketId: socket.id });
             }
-            console.log("activeUsers", activeUsers);
             io.emit("get-users", activeUsers);
         });
         socket.on("send-message", (data) => {
             const { recieverId } = data;
-            console.log(recieverId, "recieverId");
             const user = activeUsers.find((user) => user?.userId === recieverId);
-            console.log("sending message", recieverId);
             if (user) {
                 io.to(user.socketId).emit("recieve-message", data);
+            }
+        });
+        socket.on("sendNotification", async (data) => {
+            const { receiverId } = data;
+            const user = await activeUsers.find((user) => user.userId == receiverId);
+            if (user) {
+                io.to(user.socketId).emit("getNotifications", data);
             }
         });
         socket.on("disconnect", () => {
@@ -27,6 +32,8 @@ const socketConfig = (io) => {
             // send all active users to all users
             console.log("disconnectUsers", activeUsers);
             io.emit("get-users", activeUsers);
+            activeVideoCalls = activeVideoCalls.filter((user) => user.socketId !== socket.id);
+            io.emit("activeforcall", activeVideoCalls);
         });
     });
 };

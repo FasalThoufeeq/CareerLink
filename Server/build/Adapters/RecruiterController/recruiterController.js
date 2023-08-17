@@ -19,7 +19,6 @@ const RecruiterProfileController = (recruiterProfileRepositoryImpl, recruiterPro
     const UpdatingProfile = (0, express_async_handler_1.default)(async (req, res) => {
         const { profileId } = req.params;
         const updatedProfile = req.body;
-        console.log(profileId, updatedProfile, "wwwe");
         const EditedProfile = await (0, auth_1.UpdateRecruiterProfile)(updatedProfile, profileId, recruiterProfileRepository);
         res.json({
             status: "success",

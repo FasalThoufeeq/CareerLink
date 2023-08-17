@@ -18,13 +18,41 @@ const userRepositoryImpl = () => {
         const newUser = new userModel_1.default(user);
         newUser.profileId = profileId;
         const savedUser = await newUser.save();
-        console.log(savedUser, "saved");
         return savedUser;
+    };
+    const savingResetToken = async (email, hashedResetPasswordToken, resetPasswordTokenExpires) => {
+        const saving = await userModel_1.default.findOneAndUpdate({ email: email }, {
+            $set: {
+                passwordResetToken: hashedResetPasswordToken,
+                passwordResetTokenExpires: resetPasswordTokenExpires,
+            },
+        }, { new: true });
+        return saving;
+    };
+    const getUserByResetToken = async (resetToken) => {
+        const user = await userModel_1.default.findOne({
+            passwordResetToken: resetToken,
+            passwordResetTokenExpires: { $gt: Date.now() },
+        });
+        return user;
+    };
+    const resetPassword = async (resetToken, password) => {
+        await userModel_1.default.findOneAndUpdate({ passwordResetToken: resetToken }, {
+            $set: {
+                password: password,
+                passwordResetToken: null,
+                passwordResetTokenExpires: null,
+            },
+        }, { new: true });
+        return;
     };
     return {
         getUserByEmail,
         addUser,
-        getUserProfileByEmail
+        getUserProfileByEmail,
+        savingResetToken,
+        getUserByResetToken,
+        resetPassword,
     };
 };
 exports.userRepositoryImpl = userRepositoryImpl;

@@ -9,7 +9,6 @@ const jobController = (jobRepositoryImpl, jobRepositoryInter) => {
     const jobRepository = jobRepositoryInter(jobRepositoryImpl());
     const postJob = (0, express_async_handler_1.default)(async (req, res) => {
         const jobDetails = req.body;
-        console.log(jobDetails);
         const postedJob = await (0, job_1.createJob)(jobDetails, jobRepository);
         res.json({
             postedJob,
@@ -20,7 +19,6 @@ const jobController = (jobRepositoryImpl, jobRepositoryInter) => {
     const RecruiterAllJobs = (0, express_async_handler_1.default)(async (req, res) => {
         const { recruiterId } = req.params;
         const RecruiterJobs = await (0, job_1.getRecruiterJobs)(recruiterId, jobRepository);
-        console.log(RecruiterJobs, "cccc");
         res.json({
             RecruiterJobs,
             status: "success",
@@ -64,13 +62,22 @@ const jobController = (jobRepositoryImpl, jobRepositoryInter) => {
             jobDetails,
         });
     });
+    const pushingNotification = (0, express_async_handler_1.default)(async (req, res) => {
+        const { applicantId, notification, notificationSummary } = req.body;
+        await (0, job_1.PushNotification)(applicantId, notification, notificationSummary, jobRepository);
+        res.json({
+            status: "success",
+            message: "notification successfully pushed",
+        });
+    });
     return {
         postJob,
         RecruiterAllJobs,
         GetAppliedCandidates,
         StatusChange,
         EdittingJob,
-        FetchingJob
+        FetchingJob,
+        pushingNotification,
     };
 };
 exports.default = jobController;

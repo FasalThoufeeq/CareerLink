@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.FetchJob = exports.EditJobs = exports.cancelJob = exports.changeStatus = exports.getAppliedJobs = exports.getCandidates = exports.ApplyJob = exports.AllJobs = exports.getRecruiterJobs = exports.createJob = void 0;
+exports.PushNotification = exports.FetchJob = exports.EditJobs = exports.cancelJob = exports.changeStatus = exports.getAppliedJobs = exports.getCandidates = exports.ApplyJob = exports.AllJobs = exports.getRecruiterJobs = exports.createJob = void 0;
 const createJob = async (job, JobRepository) => {
     const addedJob = await JobRepository.addJob(job);
     return addedJob;
@@ -49,3 +49,8 @@ const FetchJob = async (jobId, jobRepository) => {
     return jobDetails;
 };
 exports.FetchJob = FetchJob;
+const PushNotification = async (applicantId, notification, notificationSummary, jobRepository) => {
+    await jobRepository.pushNotification(applicantId, notification, notificationSummary);
+    return;
+};
+exports.PushNotification = PushNotification;

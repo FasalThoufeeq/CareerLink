@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UpdateCompanylogo = exports.UpdateRecruiterProfile = exports.getRecruiterProfile = exports.UpdateProfilepic = exports.UpdateProfile = exports.getProfile = exports.RecruiterLogin = exports.recruiterRegister = exports.userGoogleLogin = exports.userLogin = exports.userRegister = void 0;
+exports.InviteEmail = exports.resetPassword = exports.forgottenpassEmail = exports.UpdateCompanylogo = exports.UpdateRecruiterProfile = exports.getRecruiterProfile = exports.UpdateProfilepic = exports.UpdateProfile = exports.getProfile = exports.RecruiterLogin = exports.recruiterRegister = exports.userGoogleLogin = exports.userLogin = exports.userRegister = void 0;
 const userRegister = async (user, userRepository, userProfileRepository, authService) => {
     user.email = user.email.toLocaleLowerCase();
     const isExistingEmail = await userRepository.getUserByEmail(user.email);
@@ -23,7 +23,6 @@ const userLogin = async (email, password, userRepository, authService) => {
         throw new Error(`Password incorrect`);
     }
     const profile = await userRepository.getUserProfileByEmail(email);
-    console.log(profile, "hiiihihihhii");
     const token = authService.generateToken(user._id.toString());
     return { token, user, profile };
 };
@@ -38,7 +37,6 @@ const userGoogleLogin = async (user, userRepository, userProfileRepository, auth
         const profile = await userProfileRepository.addProfile(user);
         const createUser = await userRepository.addUser(user, profile._id);
         const isExistingEmail = await userRepository.getUserByEmail(user.email);
-        console.log(isExistingEmail, "haaaaavooooo");
         const token = await authService.generateToken(isExistingEmail._id.toString());
         return { token, isExistingEmail };
     }
@@ -51,7 +49,6 @@ const recruiterRegister = async (recruiter, recruiterRepository, recruiterProfil
         throw new Error(`Recruiter with ${recruiter.email} already exists`);
     }
     const isExistingUsername = await recruiterRepository.getRecruiterByUsername(recruiter.userName);
-    console.log(isExistingUsername, "aaaaaaa");
     if (isExistingUsername) {
         throw new Error(`Recruiter with UserName ${recruiter.userName} already exists`);
     }
@@ -105,3 +102,31 @@ const UpdateCompanylogo = async (profileId, companylogo, RecruiterProfileReposit
     return EditedProfile;
 };
 exports.UpdateCompanylogo = UpdateCompanylogo;
+const forgottenpassEmail = async (email, authService, userRepository, nodemailerRepository) => {
+    const user = await userRepository.getUserByEmail(email);
+    if (!user) {
+        throw new Error(`User with ${email} not exists`);
+    }
+    const resetPasswordToken = await authService.createResetPasswordToken();
+    const hashResetPasswordToken = await authService.hashResetPasswordToken(resetPasswordToken);
+    const passwordResetTokenExpires = new Date(Date.now() + 10 * 60 * 1000);
+    const saving = await userRepository.savingResetToken(email, hashResetPasswordToken, passwordResetTokenExpires);
+    await nodemailerRepository.ResetPasswordEmail(email, resetPasswordToken);
+};
+exports.forgottenpassEmail = forgottenpassEmail;
+const resetPassword = async (resetToken, password, authService, userRepository) => {
+    const hashedResetToken = await authService.hashResetPasswordToken(resetToken);
+    const user = await userRepository.getUserByResetToken(hashedResetToken);
+    if (!user) {
+        throw new Error(`Your reset Token has expired. Please try again`);
+    }
+    const hashedPassword = await authService.encryptPassword(password);
+    await userRepository.resetPassword(hashedResetToken, hashedPassword);
+    return;
+};
+exports.resetPassword = resetPassword;
+const InviteEmail = async (name, email, roomId, jobTitle, companyName, nodemailerRepository) => {
+    await nodemailerRepository.InviteEmail(name, email, roomId, jobTitle, companyName);
+    return;
+};
+exports.InviteEmail = InviteEmail;

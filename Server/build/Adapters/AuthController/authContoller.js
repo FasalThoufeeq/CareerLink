@@ -5,17 +5,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
 const auth_1 = require("../../Application/useCases/auth/auth");
+const nodemailerInter_1 = require("../../Application/Services/nodemailerInter");
+const nodemailerImpl_1 = require("../../Framework/Services/nodemailerImpl");
 const authController = (authServiceImpl, authServiceInter, userRepositoryImpl, userRepositoryInter, userProfileRepositoryImpl, userProfileRepositoryInter, recruiterRepositoryImpl, recruiterRepositoryInter, recruiterProfileRepositoryImpl, recruiterProfileRepositoryInter) => {
     const authService = authServiceInter(authServiceImpl());
     const userDbRepository = userRepositoryInter(userRepositoryImpl());
     const userProfileRepository = userProfileRepositoryInter(userProfileRepositoryImpl());
+    const nodemailerRepository = (0, nodemailerInter_1.SendEmailInter)((0, nodemailerImpl_1.SendEmailImpl)());
     const recruiterRepository = recruiterRepositoryInter(recruiterRepositoryImpl());
     const recruiterProfileRepository = recruiterProfileRepositoryInter(recruiterProfileRepositoryImpl());
     const registerUser = (0, express_async_handler_1.default)(async (req, res) => {
         const user = req.body;
-        console.log(req.body);
         const createUser = await (0, auth_1.userRegister)(user, userDbRepository, userProfileRepository, authService);
-        console.log(createUser, "varum");
         res.json({
             status: "success",
             message: "new user registered",
@@ -25,7 +26,6 @@ const authController = (authServiceImpl, authServiceInter, userRepositoryImpl, u
     const loginUser = (0, express_async_handler_1.default)(async (req, res) => {
         const { email, password } = req.body;
         const { token, user, profile } = await (0, auth_1.userLogin)(email, password, userDbRepository, authService);
-        console.log(profile, "login");
         res.json({
             status: "success",
             message: "logged in successfully",
@@ -61,7 +61,6 @@ const authController = (authServiceImpl, authServiceInter, userRepositoryImpl, u
     const loginRecruiter = (0, express_async_handler_1.default)(async (req, res) => {
         const { email, password } = req.body;
         const { token, recruiter, profile } = await (0, auth_1.RecruiterLogin)(email, password, recruiterRepository, authService, recruiterProfileRepository);
-        console.log(recruiter, "login");
         res.json({
             status: "success",
             message: "logged in successfully",
@@ -70,12 +69,40 @@ const authController = (authServiceImpl, authServiceInter, userRepositoryImpl, u
             profile,
         });
     });
+    const forgotPassEmail = (0, express_async_handler_1.default)(async (req, res) => {
+        const { email } = req.body;
+        await (0, auth_1.forgottenpassEmail)(email, authService, userDbRepository, nodemailerRepository);
+        res.json({
+            status: "success",
+            message: "reset password link send to the user email",
+        });
+    });
+    const resetingPassword = (0, express_async_handler_1.default)(async (req, res) => {
+        const { resetToken } = req.params;
+        const { password } = req.body;
+        await (0, auth_1.resetPassword)(resetToken, password, authService, userDbRepository);
+        res.json({
+            status: "success",
+            message: "Your password Reset Successfully",
+        });
+    });
+    const InvitingEmail = (0, express_async_handler_1.default)(async (req, res) => {
+        const { name, email, roomId, jobTitle, companyName } = req.body;
+        await (0, auth_1.InviteEmail)(name, email, roomId, jobTitle, companyName, nodemailerRepository);
+        res.json({
+            status: "success",
+            message: "Invite Email send Successfully",
+        });
+    });
     return {
         registerUser,
         loginUser,
         googleLoginUser,
         registerRecruiter,
         loginRecruiter,
+        forgotPassEmail,
+        resetingPassword,
+        InvitingEmail
     };
 };
 exports.default = authController;

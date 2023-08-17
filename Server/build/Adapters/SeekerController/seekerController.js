@@ -56,9 +56,7 @@ const seekerController = (jobRepositoryImp, jobRepositoryInter, userProfileRepos
     const UpdatingProfile = (0, express_async_handler_1.default)(async (req, res) => {
         const { profileId } = req.params;
         const resume = req?.file?.path;
-        console.log(resume, "hhhh");
         const profile = req.body;
-        console.log(profile);
         const EditedProfile = await (0, auth_1.UpdateProfile)(profileId, profile, resume, userProfileRepository);
         res.json({
             status: "success",
@@ -69,8 +67,6 @@ const seekerController = (jobRepositoryImp, jobRepositoryInter, userProfileRepos
     const UpdatingProfilePic = (0, express_async_handler_1.default)(async (req, res) => {
         const { profileId } = req.params;
         const profilePic = req?.file?.path;
-        console.log(profilePic, "hhhh");
-        console.log(profileId, "hhhh");
         const EditedData = await (0, auth_1.UpdateProfilepic)(profileId, profilePic, userProfileRepository);
         res.json({
             status: "success",
