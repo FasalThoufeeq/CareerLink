@@ -29,15 +29,15 @@ const settings = ["Profile", "Logout", "Login", "Register"];
 const UserHeader = () => {
   const token = useSelector((state) => state?.seekers?.seekers?.token);
   const seeker = useSelector((state) => state?.seekers?.seekers?.profile);
-  const socket = io("https://careerlink.cloud");
-  useEffect(() => {
-    if (seeker) {
-      socket?.emit("new-user-add", seeker._id);
-    }
-    socket?.on("getNotifications", (data) => {
-      hotToast(data.notification)
-    });
-  }, [socket, seeker]);
+  // const socket = io("https://careerlink.cloud");
+  // useEffect(() => {
+  //   if (seeker) {
+  //     socket?.emit("new-user-add", seeker._id);
+  //   }
+  //   socket?.on("getNotifications", (data) => {
+  //     hotToast(data.notification)
+  //   });
+  // }, [socket, seeker]);
 
   const dispatch = useDispatch();
   const [anchorElNav, setAnchorElNav] = useState(null);
