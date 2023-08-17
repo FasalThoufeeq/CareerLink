@@ -8,7 +8,7 @@ const connectDB = async () => {
       if (!configKeys.MONGODB_URL) {
         throw new Error("MongoDB URL is not defined in configKeys");
       }
-      await mongoose.connect("mongodb+srv://fasaltq681:Fasal123@careerlink.mhwif17.mongodb.net/", {});
+      await mongoose.connect(configKeys.MONGODB_URL, {});
       console.log(`Database connected successfully`);
     } catch (error) {
       console.log(error);
