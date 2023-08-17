@@ -1,7 +1,7 @@
 import { Server } from "http";
 import configKeys from "../../config";
 
-const port = configKeys.PORT || 5000;
+const port = configKeys.PORT || 3000;
 
 const serverConfig = (server: Server) => {
   const startServer = () => {
