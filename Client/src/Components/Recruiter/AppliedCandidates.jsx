@@ -64,7 +64,7 @@ const AppliedCandidate = () => {
   const displayJobs = candidates
     ? candidates?.slice((page - 1) * rowsPerPage, page * rowsPerPage)
     : [];
-
+ 
   const handleVideoCall = async (roomID) => {
     const socket = io("https://careerlink.cloud");
     socket.emit("sendNotification", {
