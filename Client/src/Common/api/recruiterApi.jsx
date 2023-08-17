@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const MyAxios = axios.create({
-  baseURL: "http://localhost:3000/api/recruiter",
+  baseURL: "https://careerlink.cloud/api/recruiter",
 });
 
 MyAxios.interceptors.request.use(

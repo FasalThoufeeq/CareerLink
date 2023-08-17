@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const MyAxios = axios.create({
-  baseURL: "http://localhost:3000/api/chat",
+  baseURL: "https://careerlink.cloud/api/chat",
 });
 
 // MyAxios.interceptors.request.use(
