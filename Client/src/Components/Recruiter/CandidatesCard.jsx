@@ -92,7 +92,7 @@ const CandidateCard = ({
     const response = await dispatch(
       ChangeStatus({ jobId, applicantId, changedStatus })
     );
-    const socket = io("https://careerlink.cloud");
+    const socket = io("http://localhost:3000");
     socket.emit("sendNotification", {
       receiverId: applicantId,
       notification: `Your Application status has been ${changedStatus} for ${jobDetails?.jobTitle} in ${jobDetails?.recruiterId?.companyName} at ${jobDetails?.jobLocation}`,

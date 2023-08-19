@@ -21,7 +21,7 @@ const Room = () => {
       sharedLinks: [
         {
           name: "Copy Link",
-          url: `http://localhost:5173/room/${roomID}`,
+          url: `https://careerlink.cloud/room/${roomID}`,
         },
       ],
       scenario: {
