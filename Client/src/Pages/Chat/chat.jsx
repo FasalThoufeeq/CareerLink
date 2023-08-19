@@ -28,7 +28,7 @@ const Chat = () => {
   }, [sendMessages]);
 
   useEffect(() => {
-    socket.current = io("https://careerlink.cloud:3000");
+    socket.current = io("wss://careerlink.cloud");
     socket.current.emit("new-user-add", user._id);
     socket.current.on("get-users", (users) => {
       setOnlineUsers(users);
