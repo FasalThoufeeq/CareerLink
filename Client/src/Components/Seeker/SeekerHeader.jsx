@@ -29,7 +29,7 @@ const settings = ["Profile", "Logout", "Login", "Register"];
 const UserHeader = () => {
   const token = useSelector((state) => state?.seekers?.seekers?.token);
   const seeker = useSelector((state) => state?.seekers?.seekers?.profile);
-    const socket = io("wss://careerlink.cloud");
+    const socket = io("https://careerlink.cloud");
   useEffect(() => {
     if (seeker) {
       socket?.emit("new-user-add", seeker._id);

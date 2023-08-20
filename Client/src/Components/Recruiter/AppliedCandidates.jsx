@@ -66,7 +66,7 @@ const AppliedCandidate = () => {
     : [];
  
   const handleVideoCall = async (roomID) => {
-    const socket = io("wss://careerlink.cloud");
+    const socket = io("https://careerlink.cloud");
     socket.emit("sendNotification", {
       receiverId: roomID,
       notification:`Video Call Scheduled Pls check your Notification`
