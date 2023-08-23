@@ -41,12 +41,13 @@ const authController = (authServiceImpl, authServiceInter, userRepositoryImpl, u
             lastName: userDetails?._tokenResponse?.lastName,
             email: userDetails?._tokenResponse?.email,
         };
-        const { token, isExistingEmail } = await (0, auth_1.userGoogleLogin)(user, userDbRepository, userProfileRepository, authService);
+        const { token, isExistingEmail, profile } = await (0, auth_1.userGoogleLogin)(user, userDbRepository, userProfileRepository, authService);
         res.json({
             status: "success",
             message: "Google login successfull",
             token,
             user: isExistingEmail,
+            profile
         });
     });
     const registerRecruiter = (0, express_async_handler_1.default)(async (req, res) => {

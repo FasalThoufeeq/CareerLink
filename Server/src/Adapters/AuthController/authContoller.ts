@@ -92,7 +92,7 @@ const authController = (
       lastName: userDetails?._tokenResponse?.lastName,
       email: userDetails?._tokenResponse?.email,
     };
-    const { token, isExistingEmail } = await userGoogleLogin(
+    const { token, isExistingEmail, profile } = await userGoogleLogin(
       user,
       userDbRepository,
       userProfileRepository,
@@ -103,6 +103,7 @@ const authController = (
       message: "Google login successfull",
       token,
       user: isExistingEmail,
+      profile
     });
   });
 

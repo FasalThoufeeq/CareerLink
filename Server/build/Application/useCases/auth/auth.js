@@ -31,14 +31,15 @@ const userGoogleLogin = async (user, userRepository, userProfileRepository, auth
     const isExistingEmail = await userRepository.getUserByEmail(user.email);
     if (isExistingEmail) {
         const token = await authService.generateToken(isExistingEmail._id.toString());
-        return { token, isExistingEmail };
+        const profile = await userRepository.getUserProfileByEmail(user.email);
+        return { token, isExistingEmail, profile };
     }
     else {
         const profile = await userProfileRepository.addProfile(user);
         const createUser = await userRepository.addUser(user, profile._id);
         const isExistingEmail = await userRepository.getUserByEmail(user.email);
         const token = await authService.generateToken(isExistingEmail._id.toString());
-        return { token, isExistingEmail };
+        return { token, isExistingEmail, profile };
     }
 };
 exports.userGoogleLogin = userGoogleLogin;
