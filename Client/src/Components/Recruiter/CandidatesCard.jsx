@@ -6,6 +6,7 @@ import {
   Button,
   Chip,
   Container,
+  FormControl,
   Grid,
   InputLabel,
   MenuItem,
@@ -49,7 +50,7 @@ const CandidateCard = ({
   handleVideoCall,
 }) => {
   const dispatch = useDispatch();
-  const [changedStatus, setChangedStatus] = useState();
+  const [changedStatus, setChangedStatus] = useState("");
   const [jobDetails, setJobDetails] = useState();
 
   const handleChatButtonClick = () => {
@@ -67,16 +68,18 @@ const CandidateCard = ({
     GetJob();
   }, []);
   const appliedJob = appliedJobs.find((job) => job._id === jobId);
-  let statusColor = "black";
+  
+  const getStatusColor = () => {
   if (appliedJob?.status === "pending") {
-    statusColor = "#4287f5";
+    return "#4287f5";
   } else if (appliedJob?.status === "Selected") {
-    statusColor = "green";
+    return "green";
   } else if (appliedJob?.status === "Rejected") {
-    statusColor = "red";
+    return "red";
   } else if (appliedJob?.status === "Shortlisted") {
-    statusColor = "#4287f5";
+    return "#4287f5";
   }
+}
   const handleInvite = async () => {
     await dispatch(
       InviteEmail({
@@ -279,36 +282,36 @@ const CandidateCard = ({
                   )}
                 </Grid>
                 <div>
-                  <InputLabel
-                    id="application-status-label"
-                    style={{ marginLeft: "10px" }}
-                  >
-                    Application Status:{" "}
-                    <span style={{ color: statusColor }}>
-                      {appliedJob?.status}
-                    </span>
-                  </InputLabel>
-                  <Select
-                    style={{
-                      width: "150px",
-                      height: "40px",
-                      color: "black",
-                      borderRadius: "20px",
-                      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-                    }}
-                    labelId="application-status-label"
-                    value={changedStatus}
-                    onChange={(event) => setChangedStatus(event.target.value)}
-                  >
-                    <MenuItem value="">Select Status</MenuItem>
-                    <MenuItem value="Shortlisted">Shortlisted</MenuItem>
-                    <MenuItem value="Rejected">Rejected</MenuItem>
-                    <MenuItem value="Selected">Selected</MenuItem>
-                  </Select>
+ 
+                  <FormControl>
+                    <InputLabel id="demo-simple-select-label" style={{color:getStatusColor()}}>
+                      {appliedJob?.status
+                        ? appliedJob?.status
+                        : "Update Status"}
+                    </InputLabel>
+                    <Select
+                      style={{
+                        width: "150px",
+                        height: "50px",
+                        color: "black",
+                        borderRadius: "20px",
+                        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+                      }}
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={changedStatus}
+                      label="Select Status"
+                      onChange={(event) => setChangedStatus(event.target.value)}
+                    >
+                      <MenuItem value="Shortlisted">Shortlisted</MenuItem>
+                      <MenuItem value="Rejected">Rejected</MenuItem>
+                      <MenuItem value="Selected">Selected</MenuItem>
+                    </Select>
+                  </FormControl>
                   <Button
                     style={{
-                      marginLeft: "10px",
-                      marginBottom: "4px",
+                      marginLeft: "15px",
+                      marginTop:'7px',
                       color: "black",
                       borderRadius: "20px",
                       boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
