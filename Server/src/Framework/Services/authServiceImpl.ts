@@ -14,9 +14,9 @@ export const authServiceImpl = () => {
     return bcrypt.compare(password, hashedPassword);
   };
 
-  const generateToken = (payload: string) => {
+  const generateToken = (payload: string, role: string) => {
     const token = jwt.sign(
-      { userId: payload },
+      { userId: payload, role },
       configKeys.JWT_SECRET_KEY as string,
       {
         expiresIn: "5d",

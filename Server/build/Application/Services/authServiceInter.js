@@ -4,7 +4,7 @@ exports.authServiceInter = void 0;
 const authServiceInter = (service) => {
     const encryptPassword = (password) => service.encryptPassword(password);
     const comparePassword = (password, hashedPassword) => service.comparePassword(password, hashedPassword);
-    const generateToken = (payload) => service.generateToken(payload);
+    const generateToken = (payload, role) => service.generateToken(payload, role);
     const verifyToken = (token) => service.verifyToken(token);
     const createResetPasswordToken = async () => {
         const resetToken = await service.createResetPasswordToken();
@@ -20,7 +20,7 @@ const authServiceInter = (service) => {
         generateToken,
         verifyToken,
         createResetPasswordToken,
-        hashResetPasswordToken
+        hashResetPasswordToken,
     };
 };
 exports.authServiceInter = authServiceInter;

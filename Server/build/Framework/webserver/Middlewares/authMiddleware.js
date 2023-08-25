@@ -18,10 +18,14 @@ const AuthMiddleware = (req, res, next) => {
         throw new AppError_1.default("Token not found", httpStatus_1.HttpStatus.UNAUTHORIZED);
     }
     try {
-        console.log('dhskjf');
         const payload = service.verifyToken(token);
-        console.log(payload, "ooo");
-        next();
+        if (payload?.role === "Admin") {
+            // User has the "admin" role, proceed with the next middleware
+            next();
+        }
+        else {
+            throw new AppError_1.default("Unauthorized role", httpStatus_1.HttpStatus.FORBIDDEN);
+        }
     }
     catch (err) {
         throw new AppError_1.default("UnAuthorized User", httpStatus_1.HttpStatus.UNAUTHORIZED);

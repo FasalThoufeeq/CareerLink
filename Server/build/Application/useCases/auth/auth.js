@@ -23,14 +23,16 @@ const userLogin = async (email, password, userRepository, authService) => {
         throw new Error(`Password incorrect`);
     }
     const profile = await userRepository.getUserProfileByEmail(email);
-    const token = authService.generateToken(user._id.toString());
+    const role = "User";
+    const token = authService.generateToken(user._id.toString(), role);
     return { token, user, profile };
 };
 exports.userLogin = userLogin;
 const userGoogleLogin = async (user, userRepository, userProfileRepository, authService) => {
     const isExistingEmail = await userRepository.getUserByEmail(user.email);
+    const role = "User";
     if (isExistingEmail) {
-        const token = await authService.generateToken(isExistingEmail._id.toString());
+        const token = await authService.generateToken(isExistingEmail._id.toString(), role);
         const profile = await userRepository.getUserProfileByEmail(user.email);
         return { token, isExistingEmail, profile };
     }
@@ -38,7 +40,7 @@ const userGoogleLogin = async (user, userRepository, userProfileRepository, auth
         const profile = await userProfileRepository.addProfile(user);
         const createUser = await userRepository.addUser(user, profile._id);
         const isExistingEmail = await userRepository.getUserByEmail(user.email);
-        const token = await authService.generateToken(isExistingEmail._id.toString());
+        const token = await authService.generateToken(isExistingEmail._id.toString(), role);
         return { token, isExistingEmail, profile };
     }
 };
@@ -69,7 +71,8 @@ const RecruiterLogin = async (email, password, recruiterRepository, authService,
         throw new Error(`Password incorrect`);
     }
     const profile = await recruiterProfilerepository.getRecuiterProfileByEmail(email);
-    const token = authService.generateToken(recruiter._id.toString());
+    const role = "Admin";
+    const token = authService.generateToken(recruiter._id.toString(), role);
     return { token, recruiter, profile };
 };
 exports.RecruiterLogin = RecruiterLogin;

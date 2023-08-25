@@ -7,7 +7,8 @@ export const authServiceInter = (service: AuthServiceImplReturn) => {
   const comparePassword = (password: string, hashedPassword: string) =>
     service.comparePassword(password, hashedPassword);
 
-  const generateToken = (payload: string) => service.generateToken(payload);
+  const generateToken = (payload: string, role: string) =>
+    service.generateToken(payload, role);
 
   const verifyToken = (token: string) => service.verifyToken(token);
 
@@ -23,7 +24,6 @@ export const authServiceInter = (service: AuthServiceImplReturn) => {
 
     return hashedResetPasswordToken;
   };
-  
 
   return {
     encryptPassword,
@@ -31,7 +31,7 @@ export const authServiceInter = (service: AuthServiceImplReturn) => {
     generateToken,
     verifyToken,
     createResetPasswordToken,
-    hashResetPasswordToken
+    hashResetPasswordToken,
   };
 };
 export type AuthServiceInter = typeof authServiceInter;

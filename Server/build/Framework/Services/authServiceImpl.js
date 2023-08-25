@@ -17,8 +17,8 @@ const authServiceImpl = () => {
     const comparePassword = (password, hashedPassword) => {
         return bcryptjs_1.default.compare(password, hashedPassword);
     };
-    const generateToken = (payload) => {
-        const token = jsonwebtoken_1.default.sign({ userId: payload }, config_1.default.JWT_SECRET_KEY, {
+    const generateToken = (payload, role) => {
+        const token = jsonwebtoken_1.default.sign({ userId: payload, role }, config_1.default.JWT_SECRET_KEY, {
             expiresIn: "5d",
         });
         return token;

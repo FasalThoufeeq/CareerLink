@@ -23,12 +23,13 @@ const AuthMiddleware = (
   }
   
   try {
-    console.log('dhskjf');
-    
     const payload: any = service.verifyToken(token);
-    console.log(payload,"ooo");
-    
-    next();
+    if (payload?.role === "Admin") {
+      // User has the "admin" role, proceed with the next middleware
+      next();
+    } else {
+      throw new AppError("Unauthorized role", HttpStatus.FORBIDDEN);
+    }
   } catch (err) {
     throw new AppError("UnAuthorized User", HttpStatus.UNAUTHORIZED);
   }

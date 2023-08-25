@@ -55,8 +55,8 @@ export const userLogin = async (
     throw new Error(`Password incorrect`);
   }
   const profile = await userRepository.getUserProfileByEmail(email);
-
-  const token = authService.generateToken(user._id.toString());
+  const role = "User";
+  const token = authService.generateToken(user._id.toString(), role);
   return { token, user, profile };
 };
 
@@ -71,9 +71,11 @@ export const userGoogleLogin = async (
   authService: ReturnType<AuthServiceInter>
 ) => {
   const isExistingEmail: any = await userRepository.getUserByEmail(user.email);
+  const role = "User";
   if (isExistingEmail) {
     const token = await authService.generateToken(
-      isExistingEmail._id.toString()
+      isExistingEmail._id.toString(),
+      role
     );
     const profile = await userRepository.getUserProfileByEmail(user.email);
     return { token, isExistingEmail, profile };
@@ -84,7 +86,8 @@ export const userGoogleLogin = async (
       user.email
     );
     const token = await authService.generateToken(
-      isExistingEmail._id.toString()
+      isExistingEmail._id.toString(),
+      role
     );
     return { token, isExistingEmail, profile };
   }
@@ -156,8 +159,8 @@ export const RecruiterLogin = async (
   const profile = await recruiterProfilerepository.getRecuiterProfileByEmail(
     email
   );
-
-  const token = authService.generateToken(recruiter._id.toString());
+  const role = "Admin";
+  const token = authService.generateToken(recruiter._id.toString(), role);
   return { token, recruiter, profile };
 };
 
@@ -290,7 +293,7 @@ export const resetPassword = async (
   return;
 };
 
-export const InviteEmail = async(
+export const InviteEmail = async (
   name: string,
   email: string,
   roomId: string,
@@ -298,6 +301,12 @@ export const InviteEmail = async(
   companyName: string,
   nodemailerRepository: SendEmailInterReturn
 ) => {
-  await nodemailerRepository.InviteEmail(name, email, roomId, jobTitle,companyName)
-  return
+  await nodemailerRepository.InviteEmail(
+    name,
+    email,
+    roomId,
+    jobTitle,
+    companyName
+  );
+  return;
 };
