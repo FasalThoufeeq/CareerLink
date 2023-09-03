@@ -11,6 +11,7 @@ const JobListing = () => {
   const [liveApply, setLiveAplly] = useState(false);
   const [loading, setLoading] = useState(false);
   const jobs = useSelector((state) => state?.seekerJobs?.jobs?.data?.jobs);
+  
   const applicantId = useSelector(
     (state) => state?.seekers?.seekers?.user?.profileId
   );

@@ -290,6 +290,7 @@ const CandidateCard = ({
                         : "Update Status"}
                     </InputLabel>
                     <Select
+                    
                       style={{
                         width: "150px",
                         height: "50px",

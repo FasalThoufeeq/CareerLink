@@ -29,7 +29,7 @@ const SearchBar = ({ handleSearch }) => {
         style={{ marginLeft: "8px", flex: 1, width: "500px" }}
         placeholder="Serach Jobs..."
         value={searchTerm}
-        onChange={(e) => {
+        onChange={(e) => { 
           setSearchTerm(e.target.value);
           handleSearch(e.target.value);
         }}

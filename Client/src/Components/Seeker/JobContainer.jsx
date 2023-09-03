@@ -176,6 +176,7 @@ const JobContainer = ({
             </div>
           </div>
           <div style={{ position: "absolute", bottom: "8px", right: "8px" }}>
+            
             {isApplied ? (
               <Button
                 variant="outlined"
