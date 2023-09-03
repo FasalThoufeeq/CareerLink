@@ -26,7 +26,6 @@ const seekerAuthMiddleware = (
     console.log('dhskjf');
     
     const payload: any = service.verifyToken(token);
-    console.log(payload,"ooo");
     
     next();
   } catch (err) {

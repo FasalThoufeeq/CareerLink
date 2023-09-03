@@ -26,6 +26,7 @@ const AuthMiddleware = (
     const payload: any = service.verifyToken(token);
     if (payload?.role === "Admin") {
       // User has the "admin" role, proceed with the next middleware
+      
       next();
     } else {
       throw new AppError("Unauthorized role", HttpStatus.FORBIDDEN);
